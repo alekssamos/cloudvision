@@ -3,3 +3,4 @@
 *.mo
 *.nvda-addon
 .sconsign.dblite
+*.pot

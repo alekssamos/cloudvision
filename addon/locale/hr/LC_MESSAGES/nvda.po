@@ -3,110 +3,116 @@
 # This file is distributed under the same license as the CloudVision package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: CloudVision 2.0.3.3\n"
 "Report-Msgid-Bugs-To: nvda-translations@groups.io\n"
 "POT-Creation-Date: 2020-08-31 17:47+0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"PO-Revision-Date: 2020-08-31 17:55+0300\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: hr\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.6.10\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #: addon/globalPlugins/CloudVision/__init__.py:51
 msgid "CloudVision Settings"
-msgstr ""
+msgstr "Postavke CloudVision"
 
 #: addon/globalPlugins/CloudVision/__init__.py:56
 msgid "&Play sound during recognition"
-msgstr ""
+msgstr "&Reproduciraj zvučni signal tijekom prepoznavanja teksta"
 
 #: addon/globalPlugins/CloudVision/__init__.py:60
 msgid "Recognize &text"
-msgstr ""
+msgstr "Prepoznaj tekst"
 
 #: addon/globalPlugins/CloudVision/__init__.py:64
 msgid "Recognize &images"
-msgstr ""
+msgstr "Prepoznaj slike"
 
 #: addon/globalPlugins/CloudVision/__init__.py:68
 msgid "Read &QR / bar code"
-msgstr ""
+msgstr "Pročitaj QR kod"
 
 #: addon/globalPlugins/CloudVision/__init__.py:72
 msgid "Translate text"
-msgstr ""
+msgstr "Prevedi tekst"
 
 #: addon/globalPlugins/CloudVision/__init__.py:83
 msgid ""
 "Select image description language, other languages than english are more "
 "prone to translation errors"
 msgstr ""
+"Odaberite  jezik prepoznavanja slike, Jezici drukčiji od engleskog podložni "
+"su pogreškama u prijevodu"
 
 #: addon/globalPlugins/CloudVision/__init__.py:88
 msgid "Open site"
-msgstr ""
+msgstr "Otvori web stranicu"
 
 #: addon/globalPlugins/CloudVision/__init__.py:110
 msgid "Error saving settings"
-msgstr ""
+msgstr "Greška prilikom pospremanja postavki"
 
 #: addon/globalPlugins/CloudVision/__init__.py:118
 msgid "Cloud Vision settings..."
-msgstr ""
+msgstr "Postavke Cloud Vision..."
 
 #: addon/globalPlugins/CloudVision/__init__.py:158
 msgid "Error"
-msgstr ""
+msgstr "Greška"
 
 #: addon/globalPlugins/CloudVision/__init__.py:162
 msgid "Analysis completed: "
-msgstr ""
+msgstr "Analiza je završena: "
 
 #: addon/globalPlugins/CloudVision/__init__.py:164
 msgid "CloudVision result"
-msgstr ""
+msgstr "Rezultat CloudVision"
 
 #: addon/globalPlugins/CloudVision/__init__.py:175
 msgid "Analyzing navigator object"
-msgstr ""
+msgstr "Analiziram objekt navigatora"
 
 #: addon/globalPlugins/CloudVision/__init__.py:181
 msgid "This navigator object is not analyzable"
-msgstr ""
+msgstr "Ovaj objekt navigatora ne može biti analiziran"
 
 #: addon/globalPlugins/CloudVision/__init__.py:217
 msgid ""
 "Gives a description on how current navigator object looks like visually,\n"
 "if you press twice quickly, a virtual viewer will open."
 msgstr ""
+"Opisuje izgled objekta pod objektom navigatora,\n"
+"Ako pritisnete dvaput, Otvorit će se virtualni preglednik."
 
 #: addon/globalPlugins/CloudVision/__init__.py:219
 #: addon/globalPlugins/CloudVision/__init__.py:233
 msgid "Cloud Vision"
-msgstr ""
+msgstr "Cloud Vision"
 
 #: addon/globalPlugins/CloudVision/__init__.py:223
 msgid "Text Not Found."
-msgstr ""
+msgstr "Tekst nije pronađen."
 
 #: addon/globalPlugins/CloudVision/__init__.py:228
 msgid "Result copyed in clipboard.\n"
-msgstr ""
+msgstr "Rezultat je kopiran u međuspremnik.\n"
 
 #: addon/globalPlugins/CloudVision/__init__.py:232
 msgid "Copy last result in clipboard."
-msgstr ""
+msgstr "Kopiraj posljednji rezultat u međuspremnik"
 
 #. Add-on summary, usually the user visible name of the addon.
 #. Translators: Summary for this add-on to be shown on installation and add-on information.
 #: buildVars.py:17
 msgid "CloudVision"
-msgstr ""
+msgstr "CloudVision"
 
 #. Add-on description
 #. Translators: Long description to be shown for this add-on on add-on information from add-ons manager
@@ -116,3 +122,7 @@ msgid ""
 "technology. Press NVDA+Control+I to get a description of an object, if you "
 "press twice quickly, a virtual viewer will open."
 msgstr ""
+" Dodatak koji prepoznaje slike koristeći postignuća u tehnologiji umjetne "
+"inteligencije. Pritisnite NVDA+Control+I kako biste dohvatili opis objekta, "
+"Ako isti prečac pritisnete dvaput, otvorit će se opis u virtualiziranom "
+"prikazu."
