@@ -1,0 +1,1 @@
+https://visionbot.ru/addon/
