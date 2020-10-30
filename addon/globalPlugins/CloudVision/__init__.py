@@ -17,7 +17,15 @@ try:
 except ImportError:
 	from io import BytesIO ## 3
 	from io import StringIO ## 3
-import configobj
+
+## for Windows XP
+if sys.version_info.major == 2:
+	sys.path.insert(0, ".")
+	import myconfigobj as configobj
+	del sys.path[0]
+else:
+	import configobj
+
 import tones
 try:
 	import validate
@@ -46,6 +54,10 @@ if sys.version_info.major == 2:
 	import urllib as ur, urllib as up
 elif sys.version_info.major == 3:
 	import urllib.request as ur, urllib.parse as up
+
+## for Windows XP
+import socket
+socket.setdefaulttimeout(60)
 
 class SettingsDialog(gui.SettingsDialog):
 	title = _("CloudVision Settings")
@@ -149,9 +161,10 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		if s: self.beep_start()
 		for ii in range(2):
 			try:
-				resp = ur.urlopen(api_url, up.urlencode({"v":CloudVisionVersion, "n":n, "t":t, "s":s, "q":q, "lang":lang, "img_str":img_str}).encode('utf-8'), timeout=60).read().decode('utf-8')
+				resp = ur.urlopen(api_url, up.urlencode({"v":CloudVisionVersion, "n":n, "t":t, "s":s, "q":q, "lang":lang, "img_str":img_str}).encode('utf-8')).read().decode('utf-8')
 				break
 			except:
+				raise
 				resp = ""
 		self.isWorking = False
 		if resp: self.last_resp = resp
