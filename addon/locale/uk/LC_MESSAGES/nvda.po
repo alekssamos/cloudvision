@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CloudVision\n"
 "POT-Creation-Date: 2020-08-31 14:52+0300\n"
-"PO-Revision-Date: 2020-08-31 14:53+0300\n"
-"Last-Translator: Alex <aleks-samos@yandex.ru>\n"
+"PO-Revision-Date: 2020-09-19 21:02+0300\n"
+"Last-Translator: Volodymyr Pyrih <vp88.mobile@gmail.com>\n"
 "Language-Team: aleks-samos@yandex.ru\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
@@ -23,7 +23,7 @@ msgstr "Налаштування Cloud Vision"
 
 #: addon/globalPlugins/CloudVision/__init__.py:56
 msgid "&Play sound during recognition"
-msgstr "&Воспроізводіть звук під час розпізнавання"
+msgstr "&Відтворювати звук під час розпізнавання"
 
 #: addon/globalPlugins/CloudVision/__init__.py:60
 msgid "Recognize &text"
@@ -35,11 +35,11 @@ msgstr "Розпізнавати &образы"
 
 #: addon/globalPlugins/CloudVision/__init__.py:68
 msgid "Read &QR / bar code"
-msgstr "Читати &QR / bar коди"
+msgstr "Читати &QR / штрих-коди"
 
 #: addon/globalPlugins/CloudVision/__init__.py:72
 msgid "Translate text"
-msgstr "Переклад текста"
+msgstr "Переклад тексту"
 
 #: addon/globalPlugins/CloudVision/__init__.py:83
 msgid ""
@@ -67,7 +67,7 @@ msgstr "Помилка"
 
 #: addon/globalPlugins/CloudVision/__init__.py:162
 msgid "Analysis completed: "
-msgstr "Аналіз завершений:"
+msgstr "Аналіз завершено:"
 
 #: addon/globalPlugins/CloudVision/__init__.py:164
 msgid "CloudVision result"
@@ -75,42 +75,40 @@ msgstr "Результат CloudVision"
 
 #: addon/globalPlugins/CloudVision/__init__.py:175
 msgid "Analyzing navigator object"
-msgstr "Йде аналіз об'єкта навігатора"
+msgstr "Аналізую об’єкт навігатора"
 
 #: addon/globalPlugins/CloudVision/__init__.py:181
 msgid "This navigator object is not analyzable"
-msgstr "Цей об'єкт навігатора не може бути проаналізований"
+msgstr "Цей об’єкт навігатора не може бути проаналізований"
 
 #: addon/globalPlugins/CloudVision/__init__.py:217
 msgid ""
 "Gives a description on how current navigator object looks like visually,\n"
 "if you press twice quickly, a virtual viewer will open."
 msgstr ""
-"Отримує опис об'єкта, як він виглядає візуально,\n"
-"Якщо швидко натиснути двічі, відкриється віртуальний переглядач."
+"Надає опис об’єкта, як він виглядає візуально,\n"
+"Подвійне швидке натискання відкриває віртуальний переглядач."
 
 #: addon/globalPlugins/CloudVision/__init__.py:219
 #: addon/globalPlugins/CloudVision/__init__.py:233
 msgid "Cloud Vision"
-msgstr ""
+msgstr "Cloud Vision"
 
 #: addon/globalPlugins/CloudVision/__init__.py:223
 msgid "Text Not Found."
-msgstr "Текст не найден"
+msgstr "Текст незнайдено."
 
 #: addon/globalPlugins/CloudVision/__init__.py:228
 msgid "Result copyed in clipboard.\n"
-msgstr "Результат скопійований в буфер обміну\n"
+msgstr "Результат скопійовано в буфер обміну.\n"
 
 #: addon/globalPlugins/CloudVision/__init__.py:232
 msgid "Copy last result in clipboard."
 msgstr "Скопіювати останній результат в буфер обміну."
 
 #: buildVars.py:17
-#, fuzzy
-#| msgid "CloudVision result"
 msgid "CloudVision"
-msgstr "Результат CloudVision"
+msgstr "CloudVision"
 
 #: buildVars.py:20
 msgid ""
@@ -118,7 +116,7 @@ msgid ""
 "technology. Press NVDA+Control+I to get a description of an object, if you "
 "press twice quickly, a virtual viewer will open."
 msgstr ""
-"Розширення для опису зображень, використовуючи останні досягнення в "
-"технології штучного інтелекту. Натисніть клавіші NVDA+Control+I, щоб "
-"отримати опис об'єкта, якщо двічі натиснути, відкриється віртуальний "
+"Розширення для опису зображень, яке використовує останні досягнення "
+"технологій штучного інтелекту. Натисніть клавіші NVDA+Control+I, щоб "
+"отримати опис об’єкта, при подвійному натисканні відкриється віртуальний "
 "переглядач."
