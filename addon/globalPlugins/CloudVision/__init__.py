@@ -195,7 +195,8 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			return
 		left, top, width, height = nav.location
 
-		bmp = wx.EmptyBitmap(width, height)
+		if width < 1 or height < 1: return False
+		bmp = wx.Bitmap(width, height)
 		mem = wx.MemoryDC(bmp)
 		mem.Blit(0, 0, width, height, wx.ScreenDC(), left, top)
 		image = bmp.ConvertToImage()
