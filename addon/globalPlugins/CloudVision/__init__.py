@@ -4,8 +4,10 @@
 # Add-on that gets description of current navigator object based on visual features,
 # the computer vision heavy computations are made in the cloud.
 # VISIONBOT.RU
-CloudVisionVersion = "2.0.3"
+CloudVisionVersion = "3.0.0"
 import sys
+import json
+import time
 import os
 import tempfile
 import subprocess
@@ -123,6 +125,37 @@ class SettingsDialog(gui.SettingsDialog):
 
 		super(SettingsDialog, self).onOk(event)
 
+class APIError(Exception): pass
+def cloudvision_request(img_str, lang = "en", target = "all", qr = 0, translate = 0):
+	r1 = ur.urlopen("https://visionbot.ru/apiv2/in.php", data = up.urlencode({
+			"body": img_str,
+			"lang": lang,
+			"target": target,
+			"qr": qr,
+			"translate": translate
+		}).encode()
+	)
+	j1 = json.loads(r1.read())
+	r1.close()
+	del img_str # free memory
+	if j1["status"] != "ok":
+		raise APIError(j1["status"])
+	
+	for i in range(30):
+		r2 = ur.urlopen("https://visionbot.ru/apiv2/res.php",
+			data = up.urlencode({"id": j1["id"]}).encode())
+		j2 = json.loads(r2.read())
+		r2.close()
+		if j2["status"] == "error":
+			raise APIError(j2["status"])
+		
+		if j2["status"] == "ok":
+			return j2
+		
+		if j2["status"] == "notready":
+			time.sleep(1)
+			continue
+
 class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 	def __init__(self):
 		super(globalPluginHandler.GlobalPlugin, self).__init__()
@@ -153,36 +186,35 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 
 	def beep_stop(self):
 		self.isWorking = False
-		self.bp.cancel()
+		try: self.bp.cancel()
+		except: pass
 		return True
 
 
-	def thr_analyzeObject(self, gesture, api_url, img_str, lang, s=0, n=0, t=0, q=0):
+	def thr_analyzeObject(self, gesture, img_str, lang, s=0, target="all", t=0, q=0):
 		if s: self.beep_start()
-		for ii in range(2):
-			try:
-				resp = ur.urlopen(api_url, up.urlencode({"v":CloudVisionVersion, "n":n, "t":t, "s":s, "q":q, "lang":lang, "img_str":img_str}).encode('utf-8')).read().decode('utf-8')
-				break
-			except:
-				raise
-				resp = ""
+		resp = ""
+		try:
+			resx = cloudvision_request(img_str, lang, target, q, t)
+			if "qr" in resx: resp = resp + resx["qr"] + "\r\n\r\n"
+			if "text" in resx: resp = resp + resx["text"]
+			if not self.isVirtual:
+				speech.cancelSpeech()
+				ui.message(_('Analysis completed: ') + resp)
+			else:
+				ui.browseableMessage(resp, _("CloudVision result"))
+			self.isVirtual = False
+		except:
+			resp = ""
+			ui.message(str(sys.exc_info()[1]))
 		self.isWorking = False
 		if resp: self.last_resp = resp
 		if not resp.strip(): resp = _("Error")
 		if s: self.beep_stop()
-		if not self.isVirtual:
-			speech.cancelSpeech()
-			ui.message(_('Analysis completed: ') + resp)
-		else:
-			ui.browseableMessage(resp, _("CloudVision result"))
-		self.isVirtual = False
 
 	def script_analyzeObject(self, gesture):
 		if not self.isVirtual: self.isVirtual = scriptHandler.getLastScriptRepeatCount()>0
 		if self.isVirtual: return True
-		if self.isWorking: return False
-		self.isWorking = True
-		api_url = "https://visionbot.ru/addon/index.php"
 		if self.tmr: self.tmr.cancel()
 		speech.cancelSpeech()
 		ui.message(_("Analyzing navigator object"))
@@ -207,6 +239,8 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		else: # Used in WXPython 4.0
 			image.SaveFile(body, wx.BITMAP_TYPE_PNG)
 
+		if self.isWorking: return False
+		self.isWorking = True
 		img_str = base64.b64encode(body.getvalue())
 
 		sound = getConfig()['sound']
@@ -214,9 +248,9 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		if sound: s=1
 		textonly = getConfig()['textonly']
 		imageonly = getConfig()['imageonly']
-		n=0
-		if textonly and not imageonly: n=1
-		if not textonly and imageonly: n=2
+		target = "all"
+		if textonly and not imageonly: target = "text"
+		if not textonly and imageonly: target = "image"
 		trtext = getConfig()['trtext']
 		t=0
 		if trtext: t=1
@@ -225,7 +259,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		if qronly: q=1
 		lang = getConfig()['language']
 
-		self.tmr = Timer(0.1, self.thr_analyzeObject, [gesture, api_url, img_str, lang, s, n, t, q])
+		self.tmr = Timer(0.1, self.thr_analyzeObject, [gesture, img_str, lang, s, target, t, q])
 		self.tmr.start()
 
 	script_analyzeObject.__doc__ = _("Gives a description on how current navigator object looks like visually,\n"

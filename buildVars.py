@@ -21,7 +21,7 @@ addon_info = {
 "Press NVDA+Control+I to get a description of an object, "
 "if you press twice quickly, a virtual viewer will open."),
 	# version
-	"addon_version": "2.0.3.8",
+	"addon_version": "3.0.0.0",
 	# Author(s)
 	"addon_author": u"alekssamos <aleks-samos@yandex.ru>",
 	# URL for the add-on documentation support
