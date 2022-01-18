@@ -18,16 +18,16 @@ addon_info = {
 	# Add-on description
 	# Translators: Long description to be shown for this add-on on add-on information from add-ons manager
 	"addon_description": _("An extension for describing images by utilizing recent advances in AI technology. "
-"Press NVDA+Control+I to get a description of an object, "
+"Press NVDA+Control+I to get a description of an object or selected file in Explorer, "
 "if you press twice quickly, a virtual viewer will open."),
 	# version
-	"addon_version": "3.0.0.0",
+	"addon_version": "3.0.0.1",
 	# Author(s)
 	"addon_author": u"alekssamos <aleks-samos@yandex.ru>",
 	# URL for the add-on documentation support
 	"addon_url": "https://visionbot.ru/addon/",
 	# Documentation file name
-	"addon_docFileName": None,
+	"addon_docFileName": "readme.html",
 	# Minimum NVDA version supported (e.g. "2018.3.0", minor version is optional)
 	"addon_minimumNVDAVersion": 2017.1,
 	# Last NVDA version supported/tested (e.g. "2018.4.0", ideally more recent than minimum version)

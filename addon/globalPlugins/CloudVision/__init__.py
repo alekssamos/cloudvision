@@ -4,7 +4,7 @@
 # Add-on that gets description of current navigator object based on visual features,
 # the computer vision heavy computations are made in the cloud.
 # VISIONBOT.RU
-CloudVisionVersion = "3.0.0"
+CloudVisionVersion = "3.0.1"
 import sys
 import json
 import time
@@ -44,7 +44,15 @@ import api
 from logHandler import log
 import languageHandler
 import addonHandler
+from comtypes.client import CreateObject as COMCreate
+from .MyOCREnhance import totalCommanderHelper
+try:
+	from visionEnhancementProviders.screenCurtain import ScreenCurtainProvider
+except ImportError:
+	pass
+
 addonHandler.initTranslation()
+
 import textInfos.offsets
 import ui
 from globalCommands import SCRCAT_OBJECTNAVIGATION
@@ -60,6 +68,11 @@ elif sys.version_info.major == 3:
 ## for Windows XP
 import socket
 socket.setdefaulttimeout(60)
+
+filePath = ""
+fileExtension = ""
+fileName = ""
+suppFiles = ["png", "jpg", "gif", "jpeg", "webp"]
 
 class SettingsDialog(gui.SettingsDialog):
 	title = _("CloudVision Settings")
@@ -176,6 +189,53 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 	isVirtual = False
 	isWorking = False
 
+	def getFilePath(self): #For this method thanks to some nvda addon developers ( code snippets and suggestion)
+		global filePath
+		global fileExtension
+		global fileName
+		
+		# We check if we are in the Total Commander
+		tcmd = totalCommanderHelper.TotalCommanderHelper()
+		if tcmd.is_valid():
+			filePath = tcmd.currentFileWithPath()
+			if not filePath:
+				return False
+		else:
+			# We check if we are in the Windows Explorer.
+			fg = api.getForegroundObject()
+			if (fg.role != api.controlTypes.Role.PANE and fg.role != api.controlTypes.Role.WINDOW) or fg.appModule.appName != "explorer":
+				return False
+			
+			self.shell = COMCreate("shell.application")
+			desktop = False
+			# We go through the list of open Windows Explorers to find the one that has the focus.
+			for window in self.shell.Windows():
+				if window.hwnd == fg.windowHandle:
+					focusedItem=window.Document.FocusedItem
+					break
+			else: # loop exhausted
+				desktop = True
+			# Now that we have the current folder, we can explore the SelectedItems collection.
+			if desktop:
+				desktopPath = desktop = os.path.join(os.path.join(os.environ['USERPROFILE']), 'Desktop')
+				fileName = api.getDesktopObject().objectWithFocus().name
+				filePath = desktopPath + '\\' + fileName
+			else:
+				filePath = str(focusedItem.path)
+				fileName = str(focusedItem.name)
+		
+		# Getting the extension to check if is a supported file type.
+		fileExtension = filePath[-5:].lower() # Returns .jpeg or x.pdf
+		if fileExtension.startswith("."): # Case of a  .jpeg file
+			fileExtension = fileExtension[1:] # just jpeg
+		else:
+			fileExtension = fileExtension[2:] # just pdf
+		if fileExtension in suppFiles:
+			return True # Is a supported file format, so we can make OCR
+		else:
+			ui.message(_("File not supported"))
+			return False # It is a file format not supported so end the process.
+
 	def beep_start(self, thrc=False):
 		if thrc and not self.isWorking: return False
 		self.isWorking = True
@@ -217,31 +277,53 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		if self.isVirtual: return True
 		if self.tmr: self.tmr.cancel()
 		speech.cancelSpeech()
-		ui.message(_("Analyzing navigator object"))
+		p = self.getFilePath()
+		if p == True:
+			ui.message(_("Analyzing selected file"))
+		else:
+			ui.message(_("Analyzing navigator object"))
 		try: nav = api.getNavigatorObject()
 		except: return False
 
-		if not nav.location:
-			speech.cancelSpeech()
-			ui.message(_("This navigator object is not analyzable"))
-			return
-		left, top, width, height = nav.location
-
-		if width < 1 or height < 1: return False
-		bmp = wx.Bitmap(width, height)
-		mem = wx.MemoryDC(bmp)
-		mem.Blit(0, 0, width, height, wx.ScreenDC(), left, top)
-		image = bmp.ConvertToImage()
-		try: body = BytesIO()
-		except TypeError: body = StringIO()
-		if wx.__version__ == '3.0.2.0': # Maintain compatibility with old version of WXPython
-			image.SaveStream(body, wx.BITMAP_TYPE_PNG)
-		else: # Used in WXPython 4.0
-			image.SaveFile(body, wx.BITMAP_TYPE_PNG)
+		try:
+			screenCurtainId = ScreenCurtainProvider.getSettings().getId()
+			screenCurtainProviderInfo = vision.handler.getProviderInfo(screenCurtainId)
+			isScreenCurtainRunning = bool(vision.handler.getProviderInstance(screenCurtainProviderInfo))
+			if isScreenCurtainRunning:
+				# Translators: Reported when screen curtain is enabled.
+				ui.message(_("Please disable screen curtain before using CloudVision add-on."))
+				return
+		except:
+			pass
 
 		if self.isWorking: return False
 		self.isWorking = True
-		img_str = base64.b64encode(body.getvalue())
+
+		if not nav.location and p == False:
+			speech.cancelSpeech()
+			ui.message(_("This navigator object is not analyzable"))
+			return
+		if p == False:
+			left, top, width, height = nav.location
+
+		if (p == False) and (width < 1 or height < 1):
+			return False
+		if p == False:
+			bmp = wx.Bitmap(width, height)
+			mem = wx.MemoryDC(bmp)
+			mem.Blit(0, 0, width, height, wx.ScreenDC(), left, top)
+			image = bmp.ConvertToImage()
+			try: body = BytesIO()
+			except TypeError: body = StringIO()
+			if wx.__version__ == '3.0.2.0': # Maintain compatibility with old version of WXPython
+				image.SaveStream(body, wx.BITMAP_TYPE_PNG)
+			else: # Used in WXPython 4.0
+				image.SaveFile(body, wx.BITMAP_TYPE_PNG)
+			img_str = base64.b64encode(body.getvalue())
+		if p == True:
+			with open(filePath, "rb") as f:
+				body = f.read()
+			img_str = base64.b64encode(body)
 
 		sound = getConfig()['sound']
 		s=0
@@ -262,7 +344,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		self.tmr = Timer(0.1, self.thr_analyzeObject, [gesture, img_str, lang, s, target, t, q])
 		self.tmr.start()
 
-	script_analyzeObject.__doc__ = _("Gives a description on how current navigator object looks like visually,\n"
+	script_analyzeObject.__doc__ = _("Gives a description on how current navigator object or selected file in Explorer looks like visually,\n"
 	"if you press twice quickly, a virtual viewer will open.")
 	script_analyzeObject.category = _('Cloud Vision')
 
@@ -281,7 +363,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 	script_copylastresult.category = _('Cloud Vision')
 
 	__gestures = {
-		"kb:NVDA+Control+I": "analyzeObject",
+		"kb:NVDA+Control+I": "analyzeObject or selected file in Explorer",
 	}
 
 supportedLocales = [
