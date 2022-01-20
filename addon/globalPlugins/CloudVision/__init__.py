@@ -363,7 +363,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 	script_copylastresult.category = _('Cloud Vision')
 
 	__gestures = {
-		"kb:NVDA+Control+I": "analyzeObject or selected file in Explorer",
+		"kb:NVDA+Control+I": "analyzeObject",
 	}
 
 supportedLocales = [
