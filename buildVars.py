@@ -21,7 +21,7 @@ addon_info = {
 "Press NVDA+Control+I to get a description of an object or selected file in Explorer, "
 "if you press twice quickly, a virtual viewer will open."),
 	# version
-	"addon_version": "3.0.0.2",
+	"addon_version": "3.0.0.4",
 	# Author(s)
 	"addon_author": u"alekssamos <aleks-samos@yandex.ru>",
 	# URL for the add-on documentation support
@@ -29,9 +29,9 @@ addon_info = {
 	# Documentation file name
 	"addon_docFileName": "readme.html",
 	# Minimum NVDA version supported (e.g. "2018.3.0", minor version is optional)
-	"addon_minimumNVDAVersion": 2021.1,
+	"addon_minimumNVDAVersion": 2017.1,
 	# Last NVDA version supported/tested (e.g. "2018.4.0", ideally more recent than minimum version)
-	"addon_lastTestedNVDAVersion": 2021.1,
+	"addon_lastTestedNVDAVersion": 2023.1,
 	# Add-on update channel (default is None, denoting stable releases, and for development releases, use "dev"; do not change unless you know what you are doing)
 	"addon_updateChannel": None,
 }

@@ -44,8 +44,11 @@ import api
 from logHandler import log
 import languageHandler
 import addonHandler
-from comtypes.client import CreateObject as COMCreate
-from .MyOCREnhance import totalCommanderHelper
+import versionInfo
+is_new_nvda = (versionInfo.version_year >= 2021 and versionInfo.version_major>=1)
+if is_new_nvda:
+	from comtypes.client import CreateObject as COMCreate
+	from .MyOCREnhance import totalCommanderHelper
 try:
 	from visionEnhancementProviders.screenCurtain import ScreenCurtainProvider
 except ImportError:
@@ -55,7 +58,8 @@ addonHandler.initTranslation()
 
 import textInfos.offsets
 import ui
-from globalCommands import SCRCAT_OBJECTNAVIGATION
+if is_new_nvda:
+	from globalCommands import SCRCAT_OBJECTNAVIGATION
 from time import sleep
 from math import sqrt
 
@@ -154,7 +158,7 @@ def cloudvision_request(img_str, lang = "en", target = "all", qr = 0, translate 
 	if j1["status"] != "ok":
 		raise APIError(j1["status"])
 	
-	for i in range(30):
+	for i in range(60):
 		r2 = ur.urlopen("https://visionbot.ru/apiv2/res.php",
 			data = up.urlencode({"id": j1["id"]}).encode())
 		j2 = json.loads(r2.read())
@@ -190,6 +194,12 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 	isWorking = False
 
 	def getFilePath(self): #For this method thanks to some nvda addon developers ( code snippets and suggestion)
+		if not is_new_nvda:
+			focus=api.getFocusObject()
+			mod=focus.appModule
+			if mod.appName.lower() in ["explorer", "totalcmd"]:
+				ui.message(_("To recognize files under the cursor without opening Update NVDA version to 2021.1 or higher"))
+			return False
 		global filePath
 		global fileExtension
 		global fileName

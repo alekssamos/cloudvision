@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CloudVision\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
-"POT-Creation-Date: 2022-01-18 14:30+0300\n"
-"PO-Revision-Date: 2022-01-18 14:30+0300\n"
+"POT-Creation-Date: 2022-05-15 11:31+0300\n"
+"PO-Revision-Date: 2022-05-15 11:31+0300\n"
 "Last-Translator: Alex <aleks-samos@yandex.ru>\n"
 "Language-Team: alekssamos <aleks-samos@yandex.ru>\n"
 "Language: ru\n"
@@ -17,31 +17,31 @@ msgstr ""
 "X-Poedit-SearchPath-0: addon/globalPlugins/CloudVision/__init__.py\n"
 "X-Poedit-SearchPath-1: buildVars.py\n"
 
-#: addon/globalPlugins/CloudVision/__init__.py:78
+#: addon/globalPlugins/CloudVision/__init__.py:82
 msgid "CloudVision Settings"
 msgstr "Настройки CloudVision"
 
-#: addon/globalPlugins/CloudVision/__init__.py:83
+#: addon/globalPlugins/CloudVision/__init__.py:87
 msgid "&Play sound during recognition"
 msgstr "&Воспроизводить звук во время распознавания"
 
-#: addon/globalPlugins/CloudVision/__init__.py:87
+#: addon/globalPlugins/CloudVision/__init__.py:91
 msgid "Recognize &text"
 msgstr "Распознавать &текст"
 
-#: addon/globalPlugins/CloudVision/__init__.py:91
+#: addon/globalPlugins/CloudVision/__init__.py:95
 msgid "Recognize &images"
 msgstr "Распознавать &образы"
 
-#: addon/globalPlugins/CloudVision/__init__.py:95
+#: addon/globalPlugins/CloudVision/__init__.py:99
 msgid "Read &QR / bar code"
 msgstr "Читать &QR / bar коды"
 
-#: addon/globalPlugins/CloudVision/__init__.py:99
+#: addon/globalPlugins/CloudVision/__init__.py:103
 msgid "Translate text"
 msgstr "Перевод текста"
 
-#: addon/globalPlugins/CloudVision/__init__.py:110
+#: addon/globalPlugins/CloudVision/__init__.py:114
 msgid ""
 "Select image description language, other languages than english are more "
 "prone to translation errors"
@@ -49,53 +49,61 @@ msgstr ""
 "Выберите язык описания изображения,\vдругие языки, кроме английского, более "
 "подвержены ошибкам перевода"
 
-#: addon/globalPlugins/CloudVision/__init__.py:115
+#: addon/globalPlugins/CloudVision/__init__.py:119
 msgid "Open site"
 msgstr "Открыть сайт"
 
-#: addon/globalPlugins/CloudVision/__init__.py:137
+#: addon/globalPlugins/CloudVision/__init__.py:141
 msgid "Error saving settings"
 msgstr "Ошибка сохранения настроек"
 
-#: addon/globalPlugins/CloudVision/__init__.py:176
+#: addon/globalPlugins/CloudVision/__init__.py:180
 msgid "Cloud Vision settings..."
 msgstr "Настройки CloudVision..."
 
-#: addon/globalPlugins/CloudVision/__init__.py:236
+#: addon/globalPlugins/CloudVision/__init__.py:198
+msgid ""
+"To recognize files under the cursor without opening Update NVDA version to "
+"2021.1 or higher"
+msgstr ""
+"Для распознавания файлов под курсором без открытия Обновите версию NVDA до "
+"2021.1 или выше"
+
+#: addon/globalPlugins/CloudVision/__init__.py:243
 msgid "File not supported"
 msgstr "Файл не поддерживается"
 
-#: addon/globalPlugins/CloudVision/__init__.py:263
+#: addon/globalPlugins/CloudVision/__init__.py:270
 msgid "Analysis completed: "
 msgstr "Анализ завершен: "
 
-#: addon/globalPlugins/CloudVision/__init__.py:265
+#: addon/globalPlugins/CloudVision/__init__.py:272
 msgid "CloudVision result"
 msgstr "Результат CloudVision"
 
-#: addon/globalPlugins/CloudVision/__init__.py:272
+#: addon/globalPlugins/CloudVision/__init__.py:279
 msgid "Error"
 msgstr "Ошибка"
 
-#: addon/globalPlugins/CloudVision/__init__.py:282
+#: addon/globalPlugins/CloudVision/__init__.py:289
 msgid "Analyzing selected file"
 msgstr "Идет анализ выбранного файла"
 
-#: addon/globalPlugins/CloudVision/__init__.py:284
+#: addon/globalPlugins/CloudVision/__init__.py:291
 msgid "Analyzing navigator object"
 msgstr "Идет анализ объекта навигатора"
 
-#: addon/globalPlugins/CloudVision/__init__.py:294
+#: addon/globalPlugins/CloudVision/__init__.py:301
 msgid "Please disable screen curtain before using CloudVision add-on."
 msgstr ""
 "Пожалуйста, отключите затемнение экрана перед использованием дополнения "
 "CloudVision."
 
-#: addon/globalPlugins/CloudVision/__init__.py:304
+#: addon/globalPlugins/CloudVision/__init__.py:311
 msgid "This navigator object is not analyzable"
 msgstr "Этот объект навигатора невозможно анализировать"
 
-#: addon/globalPlugins/CloudVision/__init__.py:347
+#: addon/globalPlugins/CloudVision/__init__.py:354
 msgid ""
 "Gives a description on how current navigator object or selected file in "
 "Explorer looks like visually,\n"
@@ -105,20 +113,20 @@ msgstr ""
 "файл в Проводнике выглядит визуально,\n"
 "если нажать два раза быстро, откроется виртуальный просмотрщик."
 
-#: addon/globalPlugins/CloudVision/__init__.py:349
-#: addon/globalPlugins/CloudVision/__init__.py:363
+#: addon/globalPlugins/CloudVision/__init__.py:356
+#: addon/globalPlugins/CloudVision/__init__.py:370
 msgid "Cloud Vision"
 msgstr "Cloud Vision"
 
-#: addon/globalPlugins/CloudVision/__init__.py:353
+#: addon/globalPlugins/CloudVision/__init__.py:360
 msgid "Text Not Found."
 msgstr "Текст не найден"
 
-#: addon/globalPlugins/CloudVision/__init__.py:358
+#: addon/globalPlugins/CloudVision/__init__.py:365
 msgid "Result copyed in clipboard.\n"
 msgstr "Результат скопирован в буфер обмена.\n"
 
-#: addon/globalPlugins/CloudVision/__init__.py:362
+#: addon/globalPlugins/CloudVision/__init__.py:369
 msgid "Copy last result in clipboard."
 msgstr "Копировать последний результат в буфер обмена."
 
