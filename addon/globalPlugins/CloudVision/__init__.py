@@ -38,6 +38,7 @@ import config
 import globalPluginHandler
 import gui
 import scriptHandler
+import queueHandler
 from  threading import Timer
 import speech
 import api
@@ -49,10 +50,6 @@ is_new_nvda = (versionInfo.version_year >= 2021 and versionInfo.version_major>=1
 if is_new_nvda:
 	from comtypes.client import CreateObject as COMCreate
 	from .MyOCREnhance import totalCommanderHelper
-try:
-	from visionEnhancementProviders.screenCurtain import ScreenCurtainProvider
-except ImportError:
-	pass
 
 addonHandler.initTranslation()
 
@@ -174,6 +171,7 @@ def cloudvision_request(img_str, lang = "en", target = "all", qr = 0, translate 
 			continue
 
 class GlobalPlugin(globalPluginHandler.GlobalPlugin):
+
 	def __init__(self):
 		super(globalPluginHandler.GlobalPlugin, self).__init__()
 		self.CloudVisionSettingsItem = gui.mainFrame.sysTrayIcon.preferencesMenu.Append(wx.ID_ANY,
@@ -260,7 +258,6 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		except: pass
 		return True
 
-
 	def thr_analyzeObject(self, gesture, img_str, lang, s=0, target="all", t=0, q=0):
 		if s: self.beep_start()
 		resp = ""
@@ -269,14 +266,14 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			if "qr" in resx: resp = resp + resx["qr"] + "\r\n\r\n"
 			if "text" in resx: resp = resp + resx["text"]
 			if not self.isVirtual:
-				speech.cancelSpeech()
-				ui.message(_('Analysis completed: ') + resp)
+				queueHandler.queueFunction(queueHandler.eventQueue, speech.cancelSpeech)
+				queueHandler.queueFunction(queueHandler.eventQueue, ui.message, _('Analysis completed: ') + resp)
 			else:
-				ui.browseableMessage(resp, _("CloudVision result"))
+				queueHandler.queueFunction(queueHandler.eventQueue, ui.browseableMessage, resp, _("CloudVision result"))
 			self.isVirtual = False
 		except:
 			resp = ""
-			ui.message(str(sys.exc_info()[1]))
+			queueHandler.queueFunction(queueHandler.eventQueue, ui.message, str(sys.exc_info()[1]))
 		self.isWorking = False
 		if resp: self.last_resp = resp
 		if not resp.strip(): resp = _("Error")
@@ -291,20 +288,22 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		if p == True:
 			ui.message(_("Analyzing selected file"))
 		else:
+			try:
+				import vision
+				from visionEnhancementProviders.screenCurtain import ScreenCurtainProvider
+				screenCurtainId = ScreenCurtainProvider.getSettings().getId()
+				screenCurtainProviderInfo = vision.handler.getProviderInfo(screenCurtainId)
+				isScreenCurtainRunning = bool(vision.handler.getProviderInstance(screenCurtainProviderInfo))
+				if isScreenCurtainRunning:
+					# Translators: Reported when screen curtain is enabled.
+					ui.message(_("Please disable screen curtain before using CloudVision add-on."))
+					return
+			except:
+				pass
 			ui.message(_("Analyzing navigator object"))
+
 		try: nav = api.getNavigatorObject()
 		except: return False
-
-		try:
-			screenCurtainId = ScreenCurtainProvider.getSettings().getId()
-			screenCurtainProviderInfo = vision.handler.getProviderInfo(screenCurtainId)
-			isScreenCurtainRunning = bool(vision.handler.getProviderInstance(screenCurtainProviderInfo))
-			if isScreenCurtainRunning:
-				# Translators: Reported when screen curtain is enabled.
-				ui.message(_("Please disable screen curtain before using CloudVision add-on."))
-				return
-		except:
-			pass
 
 		if self.isWorking: return False
 		self.isWorking = True
