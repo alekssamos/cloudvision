@@ -4,7 +4,7 @@
 # Add-on that gets description of current navigator object based on visual features,
 # the computer vision heavy computations are made in the cloud.
 # VISIONBOT.RU
-CloudVisionVersion = "3.0.1"
+CloudVisionVersion = "3.0.0.5"
 import sys
 import json
 import time
