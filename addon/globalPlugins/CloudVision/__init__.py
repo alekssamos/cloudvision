@@ -4,7 +4,7 @@
 # Add-on that gets description of current navigator object based on visual features,
 # the computer vision heavy computations are made in the cloud.
 # VISIONBOT.RU
-CloudVisionVersion = "3.0.0.5"
+CloudVisionVersion = "3.0.1"
 import sys
 import json
 import time
@@ -141,13 +141,21 @@ class SettingsDialog(gui.SettingsDialog):
 
 class APIError(Exception): pass
 def cloudvision_request(img_str, lang = "en", target = "all", qr = 0, translate = 0):
-	r1 = ur.urlopen("https://visionbot.ru/apiv2/in.php", data = up.urlencode({
-			"body": img_str,
-			"lang": lang,
-			"target": target,
-			"qr": qr,
-			"translate": translate
-		}).encode()
+	params = {
+		"lang": lang,
+		"target": target,
+		"qr": qr,
+		"translate": translate
+	}
+	if isinstance(img_str, str):
+		lnkstart = "http"
+	else:
+		lnkstart = b"http"
+	if img_str.startswith(lnkstart):
+		params["url"] = img_str
+	else:
+		params["body"] = img_str
+	r1 = ur.urlopen("https://visionbot.ru/apiv2/in.php", data = up.urlencode(params).encode()
 	)
 	j1 = json.loads(r1.read())
 	r1.close()
@@ -284,10 +292,18 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		if self.isVirtual: return True
 		if self.tmr: self.tmr.cancel()
 		speech.cancelSpeech()
+		is_url = False
+		fg = api.getNavigatorObject()
+		if fg.role == api.controlTypes.Role.GRAPHIC or fg.role == api.controlTypes.Role.LINK or fg.role == api.controlTypes.Role.STATICTEXT and len(fg.value) > 1:
+			u = fg.IA2Attributes.get("src", fg.value)
+			fileExtension = u.split("/")[-1].split("?")[0].split(".")[-1]
+			if fileExtension in suppFiles:
+				is_url = True
+				body = u
 		p = self.getFilePath()
-		if p == True:
+		if p == True or is_url == True:
 			ui.message(_("Analyzing selected file"))
-		else:
+		elif p == False and is_url == False:
 			try:
 				import vision
 				from visionEnhancementProviders.screenCurtain import ScreenCurtainProvider
@@ -308,16 +324,16 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		if self.isWorking: return False
 		self.isWorking = True
 
-		if not nav.location and p == False:
+		if not nav.location and p == False and is_url == False:
 			speech.cancelSpeech()
 			ui.message(_("This navigator object is not analyzable"))
 			return
-		if p == False:
+		if p == False and is_url == False:
 			left, top, width, height = nav.location
 
-		if (p == False) and (width < 1 or height < 1):
+		if is_url == False and (p == False) and (width < 1 or height < 1):
 			return False
-		if p == False:
+		if p == False and is_url == False:
 			bmp = wx.Bitmap(width, height)
 			mem = wx.MemoryDC(bmp)
 			mem.Blit(0, 0, width, height, wx.ScreenDC(), left, top)
@@ -329,10 +345,12 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			else: # Used in WXPython 4.0
 				image.SaveFile(body, wx.BITMAP_TYPE_PNG)
 			img_str = base64.b64encode(body.getvalue())
-		if p == True:
+		if p == True and is_url == False:
 			with open(filePath, "rb") as f:
 				body = f.read()
 			img_str = base64.b64encode(body)
+		if is_url == True:
+			img_str = body
 
 		sound = getConfig()['sound']
 		s=0
