@@ -1,0 +1,134 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
+"POT-Creation-Date: 2022-01-18 14:29+0300\n"
+"PO-Revision-Date: 2022-12-31 11:08+0800\n"
+"Last-Translator: Ken Chang <lindsay714322@gmail.com>\n"
+"Language-Team: \n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.0.1\n"
+"X-Poedit-Basepath: .\n"
+
+#: addon\globalPlugins\CloudVision\__init__.py:78
+msgid "CloudVision Settings"
+msgstr "AI 視覺設定"
+
+#: addon\globalPlugins\CloudVision\__init__.py:83
+msgid "&Play sound during recognition"
+msgstr "辨識時播放音效(&P)"
+
+#: addon\globalPlugins\CloudVision\__init__.py:87
+msgid "Recognize &text"
+msgstr "辨識文字(&T)"
+
+#: addon\globalPlugins\CloudVision\__init__.py:91
+msgid "Recognize &images"
+msgstr "辨識圖片(&I)"
+
+#: addon\globalPlugins\CloudVision\__init__.py:95
+msgid "Read &QR / bar code"
+msgstr "讀 QR/bar 代碼(&Q)"
+
+#: addon\globalPlugins\CloudVision\__init__.py:99
+msgid "Translate text"
+msgstr "翻譯文字"
+
+#: addon\globalPlugins\CloudVision\__init__.py:110
+msgid ""
+"Select image description language, other languages than english are more "
+"prone to translation errors"
+msgstr "選取圖片描述的語言，不是英文的語言可能較多翻譯錯誤"
+
+#: addon\globalPlugins\CloudVision\__init__.py:115
+msgid "Open site"
+msgstr "開啟網站"
+
+#: addon\globalPlugins\CloudVision\__init__.py:137
+msgid "Error saving settings"
+msgstr "儲存設定時發生錯誤"
+
+#: addon\globalPlugins\CloudVision\__init__.py:176
+msgid "Cloud Vision settings..."
+msgstr "AI 視覺設定..."
+
+#: addon\globalPlugins\CloudVision\__init__.py:236
+msgid "File not supported"
+msgstr "檔案不支援"
+
+#: addon\globalPlugins\CloudVision\__init__.py:263
+msgid "Analysis completed: "
+msgstr "辨識完成： "
+
+#: addon\globalPlugins\CloudVision\__init__.py:265
+msgid "CloudVision result"
+msgstr "AI 視覺結果"
+
+#: addon\globalPlugins\CloudVision\__init__.py:272
+msgid "Error"
+msgstr "錯誤"
+
+#: addon\globalPlugins\CloudVision\__init__.py:282
+msgid "Analyzing selected file"
+msgstr "正在辨識選取的檔案"
+
+#: addon\globalPlugins\CloudVision\__init__.py:284
+msgid "Analyzing navigator object"
+msgstr "正在辨識導覽的物件"
+
+#. Translators: Reported when screen curtain is enabled.
+#: addon\globalPlugins\CloudVision\__init__.py:294
+msgid "Please disable screen curtain before using CloudVision add-on."
+msgstr "使用 AI 視覺附加元件前請先關閉螢幕簾幕。"
+
+#: addon\globalPlugins\CloudVision\__init__.py:304
+msgid "This navigator object is not analyzable"
+msgstr "此導覽物件無法辨識"
+
+#: addon\globalPlugins\CloudVision\__init__.py:347
+msgid ""
+"Gives a description on how current navigator object or selected file in "
+"Explorer looks like visually,\n"
+"if you press twice quickly, a virtual viewer will open."
+msgstr ""
+"取得目前導覽物件或檔案總管中選取的檔案之視覺描述，\n"
+"如果您快速按兩下，將開啟虛擬檢視視窗。"
+
+#: addon\globalPlugins\CloudVision\__init__.py:349
+#: addon\globalPlugins\CloudVision\__init__.py:363
+msgid "Cloud Vision"
+msgstr "AI 視覺"
+
+#: addon\globalPlugins\CloudVision\__init__.py:353
+msgid "Text Not Found."
+msgstr "找不到文字。"
+
+#: addon\globalPlugins\CloudVision\__init__.py:358
+msgid "Result copyed in clipboard.\n"
+msgstr "結果已複製到剪貼簿。\n"
+
+#: addon\globalPlugins\CloudVision\__init__.py:362
+msgid "Copy last result in clipboard."
+msgstr "複製最後一個結果到剪貼簿。"
+
+#. Add-on summary, usually the user visible name of the addon.
+#. Translators: Summary for this add-on to be shown on installation and add-on information.
+#: buildVars.py:17
+msgid "CloudVision"
+msgstr "AI 視覺"
+
+#. Add-on description
+#. Translators: Long description to be shown for this add-on on add-on information from add-ons manager
+#: buildVars.py:20
+msgid ""
+"An extension for describing images by utilizing recent advances in AI "
+"technology. Press NVDA+Control+I to get a description of an object or "
+"selected file in Explorer, if you press twice quickly, a virtual viewer will "
+"open."
+msgstr ""
+"一個使用 AI 技術描述圖片的附加元件。 按下 NVDA+Control+I 來取得物件或檔案總管"
+"中選取的檔案之描述， 如果您快速按兩下，將開啟虛擬檢視視窗。"
