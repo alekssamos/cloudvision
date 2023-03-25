@@ -81,6 +81,10 @@ class SettingsDialog(gui.SettingsDialog):
 	def makeSettings(self, sizer):
 		settingsSizerHelper = gui.guiHelper.BoxSizerHelper(self, sizer=sizer)
 
+		self.prefer_navigator = wx.CheckBox(self, label=_("Pre&fer a navigator object instead of a file"))
+		self.prefer_navigator.SetValue(getConfig()["prefer_navigator"])
+		settingsSizerHelper.addItem(self.prefer_navigator)
+
 		self.sound = wx.CheckBox(self, label=_("&Play sound during recognition"))
 		self.sound.SetValue(getConfig()["sound"])
 		settingsSizerHelper.addItem(self.sound)
@@ -124,6 +128,7 @@ class SettingsDialog(gui.SettingsDialog):
 		if not self.textonly.IsChecked() and not  self.imageonly.IsChecked():
 			self.textonly.SetValue(True)
 			self.imageonly.SetValue(True)
+		getConfig()["prefer_navigator"] = self.prefer_navigator.IsChecked()
 		getConfig()["sound"] = self.sound.IsChecked()
 		getConfig()["textonly"] = self.textonly.IsChecked()
 		getConfig()["imageonly"] = self.imageonly.IsChecked()
@@ -205,6 +210,8 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			mod=focus.appModule
 			if mod.appName.lower() in ["explorer", "totalcmd"]:
 				ui.message(_("To recognize files under the cursor without opening Update NVDA version to 2021.1 or higher"))
+			return False
+		if getConfig()["prefer_navigator"]:
 			return False
 		global filePath
 		global fileExtension
@@ -292,10 +299,12 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		if self.isVirtual: return True
 		if self.tmr: self.tmr.cancel()
 		speech.cancelSpeech()
+		global filePath, p, fileExtension
 		is_url = False
+		p = False
 		fg = api.getNavigatorObject()
 		try:
-			if (
+			if (not getConfig()["prefer_navigator"]) and (
 				(fg.role == api.controlTypes.Role.GRAPHIC
 					and getattr(fg, "IA2Attributes"))
 				or ((fg.role == api.controlTypes.Role.LINK
@@ -305,11 +314,19 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 				u = fg.IA2Attributes.get("src", fg.value)
 				fileExtension = u.split("/")[-1].split("?")[0].split(".")[-1]
 				if fileExtension in suppFiles:
-					is_url = True
-					body = u
+					if u.startswith("file:///"):
+						u = u.replace("file:///", "").replace("/", "\\").split("?")[0].split("#")[0]
+						p = True
+						filePath = u
+						u = ""
+						is_url = False
+					else:
+						if u.startswith("http://") or u.startswith("https://"):
+							is_url = True
+							body = u
 		except AttributeError:
 			pass
-		p = self.getFilePath()
+		p = p or self.getFilePath()
 		if p == True or is_url == True:
 			ui.message(_("Analyzing selected file"))
 		elif p == False and is_url == False:
@@ -450,6 +467,7 @@ def getDefaultLanguage():
 
 _config = None
 configspec = StringIO(u"""
+prefer_navigator=boolean(default=False)
 sound=boolean(default=False)
 textonly=boolean(default=True)
 imageonly=boolean(default=True)
