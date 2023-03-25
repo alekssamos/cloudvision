@@ -294,18 +294,21 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		speech.cancelSpeech()
 		is_url = False
 		fg = api.getNavigatorObject()
-		if (
-			(fg.role == api.controlTypes.Role.GRAPHIC
-				and getattr(fg, "IA2Attributes"))
-			or ((fg.role == api.controlTypes.Role.LINK
-					or fg.role == api.controlTypes.Role.STATICTEXT)
-				and len(fg.value or "") > 1)
-		):
-			u = fg.IA2Attributes.get("src", fg.value)
-			fileExtension = u.split("/")[-1].split("?")[0].split(".")[-1]
-			if fileExtension in suppFiles:
-				is_url = True
-				body = u
+		try:
+			if (
+				(fg.role == api.controlTypes.Role.GRAPHIC
+					and getattr(fg, "IA2Attributes"))
+				or ((fg.role == api.controlTypes.Role.LINK
+						or fg.role == api.controlTypes.Role.STATICTEXT)
+					and len(fg.value or "") > 1)
+			):
+				u = fg.IA2Attributes.get("src", fg.value)
+				fileExtension = u.split("/")[-1].split("?")[0].split(".")[-1]
+				if fileExtension in suppFiles:
+					is_url = True
+					body = u
+		except AttributeError:
+			pass
 		p = self.getFilePath()
 		if p == True or is_url == True:
 			ui.message(_("Analyzing selected file"))
