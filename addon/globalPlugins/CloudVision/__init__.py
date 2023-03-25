@@ -73,7 +73,7 @@ socket.setdefaulttimeout(60)
 filePath = ""
 fileExtension = ""
 fileName = ""
-suppFiles = ["png", "jpg", "gif", "jpeg", "webp"]
+suppFiles = ["png", "jpg", "gif", "tiff", "jpeg", "webp"]
 
 class SettingsDialog(gui.SettingsDialog):
 	title = _("CloudVision Settings")
