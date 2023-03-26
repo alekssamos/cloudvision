@@ -458,7 +458,8 @@ supportedLocales = [
 	"tr",
 	"uk",
 	"vi",
-	"zh_CN"
+	"zh_CN",
+	"zh_TW"
 ]
 
 def getDefaultLanguage():
