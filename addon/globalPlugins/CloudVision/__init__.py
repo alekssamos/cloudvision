@@ -209,7 +209,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			focus=api.getFocusObject()
 			mod=focus.appModule
 			if mod.appName.lower() in ["explorer", "totalcmd"]:
-				ui.message(_("To recognize files under the cursor without opening Update NVDA version to 2021.1 or higher"))
+				queueHandler.queueFunction(queueHandler.eventQueue, ui.message, _("To recognize files under the cursor without opening Update NVDA version to 2021.1 or higher"))
 			return False
 		if getConfig()["prefer_navigator"]:
 			return False
@@ -256,7 +256,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		if fileExtension in suppFiles:
 			return True # Is a supported file format, so we can make OCR
 		else:
-			ui.message(_("File not supported"))
+			queueHandler.queueFunction(queueHandler.eventQueue, ui.message, _("File not supported"))
 			return False # It is a file format not supported so end the process.
 
 	def beep_start(self, thrc=False):
@@ -294,7 +294,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		if not resp.strip(): resp = _("Error")
 		if s: self.beep_stop()
 
-	def script_analyzeObject(self, gesture):
+	def _script_analyzeObject(self, gesture):
 		if not self.isVirtual: self.isVirtual = scriptHandler.getLastScriptRepeatCount()>0
 		if self.isVirtual: return True
 		if self.tmr: self.tmr.cancel()
@@ -328,7 +328,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			pass
 		p = p or self.getFilePath()
 		if p == True or is_url == True:
-			ui.message(_("Analyzing selected file"))
+			queueHandler.queueFunction(queueHandler.eventQueue, ui.message, _("Analyzing selected file"))
 		elif p == False and is_url == False:
 			try:
 				import vision
@@ -338,26 +338,39 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 				isScreenCurtainRunning = bool(vision.handler.getProviderInstance(screenCurtainProviderInfo))
 				if isScreenCurtainRunning:
 					# Translators: Reported when screen curtain is enabled.
-					ui.message(_("Please disable screen curtain before using CloudVision add-on."))
+					queueHandler.queueFunction(queueHandler.eventQueue, ui.message, _("Please disable screen curtain before using CloudVision add-on."))
 					return
 			except:
 				pass
-			ui.message(_("Analyzing navigator object"))
+			queueHandler.queueFunction(queueHandler.eventQueue, ui.message, _("Analyzing navigator object"))
 
-		try: nav = api.getNavigatorObject()
-		except: return False
-
-		if self.isWorking: return False
+		if self.isWorking:
+			return False
 		self.isWorking = True
+
+		try:
+			nav = api.getNavigatorObject()
+		except:
+			log.exception("get nav object")
+			return False
 
 		if not nav.location and p == False and is_url == False:
 			speech.cancelSpeech()
-			ui.message(_("This navigator object is not analyzable"))
+			queueHandler.queueFunction(queueHandler.eventQueue, ui.message, _("This navigator object is not analyzable"))
 			return
 		if p == False and is_url == False:
 			left, top, width, height = nav.location
 
-		if is_url == False and (p == False) and (width < 1 or height < 1):
+		if is_url == False and (p == False) and (width < 16 or height < 16):
+			perferm_size = " {width}X{height}".format(width=width, height=height)
+			"""
+			If you do and, not or, then an error * will occur
+			* wx._core.wxAssertionError: C++ assertion ""w > 0 && h > 0"" failed at ..\..\src\msw\bitmap.cpp(752) in wxBitmap::DoCreate(): invalid bitmap size
+			This happens in the Firefox browser in some posts on the VK social network at the time of April 1, 2023.
+			"""
+			log.error("This navigator object is too small. " + perferm_size)
+			speech.cancelSpeech()
+			queueHandler.queueFunction(queueHandler.eventQueue, ui.message, _("This navigator object is too small") + perferm_size)
 			return False
 		if p == False and is_url == False:
 			bmp = wx.Bitmap(width, height)
@@ -397,18 +410,27 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		self.tmr = Timer(0.1, self.thr_analyzeObject, [gesture, img_str, lang, s, target, t, q])
 		self.tmr.start()
 
+	def script_analyzeObject(self, gesture):
+		try:
+			self._script_analyzeObject(gesture)
+		except:
+			log.exception("script error")
+		finally:
+			self.isWorking = False
+			self.isVirtual = False
+
 	script_analyzeObject.__doc__ = _("Gives a description on how current navigator object or selected file in Explorer looks like visually,\n"
 	"if you press twice quickly, a virtual viewer will open.")
 	script_analyzeObject.category = _('Cloud Vision')
 
 	def script_copylastresult(self, gesture):
 		if not self.last_resp:
-			ui.message(_("Text Not Found."))
+			queueHandler.queueFunction(queueHandler.eventQueue, ui.message, _("Text Not Found."))
 			return False
 		try: unc = unicode
 		except NameError: unc = str
 		if api.copyToClip(unc(self.last_resp)):
-			ui.message(_("Result copyed in clipboard.\n") + self.last_resp)
+			queueHandler.queueFunction(queueHandler.eventQueue, ui.message, _("Result copyed in clipboard.\n") + self.last_resp)
 			return True
 		return False
 
