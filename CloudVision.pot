@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: 'CloudVision' '3.0.0.7'\n"
+"Project-Id-Version: 'CloudVision' '3.0.1.3'\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
-"POT-Creation-Date: 2023-03-25 13:12+0300\n"
+"POT-Creation-Date: 2023-04-01 14:54+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -69,60 +69,64 @@ msgid ""
 "2021.1 or higher"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:257
+#: addon\globalPlugins\CloudVision\__init__.py:259
 msgid "File not supported"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:283
+#: addon\globalPlugins\CloudVision\__init__.py:285
 msgid "Analysis completed: "
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:285
+#: addon\globalPlugins\CloudVision\__init__.py:287
 msgid "CloudVision result"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:292
+#: addon\globalPlugins\CloudVision\__init__.py:294
 msgid "Error"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:320
+#: addon\globalPlugins\CloudVision\__init__.py:331
 msgid "Analyzing selected file"
 msgstr ""
 
 #. Translators: Reported when screen curtain is enabled.
-#: addon\globalPlugins\CloudVision\__init__.py:330
+#: addon\globalPlugins\CloudVision\__init__.py:341
 msgid "Please disable screen curtain before using CloudVision add-on."
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:334
+#: addon\globalPlugins\CloudVision\__init__.py:345
 msgid "Analyzing navigator object"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:344
+#: addon\globalPlugins\CloudVision\__init__.py:359
 msgid "This navigator object is not analyzable"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:389
+#: addon\globalPlugins\CloudVision\__init__.py:368
+msgid "This navigator object is too small"
+msgstr ""
+
+#: addon\globalPlugins\CloudVision\__init__.py:417
 msgid ""
 "Gives a description on how current navigator object or selected file in "
 "Explorer looks like visually,\n"
 "if you press twice quickly, a virtual viewer will open."
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:391
-#: addon\globalPlugins\CloudVision\__init__.py:405
+#: addon\globalPlugins\CloudVision\__init__.py:419
+#: addon\globalPlugins\CloudVision\__init__.py:433
 msgid "Cloud Vision"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:395
+#: addon\globalPlugins\CloudVision\__init__.py:423
 msgid "Text Not Found."
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:400
+#: addon\globalPlugins\CloudVision\__init__.py:428
 msgid "Result copyed in clipboard.\n"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:404
+#: addon\globalPlugins\CloudVision\__init__.py:432
 msgid "Copy last result in clipboard."
 msgstr ""
 

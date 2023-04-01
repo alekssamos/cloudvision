@@ -2,17 +2,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CloudVision\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
-"POT-Creation-Date: 2023-03-25 13:12+0300\n"
-"PO-Revision-Date: 2023-03-25 13:23+0300\n"
+"POT-Creation-Date: 2023-04-01 14:54+0300\n"
+"PO-Revision-Date: 2023-04-01 14:57+0300\n"
 "Last-Translator: Alex <aleks-samos@yandex.ru>\n"
 "Language-Team: alekssamos <aleks-samos@yandex.ru>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
-"X-Generator: Poedit 3.0.1\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+"X-Generator: Poedit 3.2.2\n"
 "X-Poedit-Basepath: ../../../..\n"
 "X-Poedit-SearchPath-0: addon/globalPlugins/CloudVision/__init__.py\n"
 "X-Poedit-SearchPath-1: buildVars.py\n"
@@ -73,42 +73,46 @@ msgstr ""
 "Для распознавания файлов под курсором без открытия Обновите версию NVDA до "
 "2021.1 или выше"
 
-#: addon\globalPlugins\CloudVision\__init__.py:257
+#: addon\globalPlugins\CloudVision\__init__.py:259
 msgid "File not supported"
 msgstr "Файл не поддерживается"
 
-#: addon\globalPlugins\CloudVision\__init__.py:283
+#: addon\globalPlugins\CloudVision\__init__.py:285
 msgid "Analysis completed: "
 msgstr "Анализ завершен: "
 
-#: addon\globalPlugins\CloudVision\__init__.py:285
+#: addon\globalPlugins\CloudVision\__init__.py:287
 msgid "CloudVision result"
 msgstr "Результат CloudVision"
 
-#: addon\globalPlugins\CloudVision\__init__.py:292
+#: addon\globalPlugins\CloudVision\__init__.py:294
 msgid "Error"
 msgstr "Ошибка"
 
-#: addon\globalPlugins\CloudVision\__init__.py:320
+#: addon\globalPlugins\CloudVision\__init__.py:331
 msgid "Analyzing selected file"
 msgstr "Идет анализ выбранного файла"
 
 #. Translators: Reported when screen curtain is enabled.
-#: addon\globalPlugins\CloudVision\__init__.py:330
+#: addon\globalPlugins\CloudVision\__init__.py:341
 msgid "Please disable screen curtain before using CloudVision add-on."
 msgstr ""
 "Пожалуйста, отключите затемнение экрана перед использованием дополнения "
 "CloudVision."
 
-#: addon\globalPlugins\CloudVision\__init__.py:334
+#: addon\globalPlugins\CloudVision\__init__.py:345
 msgid "Analyzing navigator object"
 msgstr "Идет анализ объекта навигатора"
 
-#: addon\globalPlugins\CloudVision\__init__.py:344
+#: addon\globalPlugins\CloudVision\__init__.py:359
 msgid "This navigator object is not analyzable"
 msgstr "Этот объект навигатора невозможно анализировать"
 
-#: addon\globalPlugins\CloudVision\__init__.py:389
+#: addon\globalPlugins\CloudVision\__init__.py:368
+msgid "This navigator object is too small"
+msgstr "Этот объект навигатора слишком мал"
+
+#: addon\globalPlugins\CloudVision\__init__.py:417
 msgid ""
 "Gives a description on how current navigator object or selected file in "
 "Explorer looks like visually,\n"
@@ -118,20 +122,20 @@ msgstr ""
 "файл в Проводнике выглядит визуально,\n"
 "если нажать два раза быстро, откроется виртуальный просмотрщик."
 
-#: addon\globalPlugins\CloudVision\__init__.py:391
-#: addon\globalPlugins\CloudVision\__init__.py:405
+#: addon\globalPlugins\CloudVision\__init__.py:419
+#: addon\globalPlugins\CloudVision\__init__.py:433
 msgid "Cloud Vision"
 msgstr "Cloud Vision"
 
-#: addon\globalPlugins\CloudVision\__init__.py:395
+#: addon\globalPlugins\CloudVision\__init__.py:423
 msgid "Text Not Found."
 msgstr "Текст не найден"
 
-#: addon\globalPlugins\CloudVision\__init__.py:400
+#: addon\globalPlugins\CloudVision\__init__.py:428
 msgid "Result copyed in clipboard.\n"
 msgstr "Результат скопирован в буфер обмена.\n"
 
-#: addon\globalPlugins\CloudVision\__init__.py:404
+#: addon\globalPlugins\CloudVision\__init__.py:432
 msgid "Copy last result in clipboard."
 msgstr "Копировать последний результат в буфер обмена."
 
