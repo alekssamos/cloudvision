@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CloudVision\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
-"POT-Creation-Date: 2023-03-25 13:12+0300\n"
-"PO-Revision-Date: 2023-03-25 14:35+0300\n"
+"POT-Creation-Date: 2023-04-01 14:54+0300\n"
+"PO-Revision-Date: 2023-04-01 22:41+0300\n"
 "Last-Translator: Umut KORKMAZ <umutkork@gmail.com>\n"
 "Language-Team: cagrid@hotmail.com\n"
 "Language: tr\n"
@@ -24,7 +24,6 @@ msgid "CloudVision Settings"
 msgstr "CloudVision Ayarları"
 
 #: addon\globalPlugins\CloudVision\__init__.py:84
-#| msgid "This navigator object is not analyzable"
 msgid "Pre&fer a navigator object instead of a file"
 msgstr "&Dosya yerine gezgin nesnesini tercih et"
 
@@ -76,46 +75,47 @@ msgstr ""
 "İmleç altındaki dosyaların açılmadan tanınabilmesi için NVDA sürümünü 2021.1 "
 "veya üstü bir sürüme güncelleyin"
 
-#: addon\globalPlugins\CloudVision\__init__.py:257
+#: addon\globalPlugins\CloudVision\__init__.py:259
 msgid "File not supported"
 msgstr "Dosya desteklenmiyor"
 
-#: addon\globalPlugins\CloudVision\__init__.py:283
+#: addon\globalPlugins\CloudVision\__init__.py:285
 msgid "Analysis completed: "
 msgstr "Analiz tamamlandı: "
 
-#: addon\globalPlugins\CloudVision\__init__.py:285
+#: addon\globalPlugins\CloudVision\__init__.py:287
 msgid "CloudVision result"
 msgstr "CloudVision sonucu"
 
-#: addon\globalPlugins\CloudVision\__init__.py:292
+#: addon\globalPlugins\CloudVision\__init__.py:294
 msgid "Error"
 msgstr "Hata"
 
-#: addon\globalPlugins\CloudVision\__init__.py:320
-#| msgid "Analysis completed: "
+#: addon\globalPlugins\CloudVision\__init__.py:331
 msgid "Analyzing selected file"
 msgstr "Seçilen dosya inceleniyor"
 
 #. Translators: Reported when screen curtain is enabled.
-#: addon\globalPlugins\CloudVision\__init__.py:330
+#: addon\globalPlugins\CloudVision\__init__.py:341
 msgid "Please disable screen curtain before using CloudVision add-on."
 msgstr ""
 "Lütfen CloudVision eklentisini kullanmadan önce ekran perdesini devre dışı "
 "bırakın."
 
-#: addon\globalPlugins\CloudVision\__init__.py:334
+#: addon\globalPlugins\CloudVision\__init__.py:345
 msgid "Analyzing navigator object"
 msgstr "Nesne analiz ediliyor"
 
-#: addon\globalPlugins\CloudVision\__init__.py:344
+#: addon\globalPlugins\CloudVision\__init__.py:359
 msgid "This navigator object is not analyzable"
 msgstr "Bu nesne analiz edilebilir değil"
 
-#: addon\globalPlugins\CloudVision\__init__.py:389
-#| msgid ""
-#| "Gives a description on how current navigator object looks like visually,\n"
-#| "if you press twice quickly, a virtual viewer will open."
+#: addon\globalPlugins\CloudVision\__init__.py:368
+#| msgid "This navigator object is not analyzable"
+msgid "This navigator object is too small"
+msgstr "Bu gezgin nesnesi çok küçük"
+
+#: addon\globalPlugins\CloudVision\__init__.py:417
 msgid ""
 "Gives a description on how current navigator object or selected file in "
 "Explorer looks like visually,\n"
@@ -125,20 +125,20 @@ msgstr ""
 "nasıl göründüğüne ilişkin bir açıklama duyurur,\n"
 "hızlı bir şekilde iki kez basılırsa sanal bir görüntüleyici açılır."
 
-#: addon\globalPlugins\CloudVision\__init__.py:391
-#: addon\globalPlugins\CloudVision\__init__.py:405
+#: addon\globalPlugins\CloudVision\__init__.py:419
+#: addon\globalPlugins\CloudVision\__init__.py:433
 msgid "Cloud Vision"
 msgstr "Cloud Vision"
 
-#: addon\globalPlugins\CloudVision\__init__.py:395
+#: addon\globalPlugins\CloudVision\__init__.py:423
 msgid "Text Not Found."
 msgstr "Metin Bulunamadı."
 
-#: addon\globalPlugins\CloudVision\__init__.py:400
+#: addon\globalPlugins\CloudVision\__init__.py:428
 msgid "Result copyed in clipboard.\n"
 msgstr "Sonuç panoya kopyalandı.\n"
 
-#: addon\globalPlugins\CloudVision\__init__.py:404
+#: addon\globalPlugins\CloudVision\__init__.py:432
 msgid "Copy last result in clipboard."
 msgstr "Son sonucu panoya kopyala."
 
