@@ -366,6 +366,10 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			return
 		if p == False and is_url == False:
 			left, top, width, height = nav.location
+			if width < 16 or height < 16:
+				nav = nav.parent
+				log.warning("Small size, go to the parent element")
+				left, top, width, height = nav.location
 
 		if is_url == False and (p == False) and (width < 16 or height < 16):
 			perferm_size = " {width}X{height}".format(width=width, height=height)
