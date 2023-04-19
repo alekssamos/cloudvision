@@ -1,0 +1,147 @@
+# Portuguese translations for 'CloudVision' package.
+# Copyright (C) 2023 THE 'CloudVision''S COPYRIGHT HOLDER
+# This file is distributed under the same license as the 'CloudVision' package.
+# U-DESKTOP-EI2LNIE\edu_home <diaseduardo139@gmail.com[d[d>, 2023.
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: 'CloudVision' '3.0.1.3'\n"
+"Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
+"POT-Creation-Date: 2023-04-01 14:54+0300\n"
+"PO-Revision-Date: 2023-04-16 03:26-0300\n"
+"Last-Translator: U-DESKTOP-EI2LNIE\\edu_home <diaseduardo139@gmail.com[d[d>\n"
+"Language-Team: Brazilian Portuguese\n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: addon\globalPlugins\CloudVision\__init__.py:79
+msgid "CloudVision Settings"
+msgstr "Configurações do CloudVision"
+
+#: addon\globalPlugins\CloudVision\__init__.py:84
+msgid "Pre&fer a navigator object instead of a file"
+msgstr "Prefirir um objeto de navegador ao invés de um arquivo"
+
+#: addon\globalPlugins\CloudVision\__init__.py:88
+msgid "&Play sound during recognition"
+msgstr "Reproduzir um som durante o reconhecimento"
+
+#: addon\globalPlugins\CloudVision\__init__.py:92
+msgid "Recognize &text"
+msgstr "Reconhecer textos"
+
+#: addon\globalPlugins\CloudVision\__init__.py:96
+msgid "Recognize &images"
+msgstr "reconhecer imagens"
+
+#: addon\globalPlugins\CloudVision\__init__.py:100
+msgid "Read &QR / bar code"
+msgstr "Ler  QR codes"
+
+#: addon\globalPlugins\CloudVision\__init__.py:104
+msgid "Translate text"
+msgstr "traduzir textos"
+
+#: addon\globalPlugins\CloudVision\__init__.py:115
+msgid ""
+"Select image description language, other languages than english are more "
+"prone to translation errors"
+msgstr "Selecione o idioma de tradução da imagem (idiomas diferentes do inglês são mais propensos a erros)"
+
+#: addon\globalPlugins\CloudVision\__init__.py:120
+msgid "Open site"
+msgstr "Abrir o site"
+
+#: addon\globalPlugins\CloudVision\__init__.py:143
+msgid "Error saving settings"
+msgstr "Erro ao aplicar as configurações do CloudVision"
+
+#: addon\globalPlugins\CloudVision\__init__.py:191
+msgid "Cloud Vision settings..."
+msgstr " configurações do CloudVision"
+
+#: addon\globalPlugins\CloudVision\__init__.py:212
+msgid ""
+"To recognize files under the cursor without opening Update NVDA version to "
+"2021.1 or higher"
+msgstr "Para reconhecer arquivos sem abri-los, atualize sua versão do NVDA para 2021.1 ou superior"
+
+#: addon\globalPlugins\CloudVision\__init__.py:259
+msgid "File not supported"
+msgstr "Este arquivo não é suportado"
+
+#: addon\globalPlugins\CloudVision\__init__.py:285
+msgid "Analysis completed: "
+msgstr "Análise concluída com sucesso"
+
+#: addon\globalPlugins\CloudVision\__init__.py:287
+msgid "CloudVision result"
+msgstr "Resultado do CloudVision"
+
+#: addon\globalPlugins\CloudVision\__init__.py:294
+msgid "Error"
+msgstr "Erro..."
+
+#: addon\globalPlugins\CloudVision\__init__.py:331
+msgid "Analyzing selected file"
+msgstr "Analisando o arquivo selecionado"
+
+#. Translators: Reported when screen curtain is enabled.
+#: addon\globalPlugins\CloudVision\__init__.py:341
+msgid "Please disable screen curtain before using CloudVision add-on."
+msgstr "Não é possível usar o complemento CloudVision com a cortina de tela ativada, desative-a antes de usar."
+
+#: addon\globalPlugins\CloudVision\__init__.py:345
+msgid "Analyzing navigator object"
+msgstr "Analisando o objeto do navegador"
+
+#: addon\globalPlugins\CloudVision\__init__.py:359
+msgid "This navigator object is not analyzable"
+msgstr "Este objeto de navegação não é analisável"
+
+#: addon\globalPlugins\CloudVision\__init__.py:368
+msgid "This navigator object is too small"
+msgstr "Este objeto de navegador é muito pequeno"
+
+#: addon\globalPlugins\CloudVision\__init__.py:417
+msgid ""
+"Gives a description on how current navigator object or selected file in "
+"Explorer looks like visually,\n"
+"if you press twice quickly, a virtual viewer will open."
+msgstr "Fornece uma descrição da aparência do objeto do navegador ou explorador atual, se pressionado duas vezes, um visualizador virtual aparece."
+
+#: addon\globalPlugins\CloudVision\__init__.py:419
+#: addon\globalPlugins\CloudVision\__init__.py:433
+msgid "Cloud Vision"
+msgstr "Cloud Vision"
+
+#: addon\globalPlugins\CloudVision\__init__.py:423
+msgid "Text Not Found."
+msgstr "Texto não encontrado"
+
+#: addon\globalPlugins\CloudVision\__init__.py:428
+msgid "Result copyed in clipboard.\n"
+msgstr "Resultado copiado para área de transferência"
+
+#: addon\globalPlugins\CloudVision\__init__.py:432
+msgid "Copy last result in clipboard."
+msgstr "Copiar resultado para área de transferência"
+
+#. Add-on summary, usually the user visible name of the addon.
+#. Translators: Summary for this add-on to be shown on installation and add-on information.
+#: buildVars.py:17
+msgid "CloudVision"
+msgstr "Cloud Vision"
+
+#. Add-on description
+#. Translators: Long description to be shown for this add-on on add-on information from add-ons manager
+#: buildVars.py:20
+msgid ""
+"An extension for describing images by utilizing recent advances in AI "
+"technology. Press NVDA+Control+I to get a description of an object or "
+"selected file in Explorer, if you press twice quickly, a virtual viewer will "
+"open."
+msgstr "Um complemento para descrever imagens usando os recentes avanços da Inteligência Artificial; Pressione NVDA+Control+I para obter uma descrição de um objeto ou arquivo selecionado no Explorer, se você pressionar duas vezes rapidamente, um visualizador virtual irá abrir."
