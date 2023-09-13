@@ -123,7 +123,7 @@ msgid "Text Not Found."
 msgstr "Texto não encontrado"
 
 #: addon\globalPlugins\CloudVision\__init__.py:428
-msgid "Result copyed in clipboard.\n"
+msgid "Result copyed in clipboard."
 msgstr "Resultado copiado para área de transferência"
 
 #: addon\globalPlugins\CloudVision\__init__.py:432
