@@ -9,8 +9,11 @@ import sys
 import json
 import time
 import os
+import os.path
+import controlTypes
 import tempfile
 import subprocess
+from glob import glob
 from xml.parsers import expat
 from collections import namedtuple
 try:
@@ -50,6 +53,8 @@ is_new_nvda = (versionInfo.version_year >= 2021 and versionInfo.version_major>=1
 if is_new_nvda:
 	from comtypes.client import CreateObject as COMCreate
 	from .MyOCREnhance import totalCommanderHelper
+	import winUser
+	import ctypes
 
 addonHandler.initTranslation()
 
@@ -205,8 +210,9 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 	isWorking = False
 
 	def getFilePath(self): #For this method thanks to some nvda addon developers ( code snippets and suggestion)
+		fg = api.getForegroundObject()
+		focus=api.getFocusObject()
 		if not is_new_nvda:
-			focus=api.getFocusObject()
 			mod=focus.appModule
 			if mod.appName.lower() in ["explorer", "totalcmd"]:
 				queueHandler.queueFunction(queueHandler.eventQueue, ui.message, _("To recognize files under the cursor without opening Update NVDA version to 2021.1 or higher"))
@@ -223,29 +229,37 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			filePath = tcmd.currentFileWithPath()
 			if not filePath:
 				return False
+		elif fg.windowClassName == 'Explorer++':
+			fileName = focus.name
+			addressbar = fg.children[1].children[2].children[0].children[0]
+			ctypes.windll.user32.SendMessageW(addressbar.windowHandle, 256, 27, 0)
+			ctypes.windll.user32.SendMessageW(addressbar.windowHandle, 257, 27, 65539)
+			filePath = glob(addressbar.value + focus.name+"*")[0]
+			fileName = os.path.basename(filePath)
+			log.info(f"filePath={filePath}; fileName={fileName}")
 		else:
 			# We check if we are in the Windows Explorer.
-			fg = api.getForegroundObject()
-			if (fg.role != api.controlTypes.Role.PANE and fg.role != api.controlTypes.Role.WINDOW) or fg.appModule.appName != "explorer":
-				return False
-			
-			self.shell = COMCreate("shell.application")
-			desktop = False
-			# We go through the list of open Windows Explorers to find the one that has the focus.
-			for window in self.shell.Windows():
-				if window.hwnd == fg.windowHandle:
-					focusedItem=window.Document.FocusedItem
-					break
-			else: # loop exhausted
-				desktop = True
-			# Now that we have the current folder, we can explore the SelectedItems collection.
-			if desktop:
-				desktopPath = desktop = os.path.join(os.path.join(os.environ['USERPROFILE']), 'Desktop')
-				fileName = api.getDesktopObject().objectWithFocus().name
-				filePath = desktopPath + '\\' + fileName
-			else:
-				filePath = str(focusedItem.path)
-				fileName = str(focusedItem.name)
+			if (fg.role == api.controlTypes.Role.PANE and fg.role == api.controlTypes.Role.WINDOW) or fg.appModule.appName == "explorer":
+				self.shell = COMCreate("shell.application")
+				desktop = False
+				# We go through the list of open Windows Explorers to find the one that has the focus.
+				for window in self.shell.Windows():
+					if window.hwnd == fg.windowHandle:
+						focusedItem=window.Document.FocusedItem
+						break
+				else: # loop exhausted
+					desktop = True
+				# Now that we have the current folder, we can explore the SelectedItems collection.
+				if desktop:
+					desktopPath = desktop = os.path.join(os.path.join(os.environ['USERPROFILE']), 'Desktop')
+					fileName = api.getDesktopObject().objectWithFocus().name
+					filePath = desktopPath + '\\' + fileName
+				else:
+					filePath = str(focusedItem.path)
+					fileName = str(focusedItem.name)
+		
+		if not filePath or not fileName:
+			return False
 		
 		# Getting the extension to check if is a supported file type.
 		fileExtension = filePath[-5:].lower() # Returns .jpeg or x.pdf
