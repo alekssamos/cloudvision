@@ -234,7 +234,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			addressbar = fg.children[1].children[2].children[0].children[0]
 			ctypes.windll.user32.SendMessageW(addressbar.windowHandle, 256, 27, 0)
 			ctypes.windll.user32.SendMessageW(addressbar.windowHandle, 257, 27, 65539)
-			filePath = glob(addressbar.value + focus.name+"*")[0]
+			filePath = glob(os.path.join(addressbar.value, focus.name)+"*")[0]
 			fileName = os.path.basename(filePath)
 			log.info(f"filePath={filePath}; fileName={fileName}")
 		else:
