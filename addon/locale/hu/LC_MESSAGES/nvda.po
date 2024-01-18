@@ -1,0 +1,157 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: CloudVision\n"
+"Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
+"POT-Creation-Date: 2023-04-01 14:54+0300\n"
+"PO-Revision-Date: 2024-01-18 23:53+0100\n"
+"Last-Translator: Alex <aleks-samos@yandex.ru>\n"
+"Language-Team: alekssamos <aleks-samos@yandex.ru>, Nikolett Till "
+"<tillnikolett@gmail.com>\n"
+"Language: hu_HU\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.4.2\n"
+"X-Poedit-Basepath: ../../../..\n"
+"X-Poedit-SearchPath-0: addon/globalPlugins/CloudVision/__init__.py\n"
+"X-Poedit-SearchPath-1: buildVars.py\n"
+
+#: addon\globalPlugins\CloudVision\__init__.py:79
+msgid "CloudVision Settings"
+msgstr "A Cloud Vision beállításai"
+
+#: addon\globalPlugins\CloudVision\__init__.py:84
+msgid "Pre&fer a navigator object instead of a file"
+msgstr "Az &elemnavigátor előnyben részesítése fájl helyett"
+
+#: addon\globalPlugins\CloudVision\__init__.py:88
+msgid "&Play sound during recognition"
+msgstr "&Hang lejátszása felismerés közben"
+
+#: addon\globalPlugins\CloudVision\__init__.py:92
+msgid "Recognize &text"
+msgstr "&Szöveg felismerése"
+
+#: addon\globalPlugins\CloudVision\__init__.py:96
+msgid "Recognize &images"
+msgstr "&Kép felismerése"
+
+#: addon\globalPlugins\CloudVision\__init__.py:100
+msgid "Read &QR / bar code"
+msgstr "\\Qr-kód olvasása"
+
+#: addon\globalPlugins\CloudVision\__init__.py:104
+msgid "Translate text"
+msgstr "Szöveg lefordítása"
+
+#: addon\globalPlugins\CloudVision\__init__.py:115
+msgid ""
+"Select image description language, other languages than english are more "
+"prone to translation errors"
+msgstr ""
+"Válaszd ki a képleírás nyelvét. Az angoltól eltérő nyelveken sűrűbben "
+"fordulhatnak elő fordítási hibák"
+
+#: addon\globalPlugins\CloudVision\__init__.py:120
+msgid "Open site"
+msgstr "A weboldal megnyitása"
+
+#: addon\globalPlugins\CloudVision\__init__.py:143
+msgid "Error saving settings"
+msgstr "Hiba a beállítások elmentése közben"
+
+#: addon\globalPlugins\CloudVision\__init__.py:191
+msgid "Cloud Vision settings..."
+msgstr "A Cloud Vision beállításai..."
+
+#: addon\globalPlugins\CloudVision\__init__.py:212
+msgid ""
+"To recognize files under the cursor without opening Update NVDA version to "
+"2021.1 or higher"
+msgstr ""
+"A kurzor alatti fájlok felismerése megnyitás nélkül NVDA 2021.1 vagy "
+"magasabb verzió szükséges"
+
+#: addon\globalPlugins\CloudVision\__init__.py:259
+msgid "File not supported"
+msgstr "Nem támogatott fájl"
+
+#: addon\globalPlugins\CloudVision\__init__.py:285
+msgid "Analysis completed: "
+msgstr "Az elemzés befejezve "
+
+#: addon\globalPlugins\CloudVision\__init__.py:287
+msgid "CloudVision result"
+msgstr "Eredmény"
+
+#: addon\globalPlugins\CloudVision\__init__.py:294
+msgid "Error"
+msgstr "Hiba"
+
+#: addon\globalPlugins\CloudVision\__init__.py:331
+msgid "Analyzing selected file"
+msgstr "A kiválasztott fájl elemzése"
+
+#. Translators: Reported when screen curtain is enabled.
+#: addon\globalPlugins\CloudVision\__init__.py:341
+msgid "Please disable screen curtain before using CloudVision add-on."
+msgstr "A Cloud Vision használatához ki kell kapcsolni a képernyőfüggönyt."
+
+#: addon\globalPlugins\CloudVision\__init__.py:345
+msgid "Analyzing navigator object"
+msgstr "Az elemnavigátor elemzése folyamatban van"
+
+#: addon\globalPlugins\CloudVision\__init__.py:359
+msgid "This navigator object is not analyzable"
+msgstr "Ez az elem nem ismerhető fel"
+
+#: addon\globalPlugins\CloudVision\__init__.py:368
+msgid "This navigator object is too small"
+msgstr "Ez az elem túl kicsi"
+
+#: addon\globalPlugins\CloudVision\__init__.py:417
+msgid ""
+"Gives a description on how current navigator object or selected file in "
+"Explorer looks like visually,\n"
+"if you press twice quickly, a virtual viewer will open."
+msgstr ""
+"Leírást ad arról, hogyan néz ki vizuálisan az aktuális objektum, vagy a "
+"fájlkezelőben kiválasztott fájl,\n"
+"kétszeri gyors megnyomást követően egy virtuális nézegető nyílik meg."
+
+#: addon\globalPlugins\CloudVision\__init__.py:419
+#: addon\globalPlugins\CloudVision\__init__.py:433
+msgid "Cloud Vision"
+msgstr "Cloud Vision"
+
+#: addon\globalPlugins\CloudVision\__init__.py:423
+msgid "Text Not Found."
+msgstr "Nem található szöveg."
+
+#: addon\globalPlugins\CloudVision\__init__.py:428
+msgid "Result copyed in clipboard.\n"
+msgstr "Az eredmény a vágólapra másolva.\n"
+
+#: addon\globalPlugins\CloudVision\__init__.py:432
+msgid "Copy last result in clipboard."
+msgstr "A legutóbbi eredmény másolása a vágólapra."
+
+#. Add-on summary, usually the user visible name of the addon.
+#. Translators: Summary for this add-on to be shown on installation and add-on information.
+#: buildVars.py:17
+msgid "CloudVision"
+msgstr "CloudVision"
+
+#. Add-on description
+#. Translators: Long description to be shown for this add-on on add-on information from add-ons manager
+#: buildVars.py:20
+msgid ""
+"An extension for describing images by utilizing recent advances in AI "
+"technology. Press NVDA+Control+I to get a description of an object or "
+"selected file in Explorer, if you press twice quickly, a virtual viewer will "
+"open."
+msgstr ""
+"Egy bővítmény, amely leírást készít az aktuális objektum vizuális "
+"megjelenéséről,\n"
+"kétszeri gyors megnyomásra egy virtuális nézegető nyílik meg."
