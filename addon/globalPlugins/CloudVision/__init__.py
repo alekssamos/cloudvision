@@ -102,6 +102,10 @@ class SettingsDialog(gui.SettingsDialog):
 		self.imageonly.SetValue(getConfig()["imageonly"])
 		settingsSizerHelper.addItem(self.imageonly)
 
+		self.bm = wx.CheckBox(self, label="&Be My AI")
+		self.bm.SetValue(getConfig()["bm"])
+		settingsSizerHelper.addItem(self.bm)
+
 		self.qronly = wx.CheckBox(self, label=_("Read &QR / bar code"))
 		self.qronly.SetValue(getConfig()["qronly"])
 		settingsSizerHelper.addItem(self.qronly)
@@ -130,7 +134,7 @@ class SettingsDialog(gui.SettingsDialog):
 		self.sound.SetFocus()
 
 	def onOk(self, event):
-		if not self.textonly.IsChecked() and not  self.imageonly.IsChecked():
+		if not self.textonly.IsChecked() and not  self.imageonly.IsChecked() and not  self.bm.IsChecked():
 			self.textonly.SetValue(True)
 			self.imageonly.SetValue(True)
 		getConfig()["prefer_navigator"] = self.prefer_navigator.IsChecked()
@@ -138,6 +142,7 @@ class SettingsDialog(gui.SettingsDialog):
 		getConfig()["textonly"] = self.textonly.IsChecked()
 		getConfig()["imageonly"] = self.imageonly.IsChecked()
 		getConfig()["trtext"] = self.trtext.IsChecked()
+		getConfig()["bm"] = self.bm.IsChecked()
 		getConfig()["qronly"] = self.qronly.IsChecked()
 		getConfig()["language"] = supportedLocales[self.language.GetSelection()]
 
@@ -150,10 +155,11 @@ class SettingsDialog(gui.SettingsDialog):
 		super(SettingsDialog, self).onOk(event)
 
 class APIError(Exception): pass
-def cloudvision_request(img_str, lang = "en", target = "all", qr = 0, translate = 0):
+def cloudvision_request(img_str, lang = "en", target = "all", bm=0, qr = 0, translate = 0):
 	params = {
 		"lang": lang,
 		"target": target,
+		"bm": bm,
 		"qr": qr,
 		"translate": translate
 	}
@@ -287,11 +293,11 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		except: pass
 		return True
 
-	def thr_analyzeObject(self, gesture, img_str, lang, s=0, target="all", t=0, q=0):
+	def thr_analyzeObject(self, gesture, img_str, lang, s=0, target="all", t=0, bm=0, q=0):
 		if s: self.beep_start()
 		resp = ""
 		try:
-			resx = cloudvision_request(img_str, lang, target, q, t)
+			resx = cloudvision_request(img_str, lang, target, bm, q, t)
 			if "qr" in resx: resp = resp + resx["qr"] + "\r\n\r\n"
 			if "text" in resx: resp = resp + resx["text"]
 			if not self.isVirtual:
@@ -428,6 +434,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		trtext = getConfig()['trtext']
 		t=0
 		if trtext: t=1
+		bm = getConfig()['bm']
 		qronly = getConfig()['qronly']
 		q=0
 		if qronly: q=1
@@ -530,6 +537,7 @@ prefer_navigator=boolean(default=False)
 sound=boolean(default=False)
 textonly=boolean(default=True)
 imageonly=boolean(default=True)
+bm=boolean(default=True)
 qronly=boolean(default=False)
 trtext=boolean(default=False)
 language=string(default={defaultLanguage})
