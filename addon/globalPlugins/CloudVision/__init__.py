@@ -434,13 +434,13 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		trtext = getConfig()['trtext']
 		t=0
 		if trtext: t=1
-		bm = getConfig()['bm']
+		bm = 1 if getConfig()['bm'] else 0
 		qronly = getConfig()['qronly']
 		q=0
 		if qronly: q=1
 		lang = getConfig()['language']
 
-		self.tmr = Timer(0.1, self.thr_analyzeObject, [gesture, img_str, lang, s, target, t, q])
+		self.tmr = Timer(0.1, self.thr_analyzeObject, [gesture, img_str, lang, s, target, t, bm, q])
 		self.tmr.start()
 
 	def script_analyzeObject(self, gesture):
