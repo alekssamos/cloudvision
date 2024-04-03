@@ -444,11 +444,17 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		self.tmr.start()
 
 	def script_analyzeObject(self, gesture):
+		global filePath
+		global fileExtension
+		global fileName
 		try:
 			self._script_analyzeObject(gesture)
 		except:
 			log.exception("script error")
 		finally:
+			filePath = ""
+			fileExtension = ""
+			fileName = ""
 			def restorework():
 				if self.tmr is not None and self.tmr.is_alive():
 					return
