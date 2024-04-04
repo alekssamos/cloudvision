@@ -1,20 +1,11 @@
-### CloudVision
+The add-on allows you to get a description of the image using artificial intelligence.
 
-The add-on provides a description of photos, for example, a 23-year-old girl with blonde hair smiling,
-text recognition,
-text translation into another language
-and reading QR codes.
+It works through the service visionbot.ru which uses recognition technologies
+from Google, Microsoft and, more recently, Be My AI from Be My eyes.
 
-### Add-on settings.
-Open NVDA menu, Preferences, CloudVision Settings.
+The add-on settings are in the  NVDA menu, parameters, CloudVision Settings.
 
-### Keyboard shortcuts
-* NVDA + CTRL + I - recognize the navigator object or the selected file in Explorer. If you press twice quickly, the result will appear in the virtual viewing window.
-* the gesture is not assigned - copy the last result to the clipboard. To assign, see NVDA menu, Preferences, input gestures, CloudVision category.
+Keyboard shortcuts:
+* NVDA+CTRL+I - get a description of the navigator object or jpg/png file if it is in focus in Windows explorer. If you press twice quickly, the result will appear in the virtual viewer, you can read with arrows, select, copy, and so on.
+* Copy the last recognized result to the clipboard - the combination is not assigned, you can assign it yourself in the input gestures.
 
-For the navigator, just set it to the desired element, press the combination and the add-on will recognize it.
-For a file, select it in Windows Explorer without opening it, immediately, without opening the file, press the combination.
-Only JPG, PNG, GIF are supported.
-I did not add a PDF, since recognition can last 40 minutes or longer.
-
-The idea and code for the selected files is taken from the "Nao (NVDA Advanced OCR)" add-on.
