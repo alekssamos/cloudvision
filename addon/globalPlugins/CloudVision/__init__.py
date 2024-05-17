@@ -431,6 +431,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		target = "all"
 		if textonly and not imageonly: target = "text"
 		if not textonly and imageonly: target = "image"
+		if not textonly and not imageonly: target = "nothing"
 		trtext = getConfig()['trtext']
 		t=0
 		if trtext: t=1
