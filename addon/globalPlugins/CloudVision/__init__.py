@@ -4,7 +4,7 @@
 # Add-on that gets description of current navigator object based on visual features,
 # the computer vision heavy computations are made in the cloud.
 # VISIONBOT.RU
-CloudVisionVersion = "3.0.1"
+CloudVisionVersion = "3.3"
 import sys
 import json
 import time
@@ -13,6 +13,7 @@ import os.path
 import controlTypes
 import tempfile
 import subprocess
+from .bm import account_gui as bmgui
 from glob import glob
 from xml.parsers import expat
 from collections import namedtuple
@@ -84,6 +85,7 @@ class SettingsDialog(gui.SettingsDialog):
 	title = _("CloudVision Settings")
 
 	def makeSettings(self, sizer):
+		self.SetName("cvsettings")
 		settingsSizerHelper = gui.guiHelper.BoxSizerHelper(self, sizer=sizer)
 
 		self.prefer_navigator = wx.CheckBox(self, label=_("Pre&fer a navigator object instead of a file"))
@@ -123,17 +125,29 @@ class SettingsDialog(gui.SettingsDialog):
 		choices = [languageHandler.getLanguageDescription(locale) or locale for locale in supportedLocales]
 		self.language = settingsSizerHelper.addLabeledControl(_("Select image description language, other languages than english are more prone to translation errors"), wx.Choice, choices=choices)
 		self.language.SetSelection(select)
-		def on_open_visionbot_ru_button(self):
-			import webbrowser as wb
-			wb.open("https://visionbot.ru/?fromaddon=1&addonversion="+CloudVisionVersion)
+		self.manage_account_button = wx.Button(self, label=_("Manage Be My Eyes account"))
+		self.manage_account_button.Bind(wx.EVT_BUTTON, self.on_manage_account_button)
+		settingsSizerHelper.addItem(self.manage_account_button)
+		
 		self.open_visionbot_ru_button = wx.Button(self, label=_("Open site")+" VISIONBOT.RU")
-		self.open_visionbot_ru_button.Bind(wx.EVT_BUTTON, on_open_visionbot_ru_button)
+		self.open_visionbot_ru_button.Bind(wx.EVT_BUTTON, self.on_open_visionbot_ru_button)
 		settingsSizerHelper.addItem(self.open_visionbot_ru_button)
 		
 	def postInit(self):
 		self.sound.SetFocus()
 
+	def on_manage_account_button(self, event):
+		event.Skip()
+		account_dialog = bmgui.MainDialog( self.FindWindowByName("cvsettings") )
+		account_dialog.ShowModal()
+
+	def on_open_visionbot_ru_button(self, event):
+		event.Skip()
+		import webbrowser as wb
+		wb.open("https://visionbot.ru/?fromaddon=1&addonversion="+CloudVisionVersion)
+
 	def onOk(self, event):
+		event.Skip()
 		if not self.textonly.IsChecked() and not  self.imageonly.IsChecked() and not  self.bm.IsChecked():
 			self.textonly.SetValue(True)
 			self.imageonly.SetValue(True)
