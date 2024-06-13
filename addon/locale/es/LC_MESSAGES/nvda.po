@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 'CloudVision' '3.2.2'\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
 "POT-Creation-Date: 2024-04-04 13:29-0600\n"
-"PO-Revision-Date: 2024-04-04 13:35-0600\n"
+"PO-Revision-Date: 2024-04-04 16:04-0600\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -24,7 +24,7 @@ msgstr "Configuración de CloudVision"
 
 #: addon\globalPlugins\CloudVision\__init__.py:89
 msgid "Pre&fer a navigator object instead of a file"
-msgstr ""
+msgstr "Priorizar navegador de objetos en vez de archivos"
 
 #: addon\globalPlugins\CloudVision\__init__.py:93
 msgid "&Play sound during recognition"
@@ -32,7 +32,7 @@ msgstr "&Reproducir sonido durante el reconocimiento"
 
 #: addon\globalPlugins\CloudVision\__init__.py:97
 msgid "Recognize &text"
-msgstr "Reconocer y enviar mensajes de texto"
+msgstr "Reconocer texto"
 
 #: addon\globalPlugins\CloudVision\__init__.py:101
 msgid "Recognize &images"
