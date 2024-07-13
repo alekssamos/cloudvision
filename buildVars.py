@@ -21,7 +21,7 @@ addon_info = {
 "Press NVDA+Control+I to get a description of an object or selected file in Explorer, "
 "if you press twice quickly, a virtual viewer will open."),
 	# version
-	"addon_version": "3.2.2",
+	"addon_version": "4.0.0",
 	# Author(s)
 	"addon_author": u"alekssamos <aleks-samos@yandex.ru>",
 	# URL for the add-on documentation support

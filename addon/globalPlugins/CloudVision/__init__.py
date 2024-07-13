@@ -24,19 +24,9 @@ except ImportError:
 	from io import BytesIO ## 3
 	from io import StringIO ## 3
 
-## for Windows XP
-if sys.version_info.major == 2:
-	sys.path.insert(0, ".")
-	import myconfigobj as configobj
-	del sys.path[0]
-else:
-	import configobj
-
+from .cvconf import getConfig, supportedLocales
+from .cvexceptions import APIError
 import tones
-try:
-	import validate
-except ImportError:
-	import configobj.validate as validate
 import wx
 import config
 import globalPluginHandler
@@ -138,7 +128,7 @@ class SettingsDialog(gui.SettingsDialog):
 
 	def on_manage_account_button(self, event):
 		event.Skip()
-		account_dialog = bmgui.MainDialog( self.FindWindowByName("cvsettings") )
+		account_dialog = bmgui.MainDialog( self.FindWindowByName("cvsettings"), )
 		account_dialog.ShowModal()
 
 	def on_open_visionbot_ru_button(self, event):
@@ -168,7 +158,6 @@ class SettingsDialog(gui.SettingsDialog):
 
 		super(SettingsDialog, self).onOk(event)
 
-class APIError(Exception): pass
 def cloudvision_request(img_str, lang = "en", target = "all", bm=0, qr = 0, translate = 0):
 	params = {
 		"lang": lang,
@@ -212,6 +201,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 
 	def __init__(self):
 		super(globalPluginHandler.GlobalPlugin, self).__init__()
+		bmgui.bm()
 		self.CloudVisionSettingsItem = gui.mainFrame.sysTrayIcon.preferencesMenu.Append(wx.ID_ANY,
 			_("Cloud Vision settings..."))
 		gui.mainFrame.sysTrayIcon.Bind(
@@ -228,6 +218,13 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 	last_resp = ""
 	isVirtual = False
 	isWorking = False
+
+	def on_ask_bm(self, evt):
+		gui.mainFrame.prePopup()
+		d = bmgui.AskFrame(gui.mainFrame)
+		d.Show()
+		gui.mainFrame.postPopup()
+		#d.postInit()
 
 	def getFilePath(self): #For this method thanks to some nvda addon developers ( code snippets and suggestion)
 		fg = api.getForegroundObject()
@@ -494,80 +491,18 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 	script_copylastresult.__doc__ = _('Copy last result in clipboard.')
 	script_copylastresult.category = _('Cloud Vision')
 
+	def script_askBm(self, gesture):
+		queueHandler.queueFunction(queueHandler.eventQueue, self.on_ask_bm, None)
+	
+	def _askBm(self, gesture):
+		ui.message("xxxxxzzzx")
+		ask_frame = bmgui.AskFrame()
+		ask_frame.Show()
+		ask_frame.postInit()
+	script_askBm.__doc__ = _("Ask the bot a question. You need to log in to your be my eyes account in the add-on settings")
+
 	__gestures = {
 		"kb:NVDA+Control+I": "analyzeObject",
+		"kb:NVDA+Alt+A": "askBm",
 	}
 
-supportedLocales = [
-	"am",
-	"ar",
-	"an",
-	"af_ZA",
-	"bg",
-	"ca",
-	"cs",
-	"da",
-	"de",
-	"el",
-	"en",
-	"es",
-	"fi",
-	"fr",
-	"hr",
-	"hu",
-	"hi",
-	"id",
-	"it",
-	"ja",
-	"ko",
-	"lt",
-	"lv",
-	"my",
-	"nl",
-	"pl",
-	"pt",
-	"ro",
-	"ru",
-	"sk",
-	"sl",
-	"sr",
-	"sv",
-	"sq",
-	"tg",
-	"tr",
-	"uk",
-	"vi",
-	"zh_CN",
-	"zh_TW"
-]
-
-def getDefaultLanguage():
-	lang = languageHandler.getLanguage()
-
-	if lang not in supportedLocales and "_" in lang:
-		lang = lang.split("_")[0]
-	
-	if lang not in supportedLocales:
-		lang = "en"
-
-	return lang
-
-_config = None
-configspec = StringIO(u"""
-prefer_navigator=boolean(default=False)
-sound=boolean(default=False)
-textonly=boolean(default=True)
-imageonly=boolean(default=True)
-bm=boolean(default=True)
-qronly=boolean(default=False)
-trtext=boolean(default=False)
-language=string(default={defaultLanguage})
-""".format(defaultLanguage=getDefaultLanguage()))
-def getConfig():
-	global _config
-	if not _config:
-		path = os.path.join(config.getUserDefaultConfigPath(), "CloudVision.ini")
-		_config = configobj.ConfigObj(path, configspec=configspec)
-		val = validate.Validator()
-		_config.validate(val)
-	return _config
