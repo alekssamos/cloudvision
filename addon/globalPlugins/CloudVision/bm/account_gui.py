@@ -63,7 +63,7 @@ class bm:
         j1 = json.loads(r1)
         for i in range(60):
             r2 = ur.urlopen(
-                "https://visionbot.ru/apiv2/res.php",
+                self.url + "res.php",
                 data=up.urlencode({"id": j1["id"]}).encode(),
             ).read().decode("UTF-8")
             j2 = json.loads(r2)
@@ -266,13 +266,18 @@ class AskPanel(wx.Panel):
     def _on_send(self, event):
         message = self.question_input.GetValue()
         f = self.FindWindowByName("askframe1")
-        b = bm()
-        res=b.ask(message=message, lang=f.lang)
+        try:
+            b = bm()
+            res=b.ask(message=message, lang=f.lang)
+        except APIError:
+            wx.MessageBox(str( sys.exc_info()[1] ), style=wx.ICON_ERROR)
+            return False
         wx.MessageBox(str(res))
 
     def on_close(self, event):
         event.Skip()
-        self.Destroy()
+        f = self.FindWindowByName("askframe1")
+        f.Hide()
 
 
 class MainDialog(wx.Dialog):
