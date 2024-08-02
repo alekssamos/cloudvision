@@ -29,6 +29,7 @@ from .cvexceptions import APIError
 import tones
 import wx
 import config
+import globalVars
 import globalPluginHandler
 import gui
 import scriptHandler
@@ -127,7 +128,7 @@ class SettingsDialog(gui.SettingsDialog):
 		self.sound.SetFocus()
 
 	def on_manage_account_button(self, event):
-		event.Skip()
+		if event: event.Skip()
 		account_dialog = bmgui.MainDialog( self.FindWindowByName("cvsettings"), )
 		account_dialog.ShowModal()
 
@@ -208,6 +209,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			wx.EVT_MENU, lambda evt: gui.mainFrame._popupSettingsDialog(SettingsDialog), self.CloudVisionSettingsItem)
 
 	def terminate(self):
+		globalVars.cvask = None
 		try:
 			gui.mainFrame.sysTrayIcon.preferencesMenu.RemoveItem(
 				self.CloudVisionSettingsItem)
@@ -220,11 +222,27 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 	isWorking = False
 
 	def on_ask_bm(self, evt):
-		gui.mainFrame.prePopup()
-		d = bmgui.AskFrame(gui.mainFrame)
-		d.Show()
-		gui.mainFrame.postPopup()
-		#d.postInit()
+		if not self.last_resp:
+			queueHandler.queueFunction(queueHandler.eventQueue, ui.message, _("There have been no recognitions yet"))
+			return
+		if not getattr(globalVars, "cvask", None):
+			gui.mainFrame.prePopup()
+			d = bmgui.AskFrame(gui.mainFrame)
+			d.Show()
+			gui.mainFrame.postPopup()
+			globalVars.cvask = d
+		else:
+			d=globalVars.cvask
+			d.ask_panel.messages_list.ClearAll()
+			d.ask_panel.question_input.SetValue("")
+			d.Show()
+		d.postInit()
+		if not bmgui.bm().bm_authorized:
+			d.ask_panel.messages_list.InsertItem(0, _("First you need to log in or register"))
+			d.ask_panel.messages_list.InsertItem(1, _("Open NVDA Menu, Preferences, CloudVision Settings, Manage Be My Eyes account"))
+			d.ask_panel.messages_list.SetFocus()
+		else:
+			if self.last_resp: d.ask_panel.messages_list.InsertItem(0, self.last_resp)
 
 	def getFilePath(self): #For this method thanks to some nvda addon developers ( code snippets and suggestion)
 		fg = api.getForegroundObject()

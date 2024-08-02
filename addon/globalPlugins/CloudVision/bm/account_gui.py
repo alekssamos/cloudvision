@@ -19,6 +19,7 @@ socket.setdefaulttimeout(60)
 
 import wx
 
+
 class bm:
     url = "https://visionbot.ru/apiv2/"
 
@@ -32,40 +33,47 @@ class bm:
 
     @property
     def bm_token(self):
-        with open(bm_token_file) as f: return f.read(90)
+        with open(bm_token_file) as f:
+            return f.read(90).strip()
 
     @property
     def bm_chat_id(self):
-        with open(bm_chat_id_file) as f: return int(f.read(90))
+        with open(bm_chat_id_file) as f:
+            return int(f.read(90).strip())
+
     @property
     def bm_authorized(self):
-        return len(self.bm_token)>20
+        return len(self.bm_token) > 20
 
     def ask(self, message, lang):
-        with open(bm_token_file, "r") as f:
-            bmtoken = f.read(90).strip()
-        with open(bm_chat_id_file, "r") as f:
-            bm_chat_id = f.read(90).strip()
         is_chat_id_exists = False
         try:
-            if int(bm_chat_id) != 0:
+            if int(self.bm_chat_id) != 0:
                 is_chat_id_exists = True
         except ValueError:
             raise APIError("chat id not found. First, recognize the picture")
         params = {
             "action": "ask",
             "lang": lang,
-            "bmtoken": bmtoken,
-            "bm_chat_id": bm_chat_id,
+            "bm_token": self.bm_token,
+            "bm_chat_id": self.bm_chat_id,
             "message": message,
         }
-        r1 = ur.urlopen(self.url + "bm.php", data=up.urlencode(params).encode()).read().decode("UTF-8")
+        r1 = (
+            ur.urlopen(self.url + "bm.php", data=up.urlencode(params).encode())
+            .read()
+            .decode("UTF-8")
+        )
         j1 = json.loads(r1)
         for i in range(60):
-            r2 = ur.urlopen(
-                self.url + "res.php",
-                data=up.urlencode({"id": j1["id"]}).encode(),
-            ).read().decode("UTF-8")
+            r2 = (
+                ur.urlopen(
+                    self.url + "res.php",
+                    data=up.urlencode({"id": j1["id"]}).encode(),
+                )
+                .read()
+                .decode("UTF-8")
+            )
             j2 = json.loads(r2)
             if j2["status"] == "error":
                 raise APIError(j2["status"])
@@ -84,10 +92,14 @@ class bm:
             "email": email,
             "password": password,
         }
-        r = ur.urlopen(self.url + "bm.php", data=up.urlencode(params).encode()).read().decode("UTF-8")
+        r = (
+            ur.urlopen(self.url + "bm.php", data=up.urlencode(params).encode())
+            .read()
+            .decode("UTF-8")
+        )
         j = json.loads(r)
         if j["status"] == "ok":
-            with open(os.path.join(CONFIGDIR, "bm_token.txt"), "w") as f:
+            with open(bm_token_file, "w") as f:
                 f.write(j["bmtoken"])
         return j
 
@@ -100,10 +112,14 @@ class bm:
             "email": email,
             "password": password,
         }
-        r = ur.urlopen(self.url + "bm.php", data=up.urlencode(params).encode()).read().decode("UTF-8")
+        r = (
+            ur.urlopen(self.url + "bm.php", data=up.urlencode(params).encode())
+            .read()
+            .decode("UTF-8")
+        )
         j = json.loads(r)
         if j["status"] == "ok":
-            with open(os.path.join(CONFIGDIR, "bm_token.txt"), "w") as f:
+            with open(bm_token_file, "w") as f:
                 f.write(j["bmtoken"])
         return j
 
@@ -145,7 +161,7 @@ class LoginPanel(wx.Panel):
         password = self.password_input.GetValue()
         f = self.FindWindowByName("lrframe1")
         b = bm()
-        res=b.login(email=email, password=password, lang=f.lang)
+        res = b.login(email=email, password=password, lang=f.lang)
         wx.MessageBox(str(res))
 
     def on_show_register_btn(self, event):
@@ -218,7 +234,7 @@ class RegisterPanel(wx.Panel):
         password = self.password_input.GetValue()
         f = self.FindWindowByName("lrframe1")
         b = bm()
-        res=b.signup(
+        res = b.signup(
             first_name=name,
             last_name=surname,
             email=email,
@@ -230,12 +246,13 @@ class RegisterPanel(wx.Panel):
 
 class AskPanel(wx.Panel):
     ask_tmr = None
+
     def __init__(self, parent):
         super().__init__(parent)
 
         main_sizer = wx.BoxSizer(wx.VERTICAL)
 
-        messages_sizer = wx.BoxSizer(wx.HORIZONTAL)
+        messages_sizer = wx.BoxSizer(wx.VERTICAL)
         self.messages_list = wx.ListCtrl(self)
         messages_sizer.Add(self.messages_list, 1, wx.EXPAND | wx.ALL, 5)
 
@@ -260,22 +277,29 @@ class AskPanel(wx.Panel):
 
     def on_send(self, event):
         event.Skip()
-        if self.ask_tmr and self.ask_tmr.is_alive(): self.ask_tmr.cancel()
-        self.ask_tmr = Timer(0.1, self._on_send, [event,])
+        if self.ask_tmr and self.ask_tmr.is_alive():
+            self.ask_tmr.cancel()
+        self.ask_tmr = Timer(
+            0.1,
+            self._on_send,
+            [
+                event,
+            ],
+        )
         self.ask_tmr.start()
+
     def _on_send(self, event):
         message = self.question_input.GetValue()
         f = self.FindWindowByName("askframe1")
         try:
             b = bm()
-            res=b.ask(message=message, lang=f.lang)
+            res = b.ask(message=message, lang=f.lang)
         except APIError:
-            wx.MessageBox(str( sys.exc_info()[1] ), style=wx.ICON_ERROR)
+            wx.MessageBox(str(sys.exc_info()[1]), style=wx.ICON_ERROR)
             return False
         wx.MessageBox(str(res))
 
     def on_close(self, event):
-        event.Skip()
         f = self.FindWindowByName("askframe1")
         f.Hide()
 
@@ -295,7 +319,7 @@ class MainDialog(wx.Dialog):
         sizer.Add(self.login_panel, 1, wx.EXPAND)
         sizer.Add(self.register_panel, 1, wx.EXPAND)
 
-        bmtoken=""
+        bmtoken = ""
         if os.path.isfile(bm_token_file):
             with open(bm_token_file, "r") as f:
                 bmtoken = f.read(90).strip()
@@ -303,6 +327,7 @@ class MainDialog(wx.Dialog):
 
         self.SetSizer(sizer)
         self.Layout()
+
 
 class AskFrame(wx.Frame):
     def __init__(self, parent=None, lang="en"):
@@ -318,9 +343,14 @@ class AskFrame(wx.Frame):
         sizer.Add(self.ask_panel, 1, wx.EXPAND)
         self.SetSizer(sizer)
         self.Layout()
-    def postInit(self):
-        self.ask_panel.SetFocus()
+        self.Bind(wx.EVT_CLOSE, self.on_close)
 
+    def postInit(self):
+        self.Layout()
+        self.ask_panel.question_input.SetFocus()
+
+    def on_close(self, event):
+        self.Hide()
 
 
 if __name__ == "__main__":
