@@ -2,8 +2,8 @@ import json
 import sys
 import os
 import os.path
-import globalVars
-from threading import Timer
+import time
+from threading import Timer, Lock
 from ..cvconf import getConfig, CONFIGDIR, bm_chat_id_file, bm_token_file
 from ..cvexceptions import APIError
 
@@ -18,7 +18,8 @@ import socket
 socket.setdefaulttimeout(60)
 
 import wx
-
+import ui
+import queueHandler
 
 class bm:
     url = "https://visionbot.ru/apiv2/"
@@ -28,8 +29,9 @@ class bm:
         if not os.path.isfile(bm_token_file):
             with open(bm_token_file, "w") as f:
                 f.write(" ")
-        with open(bm_chat_id_file, "w") as f:
-            f.write("0")
+        if not os.path.isfile(bm_chat_id_file):
+            with open(bm_chat_id_file, "w") as f:
+                f.write("0")
 
     @property
     def bm_token(self):
@@ -55,7 +57,7 @@ class bm:
         params = {
             "action": "ask",
             "lang": lang,
-            "bm_token": self.bm_token,
+            "bmtoken": self.bm_token,
             "bm_chat_id": self.bm_chat_id,
             "message": message,
         }
@@ -65,18 +67,24 @@ class bm:
             .decode("UTF-8")
         )
         j1 = json.loads(r1)
+        if j1["status"] == "error":
+            raise APIError(j1["text"])
+        params = {
+            "id": j1["id"],
+            "ask":"1",
+        }
         for i in range(60):
             r2 = (
                 ur.urlopen(
                     self.url + "res.php",
-                    data=up.urlencode({"id": j1["id"]}).encode(),
+                    data=up.urlencode(params).encode(),
                 )
                 .read()
                 .decode("UTF-8")
             )
             j2 = json.loads(r2)
             if j2["status"] == "error":
-                raise APIError(j2["status"])
+                raise APIError(j2.get("text", "unknown error"))
 
             if j2["status"] == "ok":
                 return j2
@@ -163,6 +171,7 @@ class LoginPanel(wx.Panel):
         b = bm()
         res = b.login(email=email, password=password, lang=f.lang)
         wx.MessageBox(str(res))
+        f.Close()
 
     def on_show_register_btn(self, event):
         event.Skip()
@@ -242,6 +251,7 @@ class RegisterPanel(wx.Panel):
             lang=f.lang,
         )
         wx.MessageBox(str(res))
+        f.Close()
 
 
 class AskPanel(wx.Panel):
@@ -253,30 +263,42 @@ class AskPanel(wx.Panel):
         main_sizer = wx.BoxSizer(wx.VERTICAL)
 
         messages_sizer = wx.BoxSizer(wx.VERTICAL)
-        self.messages_list = wx.ListCtrl(self)
-        messages_sizer.Add(self.messages_list, 1, wx.EXPAND | wx.ALL, 5)
+        self.messages_aria = wx.TextCtrl(self, style=wx.TE_MULTILINE|wx.TE_READONLY)
+        messages_sizer.Add(self.messages_aria)
 
         question_sizer = wx.BoxSizer(wx.HORIZONTAL)
         question_label = wx.StaticText(self, label="Question:")
-        self.question_input = wx.TextCtrl(self, style=wx.TE_MULTILINE)
+        self.question_input = wx.TextCtrl(self, style=wx.TE_MULTILINE|wx.TE_PROCESS_ENTER)
         question_sizer.Add(question_label, 0, wx.ALL, 5)
         question_sizer.Add(self.question_input, 1, wx.EXPAND | wx.ALL, 5)
 
-        send_button = wx.Button(self, label="Send")
-        send_button.Bind(wx.EVT_BUTTON, self.on_send)
+        send_close_sizer = wx.BoxSizer(wx.HORIZONTAL)
+        self.send_button = wx.Button(self, label="Send")
+        self.send_button.Bind(wx.EVT_BUTTON, self.on_send)
 
         close_button = wx.Button(self, label="Close")
         close_button.Bind(wx.EVT_BUTTON, self.on_close)
+        send_close_sizer.Add(self.send_button)
+        send_close_sizer.Add(close_button)
 
         main_sizer.Add(messages_sizer, 0, wx.EXPAND | wx.ALL, 5)
-        main_sizer.Add(messages_sizer, 0, wx.EXPAND | wx.ALL, 5)
-        main_sizer.Add(send_button, 0, wx.ALIGN_CENTER | wx.ALL, 5)
-        main_sizer.Add(close_button, 0, wx.ALIGN_CENTER | wx.ALL, 5)
+        main_sizer.Add(question_sizer, 0, wx.EXPAND | wx.ALL, 5)
+        main_sizer.Add(send_close_sizer)
 
         self.SetSizer(main_sizer)
 
+    def add_message(self, who, text, report=True):
+        if report: queueHandler.queueFunction(queueHandler.eventQueue, ui.message, f"{who}: {text}")
+        with Lock():
+            text = self.messages_aria.GetValue() + "\n" + who + ": " + text
+            self.messages_aria.SetValue(text)
+        self.Layout()
     def on_send(self, event):
         event.Skip()
+        if not bm().bm_authorized:
+            self.messages_aria.SetFocus()
+            return
+        self.send_button.Disable()
         if self.ask_tmr and self.ask_tmr.is_alive():
             self.ask_tmr.cancel()
         self.ask_tmr = Timer(
@@ -286,6 +308,7 @@ class AskPanel(wx.Panel):
                 event,
             ],
         )
+        queueHandler.queueFunction(queueHandler.eventQueue, ui.message, _("Wait for the Be My Eyes to type the message"))
         self.ask_tmr.start()
 
     def _on_send(self, event):
@@ -293,11 +316,16 @@ class AskPanel(wx.Panel):
         f = self.FindWindowByName("askframe1")
         try:
             b = bm()
+            self.add_message(_("You"), message)
+            self.question_input.SetValue("")
             res = b.ask(message=message, lang=f.lang)
         except APIError:
             wx.MessageBox(str(sys.exc_info()[1]), style=wx.ICON_ERROR)
             return False
-        wx.MessageBox(str(res))
+        finally:
+            self.send_button.Enable()
+        self.add_message("Be My Eyes", res["text"])
+        self.messages_aria.SetFocus()
 
     def on_close(self, event):
         f = self.FindWindowByName("askframe1")
@@ -344,10 +372,18 @@ class AskFrame(wx.Frame):
         self.SetSizer(sizer)
         self.Layout()
         self.Bind(wx.EVT_CLOSE, self.on_close)
+        if not bm().bm_authorized:
+            _t = "\n".join([
+                _("First you need to log in or register"),
+                _("Open NVDA Menu, Preferences, CloudVision Settings, Manage Be My Eyes account")
+            ])
+            self.ask_panel.messages_aria.SetValue(_t)
+            queueHandler.queueFunction(queueHandler.eventQueue, ui.message, _t)
 
     def postInit(self):
         self.Layout()
-        self.ask_panel.question_input.SetFocus()
+        field = self.ask_panel.question_input if bm().bm_authorized else self.ask_panel.messages_aria
+        field.SetFocus()
 
     def on_close(self, event):
         self.Hide()

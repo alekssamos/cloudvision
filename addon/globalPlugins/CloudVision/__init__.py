@@ -24,7 +24,7 @@ except ImportError:
 	from io import BytesIO ## 3
 	from io import StringIO ## 3
 
-from .cvconf import getConfig, supportedLocales
+from .cvconf import getConfig, supportedLocales, bm_chat_id_file, bm_token_file
 from .cvexceptions import APIError
 import tones
 import wx
@@ -167,6 +167,9 @@ def cloudvision_request(img_str, lang = "en", target = "all", bm=0, qr = 0, tran
 		"qr": qr,
 		"translate": translate
 	}
+	if os.path.isfile(bm_token_file) and os.path.getsize(bm_token_file)>20:
+		log.info("Authorization in BM")
+		with open(bm_token_file, "r") as f: params["bmtoken"] = f.read(90).strip()
 	if isinstance(img_str, str):
 		lnkstart = "http"
 	else:
@@ -233,16 +236,9 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			globalVars.cvask = d
 		else:
 			d=globalVars.cvask
-			d.ask_panel.messages_list.ClearAll()
 			d.ask_panel.question_input.SetValue("")
 			d.Show()
 		d.postInit()
-		if not bmgui.bm().bm_authorized:
-			d.ask_panel.messages_list.InsertItem(0, _("First you need to log in or register"))
-			d.ask_panel.messages_list.InsertItem(1, _("Open NVDA Menu, Preferences, CloudVision Settings, Manage Be My Eyes account"))
-			d.ask_panel.messages_list.SetFocus()
-		else:
-			if self.last_resp: d.ask_panel.messages_list.InsertItem(0, self.last_resp)
 
 	def getFilePath(self): #For this method thanks to some nvda addon developers ( code snippets and suggestion)
 		fg = api.getForegroundObject()
@@ -329,6 +325,9 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			resx = cloudvision_request(img_str, lang, target, bm, q, t)
 			if "qr" in resx: resp = resp + resx["qr"] + "\r\n\r\n"
 			if "text" in resx: resp = resp + resx["text"]
+			if "bm_chat_id" in resx:
+				with open(bm_chat_id_file, "w") as f:
+					f.write( str(resx["bm_chat_id"]) )
 			if not self.isVirtual:
 				queueHandler.queueFunction(queueHandler.eventQueue, speech.cancelSpeech)
 				queueHandler.queueFunction(queueHandler.eventQueue, ui.message, _('Analysis completed: ') + resp)
@@ -340,6 +339,12 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			queueHandler.queueFunction(queueHandler.eventQueue, ui.message, str(sys.exc_info()[1]))
 		self.isWorking = False
 		if resp: self.last_resp = resp
+		f = wx.FindWindowByName("askframe1")
+		if f and bmgui.bm().bm_authorized:
+			_t=""
+			if target=="nothing": _t="Be My Eyes"
+			else: _t="Be My Eyes & Cloud Vision"
+			if self.last_resp and bm: f.ask_panel.add_message(_t, self.last_resp, False)
 		if not resp.strip(): resp = _("Error")
 		if s: self.beep_stop()
 
@@ -348,6 +353,8 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		if self.isVirtual: return True
 		if self.tmr: self.tmr.cancel()
 		speech.cancelSpeech()
+		f = wx.FindWindowByName("askframe1")
+		if f: f.ask_panel.messages_aria.SetValue("")
 		global filePath, p, fileExtension
 		is_url = False
 		p = False
