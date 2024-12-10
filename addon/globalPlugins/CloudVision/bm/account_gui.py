@@ -19,8 +19,13 @@ socket.setdefaulttimeout(60)
 
 import wx
 import ui
+from logHandler import log
 import queueHandler
 
+class FocusedStaticText(wx.StaticText):
+    def AcceptsFocus(self): return True
+
+LOGGED_IN_TEXT = "You are logged in to your account:"
 class bm:
     url = "https://visionbot.ru/apiv2/"
 
@@ -35,17 +40,36 @@ class bm:
 
     @property
     def bm_token(self):
+        if not os.path.isfile(bm_token_file): return ""
         with open(bm_token_file) as f:
             return f.read(90).strip()
 
     @property
     def bm_chat_id(self):
+        if not os.path.isfile(bm_chat_id_file): return 0
         with open(bm_chat_id_file) as f:
             return int(f.read(90).strip())
 
     @property
     def bm_authorized(self):
         return len(self.bm_token) > 20
+
+    def refresh(self):
+        params = {
+            "action": "refresh",
+            "bmtoken": self.bm_token
+        }
+        r1 = (
+            ur.urlopen(self.url + "bm.php", data=up.urlencode(params).encode())
+            .read()
+            .decode("UTF-8")
+        )
+        j1 = json.loads(r1)
+        if j1["status"] == "error":
+            if "detail:" in j1["text"]: os.path.remove(bm_token_file)
+            raise APIError(j1["text"])
+        log.error(str(j1))
+        return j1["text"]
 
     def ask(self, message, lang):
         is_chat_id_exists = False
@@ -181,6 +205,32 @@ class LoginPanel(wx.Panel):
         f.Layout()
         f.register_panel.SetFocus()
 
+
+class LoggedInPannel(wx.Panel):
+    def __init__(self, parent):
+        super().__init__(parent)
+
+        self.logged_in_h_sizer = wx.BoxSizer(wx.HORIZONTAL)
+
+        self.logged_in_label = FocusedStaticText(self, wx.ID_ANY, LOGGED_IN_TEXT)
+        self.logged_in_label.SetFocus()
+        self.logged_in_h_sizer.Add(self.logged_in_label, 0, 0, 0)
+
+        self.logout_button = wx.Button(self, wx.ID_ANY, "Logout")
+        self.logged_in_h_sizer.Add(self.logout_button, 0, 0, 0)
+
+        self.SetSizer(self.logged_in_h_sizer)
+
+
+        self.logout_button.Bind(wx.EVT_BUTTON, self.on_logout)
+    def on_logout(self, event):
+        event.Skip()
+        with Lock():
+            if os.path.isfile(bm_token_file): os.remove(bm_token_file)
+        f = self.FindWindowByName("lrframe1")
+        self.Hide()
+        f.login_panel.Show()
+        f.login_panel.email_input.SetFocus()
 
 class RegisterPanel(wx.Panel):
     def __init__(self, parent):
@@ -342,19 +392,39 @@ class MainDialog(wx.Dialog):
 
         self.login_panel = LoginPanel(self)
         self.register_panel = RegisterPanel(self)
+        self.logged_panel = LoggedInPannel(self)
 
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add(self.login_panel, 1, wx.EXPAND)
+        sizer.Add(self.logged_panel, 1, wx.EXPAND)
         sizer.Add(self.register_panel, 1, wx.EXPAND)
 
+        for o in (self, self.login_panel, self.logged_panel, self.register_panel):
+            o.Bind(wx.EVT_KEY_UP, self.OnKeyUp)
         bmtoken = ""
         if os.path.isfile(bm_token_file):
             with open(bm_token_file, "r") as f:
                 bmtoken = f.read(90).strip()
         self.register_panel.Hide()
-
+        if bm().bm_authorized:
+            self.login_panel.Hide()
+            refresh_result=""
+            try:
+                refresh_result = bm().refresh()
+            except Exception:
+                log.exception("Error get BM Account data")
+                refresh_result = "..."
+            self.logged_panel.logged_in_label.SetLabel(LOGGED_IN_TEXT+refresh_result)
+        else:
+            self.logged_panel.Hide()
         self.SetSizer(sizer)
         self.Layout()
+    def OnKeyUp(self, e):
+        key = e.GetKeyCode()
+        print("Отпустили кнопку", key, chr(key))
+        e.Skip()
+        if key == 27:
+            self.Close()
 
 
 class AskFrame(wx.Frame):

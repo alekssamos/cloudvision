@@ -72,6 +72,23 @@ fileExtension = ""
 fileName = ""
 suppFiles = ["png", "jpg", "gif", "tiff", "tif", "jpeg", "webp"]
 
+def say_message_thr(type):
+	queueHandler.queueFunction(queueHandler.eventQueue, speech.cancelSpeech)
+	if type==1:
+		queueHandler.queueFunction(queueHandler.eventQueue, ui.message, _("Analyzing selected file"))
+	elif type==2:
+		# Translators: Reported when screen curtain is enabled.
+		queueHandler.queueFunction(queueHandler.eventQueue, ui.message, _("Please disable screen curtain before using CloudVision add-on."))
+	elif type==3:
+		queueHandler.queueFunction(queueHandler.eventQueue, ui.message, _("Analyzing navigator object"))
+	else:
+		log.error(f"1, 2 or 3. You passed {type}")
+
+def say_message(type):
+	_tmr = Timer(0.6, say_message_thr, [type, ])
+	_tmr.start()
+	queueHandler.queueFunction(queueHandler.eventQueue, speech.cancelSpeech)
+
 class SettingsDialog(gui.SettingsDialog):
 	title = _("CloudVision Settings")
 
@@ -129,8 +146,11 @@ class SettingsDialog(gui.SettingsDialog):
 
 	def on_manage_account_button(self, event):
 		if event: event.Skip()
+		self.manage_account_button.Disable()
+		queueHandler.queueFunction(queueHandler.eventQueue, ui.message, _("Please wait..."))
 		account_dialog = bmgui.MainDialog( self.FindWindowByName("cvsettings"), )
 		account_dialog.ShowModal()
+		self.manage_account_button.Enable()
 
 	def on_open_visionbot_ru_button(self, event):
 		event.Skip()
@@ -352,7 +372,6 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		if not self.isVirtual: self.isVirtual = scriptHandler.getLastScriptRepeatCount()>0
 		if self.isVirtual: return True
 		if self.tmr: self.tmr.cancel()
-		speech.cancelSpeech()
 		f = wx.FindWindowByName("askframe1")
 		if f: f.ask_panel.messages_aria.SetValue("")
 		global filePath, p, fileExtension
@@ -384,7 +403,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			pass
 		p = p or self.getFilePath()
 		if p == True or is_url == True:
-			queueHandler.queueFunction(queueHandler.eventQueue, ui.message, _("Analyzing selected file"))
+			say_message(1)
 		elif p == False and is_url == False:
 			try:
 				import vision
@@ -393,14 +412,13 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 				screenCurtainProviderInfo = vision.handler.getProviderInfo(screenCurtainId)
 				isScreenCurtainRunning = bool(vision.handler.getProviderInstance(screenCurtainProviderInfo))
 				if isScreenCurtainRunning:
-					# Translators: Reported when screen curtain is enabled.
-					queueHandler.queueFunction(queueHandler.eventQueue, ui.message, _("Please disable screen curtain before using CloudVision add-on."))
+					say_message(2)
 					self.isWorking = False
 					self.isVirtual = False
 					return
 			except:
 				pass
-			queueHandler.queueFunction(queueHandler.eventQueue, ui.message, _("Analyzing navigator object"))
+			say_message(3)
 
 		if self.isWorking:
 			return False
