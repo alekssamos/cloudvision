@@ -10,6 +10,7 @@ Open NVDA menu, Preferences, CloudVision Settings.
 
 ### Keyboard shortcuts
 * NVDA + CTRL + I - recognize the navigator object or the selected file in Explorer. If you press twice quickly, the result will appear in the virtual viewing window.
+* NVDA+ALT+A - ask a question to the Be My AI (you need to log in or register to your account in the CloudVision settings)
 * the gesture is not assigned - copy the last result to the clipboard. To assign, see NVDA menu, Preferences, input gestures, CloudVision category.
 
 For the navigator, just set it to the desired element, press the combination and the add-on will recognize it.
@@ -18,3 +19,5 @@ Only JPG, PNG, GIF are supported.
 I did not add a PDF, since recognition can last 40 minutes or longer.
 
 The idea and code for the selected files is taken from the "Nao (NVDA Advanced OCR)" add-on.
+
+Logging in via Google, Apple and other services is not supported. Please, if an error occurs, create a new account with a new fresh email.
