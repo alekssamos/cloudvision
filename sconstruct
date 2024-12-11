@@ -73,7 +73,8 @@ if "channel" in env and env["channel"] is not None:
 buildVars.addon_info["addon_version"] = env["addon_version"]
 buildVars.addon_info["addon_updateChannel"] = env["addon_updateChannel"]
 
-addonFile = env.File("${addon_name}-${addon_version}.nvda-addon")
+# addonFile = env.File("${addon_name}-${addon_version}.nvda-addon")
+addonFile = env.File("${addon_name}.nvda-addon")
 
 def addonGenerator(target, source, env, for_signature):
 	action = env.Action(lambda target, source, env : createAddonBundleFromPath(source[0].abspath, target[0].abspath) and None,
