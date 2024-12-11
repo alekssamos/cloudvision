@@ -25,7 +25,7 @@ import queueHandler
 class FocusedStaticText(wx.StaticText):
     def AcceptsFocus(self): return True
 
-LOGGED_IN_TEXT = "You are logged in to your account:"
+LOGGED_IN_TEXT = _("You are logged in to your account:")
 class bm:
     url = "https://visionbot.ru/apiv2/"
 
@@ -163,21 +163,21 @@ class LoginPanel(wx.Panel):
         main_sizer = wx.BoxSizer(wx.VERTICAL)
 
         email_sizer = wx.BoxSizer(wx.HORIZONTAL)
-        email_label = wx.StaticText(self, label="Email:")
+        email_label = wx.StaticText(self, label=_("Email:"))
         self.email_input = wx.TextCtrl(self)
         email_sizer.Add(email_label, 0, wx.ALL, 5)
         email_sizer.Add(self.email_input, 1, wx.EXPAND | wx.ALL, 5)
 
         password_sizer = wx.BoxSizer(wx.HORIZONTAL)
-        password_label = wx.StaticText(self, label="Password:")
+        password_label = wx.StaticText(self, label=_("Password:"))
         self.password_input = wx.TextCtrl(self, style=wx.TE_PASSWORD)
         password_sizer.Add(password_label, 0, wx.ALL, 5)
         password_sizer.Add(self.password_input, 1, wx.EXPAND | wx.ALL, 5)
 
-        login_button = wx.Button(self, label="Login")
+        login_button = wx.Button(self, label=_("Log in"))
         login_button.Bind(wx.EVT_BUTTON, self.on_login)
 
-        show_register_button = wx.Button(self, label="Create account")
+        show_register_button = wx.Button(self, label=_("Create account"))
         show_register_button.Bind(wx.EVT_BUTTON, self.on_show_register_btn)
 
         main_sizer.Add(email_sizer, 0, wx.EXPAND | wx.ALL, 5)
@@ -213,10 +213,9 @@ class LoggedInPannel(wx.Panel):
         self.logged_in_h_sizer = wx.BoxSizer(wx.HORIZONTAL)
 
         self.logged_in_label = FocusedStaticText(self, wx.ID_ANY, LOGGED_IN_TEXT)
-        self.logged_in_label.SetFocus()
         self.logged_in_h_sizer.Add(self.logged_in_label, 0, 0, 0)
 
-        self.logout_button = wx.Button(self, wx.ID_ANY, "Logout")
+        self.logout_button = wx.Button(self, wx.ID_ANY, _("Logout"))
         self.logged_in_h_sizer.Add(self.logout_button, 0, 0, 0)
 
         self.SetSizer(self.logged_in_h_sizer)
@@ -239,33 +238,33 @@ class RegisterPanel(wx.Panel):
         main_sizer = wx.BoxSizer(wx.VERTICAL)
 
         name_sizer = wx.BoxSizer(wx.HORIZONTAL)
-        name_label = wx.StaticText(self, label="Name:")
+        name_label = wx.StaticText(self, label=_("Name:"))
         self.name_input = wx.TextCtrl(self)
         name_sizer.Add(name_label, 0, wx.ALL, 5)
         name_sizer.Add(self.name_input, 1, wx.EXPAND | wx.ALL, 5)
 
         surname_sizer = wx.BoxSizer(wx.HORIZONTAL)
-        surname_label = wx.StaticText(self, label="Surname:")
+        surname_label = wx.StaticText(self, label=_("Surname:"))
         self.surname_input = wx.TextCtrl(self)
         surname_sizer.Add(surname_label, 0, wx.ALL, 5)
         surname_sizer.Add(self.surname_input, 1, wx.EXPAND | wx.ALL, 5)
 
         email_sizer = wx.BoxSizer(wx.HORIZONTAL)
-        email_label = wx.StaticText(self, label="Email:")
+        email_label = wx.StaticText(self, label=_("Email:"))
         self.email_input = wx.TextCtrl(self)
         email_sizer.Add(email_label, 0, wx.ALL, 5)
         email_sizer.Add(self.email_input, 1, wx.EXPAND | wx.ALL, 5)
 
         password_sizer = wx.BoxSizer(wx.HORIZONTAL)
-        password_label = wx.StaticText(self, label="Password:")
+        password_label = wx.StaticText(self, label=_("Password:"))
         self.password_input = wx.TextCtrl(self, style=wx.TE_PASSWORD)
         password_sizer.Add(password_label, 0, wx.ALL, 5)
         password_sizer.Add(self.password_input, 1, wx.EXPAND | wx.ALL, 5)
 
-        register_button = wx.Button(self, label="Register")
+        register_button = wx.Button(self, label=_("Register"))
         register_button.Bind(wx.EVT_BUTTON, self.on_register)
 
-        show_login_button = wx.Button(self, label="Login")
+        show_login_button = wx.Button(self, label=_("Log in"))
         show_login_button.Bind(wx.EVT_BUTTON, self.on_show_login_btn)
 
         main_sizer.Add(name_sizer, 0, wx.EXPAND | wx.ALL, 5)
@@ -415,13 +414,13 @@ class MainDialog(wx.Dialog):
                 log.exception("Error get BM Account data")
                 refresh_result = "..."
             self.logged_panel.logged_in_label.SetLabel(LOGGED_IN_TEXT+refresh_result)
+            self.logged_panel.logged_in_label.SetFocus()
         else:
             self.logged_panel.Hide()
         self.SetSizer(sizer)
         self.Layout()
     def OnKeyUp(self, e):
         key = e.GetKeyCode()
-        print("Отпустили кнопку", key, chr(key))
         e.Skip()
         if key == 27:
             self.Close()
