@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CloudVision\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
-"POT-Creation-Date: 2024-12-12 21:32+0300\n"
-"PO-Revision-Date: 2024-12-12 21:40+0300\n"
+"POT-Creation-Date: 2024-12-12 21:44+0300\n"
+"PO-Revision-Date: 2024-12-12 21:45+0300\n"
 "Last-Translator: Alex <aleks-samos@yandex.ru>\n"
 "Language-Team: alekssamos <aleks-samos@yandex.ru>\n"
 "Language: ru\n"
@@ -55,6 +55,14 @@ msgstr "Фамилия:"
 #: addon\globalPlugins\CloudVision\bm\account_gui.py:264
 msgid "Register"
 msgstr "Регистрация"
+
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:325
+msgid "Send"
+msgstr "Отправить"
+
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:328
+msgid "Close"
+msgstr "Закрыть"
 
 #: addon\globalPlugins\CloudVision\bm\account_gui.py:360
 msgid "Wait for the Be My Eyes to type the message"

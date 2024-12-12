@@ -322,10 +322,10 @@ class AskPanel(wx.Panel):
         question_sizer.Add(self.question_input, 1, wx.EXPAND | wx.ALL, 5)
 
         send_close_sizer = wx.BoxSizer(wx.HORIZONTAL)
-        self.send_button = wx.Button(self, label="Send")
+        self.send_button = wx.Button(self, label=_("Send"))
         self.send_button.Bind(wx.EVT_BUTTON, self.on_send)
 
-        close_button = wx.Button(self, label="Close")
+        close_button = wx.Button(self, label=_("Close"))
         close_button.Bind(wx.EVT_BUTTON, self.on_close)
         send_close_sizer.Add(self.send_button)
         send_close_sizer.Add(close_button)
