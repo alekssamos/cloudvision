@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 'CloudVision' '4.1.4'\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
-"POT-Creation-Date: 2024-12-12 21:44+0300\n"
+"POT-Creation-Date: 2024-12-12 21:50+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,66 +17,70 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:28
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:30
 msgid "You are logged in to your account:"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:166
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:253
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:168
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:255
 msgid "Email:"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:172
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:259
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:174
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:261
 msgid "Password:"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:177
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:267
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:179
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:269
 msgid "Log in"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:180
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:182
 msgid "Create account"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:218
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:220
 msgid "Logout"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:241
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:243
 msgid "Name:"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:247
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:249
 msgid "Surname:"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:264
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:266
 msgid "Register"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:325
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:321
+msgid "Question:"
+msgstr ""
+
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:327
 msgid "Send"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:328
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:330
 msgid "Close"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:360
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:362
 msgid "Wait for the Be My Eyes to type the message"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:368
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:370
 msgid "You"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:446
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:448
 msgid "First you need to log in or register"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:447
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:449
 msgid ""
 "Open NVDA Menu, Preferences, CloudVision Settings, Manage Be My Eyes account"
 msgstr ""
