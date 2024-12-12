@@ -21,7 +21,7 @@ addon_info = {
 "Press NVDA+Control+I to get a description of an object or selected file in Explorer, "
 "if you press twice quickly, a virtual viewer will open."),
 	# version
-	"addon_version": "4.1.3",
+	"addon_version": "4.1.4",
 	# Author(s)
 	"addon_author": u"alekssamos <aleks-samos@yandex.ru>",
 	# URL for the add-on documentation support
@@ -42,6 +42,7 @@ import os.path
 # Define the python files that are the sources of your add-on.
 # You can use glob expressions here, they will be expanded.
 pythonSources = [os.path.join("addon", "*.py"),
+				    os.path.join("addon", "bm", "*.py"),
 				 os.path.join("addon", "globalPlugins", "CloudVision", "*.py")]
 
 # Files that contain strings for translation. Usually your python sources
