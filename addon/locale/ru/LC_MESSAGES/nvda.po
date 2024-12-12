@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CloudVision\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
-"POT-Creation-Date: 2024-12-10 16:18+0300\n"
-"PO-Revision-Date: 2024-12-10 16:22+0300\n"
+"POT-Creation-Date: 2024-12-12 21:32+0300\n"
+"PO-Revision-Date: 2024-12-12 21:40+0300\n"
 "Last-Translator: Alex <aleks-samos@yandex.ru>\n"
 "Language-Team: alekssamos <aleks-samos@yandex.ru>\n"
 "Language: ru\n"
@@ -16,6 +16,65 @@ msgstr ""
 "X-Poedit-Basepath: ../../../..\n"
 "X-Poedit-SearchPath-0: addon/globalPlugins/CloudVision/__init__.py\n"
 "X-Poedit-SearchPath-1: buildVars.py\n"
+
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:28
+msgid "You are logged in to your account:"
+msgstr "Вы авторизованы в аккаунте:"
+
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:166
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:253
+msgid "Email:"
+msgstr "Почта:"
+
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:172
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:259
+msgid "Password:"
+msgstr "Пароль:"
+
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:177
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:267
+msgid "Log in"
+msgstr "Войти"
+
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:180
+msgid "Create account"
+msgstr "Создать аккаунт"
+
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:218
+msgid "Logout"
+msgstr "Выход из аккаунта"
+
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:241
+msgid "Name:"
+msgstr "Имя:"
+
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:247
+msgid "Surname:"
+msgstr "Фамилия:"
+
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:264
+msgid "Register"
+msgstr "Регистрация"
+
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:360
+msgid "Wait for the Be My Eyes to type the message"
+msgstr "Подождите, пока Be My Eyes напишет сообщение"
+
+# The author of the message (Be My AI or user)
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:368
+msgid "You"
+msgstr "Вы"
+
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:446
+msgid "First you need to log in or register"
+msgstr "Сначала вам нужно войти в систему или зарегистрироваться"
+
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:447
+msgid ""
+"Open NVDA Menu, Preferences, CloudVision Settings, Manage Be My Eyes account"
+msgstr ""
+"Откройте NVDA меню, Параметры, настройки CloudVision, управление аккаунтом "
+"Be My Eyes"
 
 #: addon\globalPlugins\CloudVision\__init__.py:78
 msgid "Analyzing selected file"
@@ -78,7 +137,7 @@ msgstr "Открыть сайт"
 
 #: addon\globalPlugins\CloudVision\__init__.py:150
 msgid "Please wait..."
-msgstr "Пожалуйста, подождите"
+msgstr "Пожалуйста, подождите..."
 
 #: addon\globalPlugins\CloudVision\__init__.py:178
 msgid "Error saving settings"
@@ -141,7 +200,7 @@ msgstr "Cloud Vision"
 
 #: addon\globalPlugins\CloudVision\__init__.py:525
 msgid "Text Not Found."
-msgstr "Текст не найден"
+msgstr "Текст не найден."
 
 #: addon\globalPlugins\CloudVision\__init__.py:530
 msgid "Result copyed in clipboard.\n"
