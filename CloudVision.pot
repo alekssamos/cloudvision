@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 'CloudVision' '4.1.4'\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
-"POT-Creation-Date: 2024-12-12 21:32+0300\n"
+"POT-Creation-Date: 2024-12-12 21:44+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -54,6 +54,14 @@ msgstr ""
 
 #: addon\globalPlugins\CloudVision\bm\account_gui.py:264
 msgid "Register"
+msgstr ""
+
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:325
+msgid "Send"
+msgstr ""
+
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:328
+msgid "Close"
 msgstr ""
 
 #: addon\globalPlugins\CloudVision\bm\account_gui.py:360
