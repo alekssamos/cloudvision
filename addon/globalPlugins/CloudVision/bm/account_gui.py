@@ -21,7 +21,9 @@ import wx
 import ui
 from logHandler import log
 import queueHandler
+import addonHandler
 
+addonHandler.initTranslation()
 class FocusedStaticText(wx.StaticText):
     def AcceptsFocus(self): return True
 
@@ -316,7 +318,7 @@ class AskPanel(wx.Panel):
         messages_sizer.Add(self.messages_aria)
 
         question_sizer = wx.BoxSizer(wx.HORIZONTAL)
-        question_label = wx.StaticText(self, label="Question:")
+        question_label = wx.StaticText(self, label=_("Question:"))
         self.question_input = wx.TextCtrl(self, style=wx.TE_MULTILINE|wx.TE_PROCESS_ENTER)
         question_sizer.Add(question_label, 0, wx.ALL, 5)
         question_sizer.Add(self.question_input, 1, wx.EXPAND | wx.ALL, 5)
