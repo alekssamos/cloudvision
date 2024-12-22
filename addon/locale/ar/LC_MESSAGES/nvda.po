@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: 'CloudVision' '4.1.4'\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
 "POT-Creation-Date: 2024-12-12 21:50+0300\n"
-"PO-Revision-Date: 2024-12-22 14:00+0200\n"
+"PO-Revision-Date: 2024-12-22 15:56+0300\n"
 "Last-Translator: \n"
 "Language-Team: tecwindow\n"
 "Language: ar\n"
@@ -89,7 +89,7 @@ msgstr ""
 
 #: addon\globalPlugins\CloudVision\__init__.py:78
 msgid "Analyzing selected file"
-msgstr "تحليل الملف المحدد"
+msgstr "يجري تحليل الملف المحدد"
 
 #. Translators: Reported when screen curtain is enabled.
 #: addon\globalPlugins\CloudVision\__init__.py:81
@@ -98,7 +98,7 @@ msgstr "يرجى تعطيل ستار الشاشة قبل استخدام إضاف
 
 #: addon\globalPlugins\CloudVision\__init__.py:83
 msgid "Analyzing navigator object"
-msgstr "تحليل العنصر الحالي"
+msgstr "يجري تحليل الكائن "
 
 #: addon\globalPlugins\CloudVision\__init__.py:93
 msgid "CloudVision Settings"
@@ -106,7 +106,7 @@ msgstr "إعدادات CloudVision"
 
 #: addon\globalPlugins\CloudVision\__init__.py:99
 msgid "Pre&fer a navigator object instead of a file"
-msgstr "استخدام التنقل على الكائن بدلاً من الملف"
+msgstr "تفضيل كائن بدلاً من ملف"
 
 #: addon\globalPlugins\CloudVision\__init__.py:103
 msgid "&Play sound during recognition"
@@ -158,7 +158,7 @@ msgstr "إعدادات Cloud Vision."
 
 #: addon\globalPlugins\CloudVision\__init__.py:249
 msgid "There have been no recognitions yet"
-msgstr "لم تكن هناك أي اعترافات حتى الآن"
+msgstr "لم تكن هناك أي تعرفات حتى الآن"
 
 #: addon\globalPlugins\CloudVision\__init__.py:269
 msgid ""
@@ -174,7 +174,7 @@ msgstr "ملف غير مدعوم"
 
 #: addon\globalPlugins\CloudVision\__init__.py:353
 msgid "Analysis completed: "
-msgstr "انتها التعرف: "
+msgstr "اكتمل التعرف: "
 
 #: addon\globalPlugins\CloudVision\__init__.py:355
 msgid "CloudVision result"
@@ -190,7 +190,7 @@ msgstr "لا يمكن تحليل هذا الكائن"
 
 #: addon\globalPlugins\CloudVision\__init__.py:457
 msgid "This navigator object is too small"
-msgstr "هذا العنصر صغير جدا"
+msgstr "هذا الكائن صغير جدا"
 
 #: addon\globalPlugins\CloudVision\__init__.py:519
 msgid ""
@@ -216,7 +216,7 @@ msgstr "تم نسخ النتيجة إلى الحافظة\n"
 
 #: addon\globalPlugins\CloudVision\__init__.py:534
 msgid "Copy last result in clipboard."
-msgstr "تم نسخ آخر نتيجة إلى الحافظة."
+msgstr "نسخ آخر نتيجة إلى الحافظة."
 
 #: addon\globalPlugins\CloudVision\__init__.py:545
 msgid ""
