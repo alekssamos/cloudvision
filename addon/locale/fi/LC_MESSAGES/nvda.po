@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cloudVision\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
-"POT-Creation-Date: 2024-12-10 16:36+0200\n"
-"PO-Revision-Date: 2024-12-10 16:44+0200\n"
+"POT-Creation-Date: 2024-12-12 21:50+0300\n"
+"PO-Revision-Date: 2024-12-23 17:06+0200\n"
 "Last-Translator: Jani Kinnunen <janikinnunen340@gmail.com>\n"
 "Language-Team: fi_FI <janikinnunen340@gmail.com>\n"
 "Language: fi_FI\n"
@@ -13,6 +13,76 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.5\n"
 "X-Poedit-Basepath: .\n"
+
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:30
+msgid "You are logged in to your account:"
+msgstr "Olet kirjautunut tilillesi:"
+
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:168
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:255
+msgid "Email:"
+msgstr "&Sähköposti:"
+
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:174
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:261
+msgid "Password:"
+msgstr "S&alasana:"
+
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:179
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:269
+msgid "Log in"
+msgstr "&Kirjaudu sisään"
+
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:182
+msgid "Create account"
+msgstr "&Luo tili"
+
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:220
+msgid "Logout"
+msgstr "Kirjaudu &ulos"
+
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:243
+msgid "Name:"
+msgstr "Etu&nimi:"
+
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:249
+msgid "Surname:"
+msgstr "Suk&unimi:"
+
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:266
+msgid "Register"
+msgstr "Re&kisteröidy"
+
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:321
+msgid "Question:"
+msgstr "&Kysymys:"
+
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:327
+msgid "Send"
+msgstr "&Lähetä"
+
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:330
+msgid "Close"
+msgstr "&Sulje"
+
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:362
+msgid "Wait for the Be My Eyes to type the message"
+msgstr "Odota, kun Be My Eyes kirjoittaa viestiä"
+
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:370
+msgid "You"
+msgstr "Sinä"
+
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:448
+msgid "First you need to log in or register"
+msgstr "Sinun täytyy ensin kirjautua sisään tai rekisteröityä."
+
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:449
+msgid ""
+"Open NVDA Menu, Preferences, CloudVision Settings, Manage Be My Eyes account"
+msgstr ""
+"Avaa NVDA-valikko ja sieltä Asetukset > Pilvinäkö ja valitse Be My Eyes -"
+"tilin hallinta."
 
 #: addon\globalPlugins\CloudVision\__init__.py:78
 msgid "Analyzing selected file"
@@ -37,7 +107,7 @@ msgstr "Aseta &navigointiobjekti etusijalle"
 
 #: addon\globalPlugins\CloudVision\__init__.py:103
 msgid "&Play sound during recognition"
-msgstr "&Soita ääni tunnistuksen aikana"
+msgstr "Toi&sta ääni tunnistuksen aikana"
 
 #: addon\globalPlugins\CloudVision\__init__.py:107
 msgid "Recognize &text"
@@ -65,11 +135,11 @@ msgstr ""
 
 #: addon\globalPlugins\CloudVision\__init__.py:136
 msgid "Manage Be My Eyes account"
-msgstr "Be My Eyes -tilin hallinta"
+msgstr "Be My E&yes -tilin hallinta"
 
 #: addon\globalPlugins\CloudVision\__init__.py:140
 msgid "Open site"
-msgstr "Avaa sivu"
+msgstr "&Avaa sivu"
 
 #: addon\globalPlugins\CloudVision\__init__.py:150
 msgid "Please wait..."
