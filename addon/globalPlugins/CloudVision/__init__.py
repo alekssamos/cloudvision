@@ -543,6 +543,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		ask_frame.Show()
 		ask_frame.postInit()
 	script_askBm.__doc__ = _("Ask the bot a question. You need to log in to your be my eyes account in the add-on settings")
+	script_askBm.category = _('Cloud Vision')
 
 	__gestures = {
 		"kb:NVDA+Control+I": "analyzeObject",
