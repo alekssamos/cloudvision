@@ -3,6 +3,7 @@ import sys
 import os
 import os.path
 import time
+import globalVars
 from threading import Timer, Lock
 from ..cvconf import getConfig, CONFIGDIR, bm_chat_id_file, bm_token_file
 from ..cvexceptions import APIError
@@ -12,9 +13,7 @@ if sys.version_info.major == 2:
 elif sys.version_info.major == 3:
     import urllib.request as ur, urllib.parse as up
 
-## for Windows XP
 import socket
-
 socket.setdefaulttimeout(60)
 
 import wx
@@ -24,10 +23,12 @@ import queueHandler
 import addonHandler
 
 addonHandler.initTranslation()
+
 class FocusedStaticText(wx.StaticText):
     def AcceptsFocus(self): return True
 
 LOGGED_IN_TEXT = _("You are logged in to your account:")
+
 class bm:
     url = "https://visionbot.ru/apiv2/"
 
@@ -57,15 +58,8 @@ class bm:
         return len(self.bm_token) > 20
 
     def refresh(self):
-        params = {
-            "action": "refresh",
-            "bmtoken": self.bm_token
-        }
-        r1 = (
-            ur.urlopen(self.url + "bm.php", data=up.urlencode(params).encode())
-            .read()
-            .decode("UTF-8")
-        )
+        params = {"action": "refresh", "bmtoken": self.bm_token}
+        r1 = ur.urlopen(self.url + "bm.php", data=up.urlencode(params).encode()).read().decode("UTF-8")
         j1 = json.loads(r1)
         if j1["status"] == "error":
             if "detail:" in j1["text"]: os.path.remove(bm_token_file)
@@ -74,10 +68,9 @@ class bm:
         return j1["text"]
 
     def ask(self, message, lang):
-        is_chat_id_exists = False
         try:
-            if int(self.bm_chat_id) != 0:
-                is_chat_id_exists = True
+            if int(self.bm_chat_id) == 0:
+                raise APIError("chat id not found. First, recognize the picture")
         except ValueError:
             raise APIError("chat id not found. First, recognize the picture")
         params = {
@@ -87,50 +80,25 @@ class bm:
             "bm_chat_id": self.bm_chat_id,
             "message": message,
         }
-        r1 = (
-            ur.urlopen(self.url + "bm.php", data=up.urlencode(params).encode())
-            .read()
-            .decode("UTF-8")
-        )
+        r1 = ur.urlopen(self.url + "bm.php", data=up.urlencode(params).encode()).read().decode("UTF-8")
         j1 = json.loads(r1)
         if j1["status"] == "error":
             raise APIError(j1["text"])
-        params = {
-            "id": j1["id"],
-            "ask":"1",
-        }
-        for i in range(60):
-            r2 = (
-                ur.urlopen(
-                    self.url + "res.php",
-                    data=up.urlencode(params).encode(),
-                )
-                .read()
-                .decode("UTF-8")
-            )
+        params = {"id": j1["id"], "ask": "1"}
+        for _ in range(60):
+            r2 = ur.urlopen(self.url + "res.php", data=up.urlencode(params).encode()).read().decode("UTF-8")
             j2 = json.loads(r2)
             if j2["status"] == "error":
                 raise APIError(j2.get("text", "unknown error"))
-
             if j2["status"] == "ok":
                 return j2
-
             if j2["status"] == "notready":
                 time.sleep(1)
                 continue
 
     def login(self, email, password, lang="en"):
-        params = {
-            "action": "login",
-            "lang": self.lang,
-            "email": email,
-            "password": password,
-        }
-        r = (
-            ur.urlopen(self.url + "bm.php", data=up.urlencode(params).encode())
-            .read()
-            .decode("UTF-8")
-        )
+        params = {"action": "login", "lang": self.lang, "email": email, "password": password}
+        r = ur.urlopen(self.url + "bm.php", data=up.urlencode(params).encode()).read().decode("UTF-8")
         j = json.loads(r)
         if j["status"] == "ok":
             with open(bm_token_file, "w") as f:
@@ -146,47 +114,35 @@ class bm:
             "email": email,
             "password": password,
         }
-        r = (
-            ur.urlopen(self.url + "bm.php", data=up.urlencode(params).encode())
-            .read()
-            .decode("UTF-8")
-        )
+        r = ur.urlopen(self.url + "bm.php", data=up.urlencode(params).encode()).read().decode("UTF-8")
         j = json.loads(r)
         if j["status"] == "ok":
             with open(bm_token_file, "w") as f:
                 f.write(j["bmtoken"])
         return j
 
-
 class LoginPanel(wx.Panel):
     def __init__(self, parent):
         super().__init__(parent)
-
         main_sizer = wx.BoxSizer(wx.VERTICAL)
-
         email_sizer = wx.BoxSizer(wx.HORIZONTAL)
         email_label = wx.StaticText(self, label=_("Email:"))
         self.email_input = wx.TextCtrl(self)
         email_sizer.Add(email_label, 0, wx.ALL, 5)
         email_sizer.Add(self.email_input, 1, wx.EXPAND | wx.ALL, 5)
-
         password_sizer = wx.BoxSizer(wx.HORIZONTAL)
         password_label = wx.StaticText(self, label=_("Password:"))
         self.password_input = wx.TextCtrl(self, style=wx.TE_PASSWORD)
         password_sizer.Add(password_label, 0, wx.ALL, 5)
         password_sizer.Add(self.password_input, 1, wx.EXPAND | wx.ALL, 5)
-
         login_button = wx.Button(self, label=_("Log in"))
         login_button.Bind(wx.EVT_BUTTON, self.on_login)
-
         show_register_button = wx.Button(self, label=_("Create account"))
         show_register_button.Bind(wx.EVT_BUTTON, self.on_show_register_btn)
-
         main_sizer.Add(email_sizer, 0, wx.EXPAND | wx.ALL, 5)
         main_sizer.Add(password_sizer, 0, wx.EXPAND | wx.ALL, 5)
         main_sizer.Add(login_button, 0, wx.ALIGN_CENTER | wx.ALL, 5)
         main_sizer.Add(show_register_button, 0, wx.ALIGN_CENTER | wx.ALL, 5)
-
         self.SetSizer(main_sizer)
 
     def on_login(self, event):
@@ -207,23 +163,17 @@ class LoginPanel(wx.Panel):
         f.Layout()
         f.register_panel.SetFocus()
 
-
 class LoggedInPannel(wx.Panel):
     def __init__(self, parent):
         super().__init__(parent)
-
         self.logged_in_h_sizer = wx.BoxSizer(wx.HORIZONTAL)
-
         self.logged_in_label = FocusedStaticText(self, wx.ID_ANY, LOGGED_IN_TEXT)
         self.logged_in_h_sizer.Add(self.logged_in_label, 0, 0, 0)
-
         self.logout_button = wx.Button(self, wx.ID_ANY, _("Logout"))
         self.logged_in_h_sizer.Add(self.logout_button, 0, 0, 0)
-
         self.SetSizer(self.logged_in_h_sizer)
-
-
         self.logout_button.Bind(wx.EVT_BUTTON, self.on_logout)
+
     def on_logout(self, event):
         event.Skip()
         with Lock():
@@ -236,46 +186,37 @@ class LoggedInPannel(wx.Panel):
 class RegisterPanel(wx.Panel):
     def __init__(self, parent):
         super().__init__(parent)
-
         main_sizer = wx.BoxSizer(wx.VERTICAL)
-
         name_sizer = wx.BoxSizer(wx.HORIZONTAL)
         name_label = wx.StaticText(self, label=_("Name:"))
         self.name_input = wx.TextCtrl(self)
         name_sizer.Add(name_label, 0, wx.ALL, 5)
         name_sizer.Add(self.name_input, 1, wx.EXPAND | wx.ALL, 5)
-
         surname_sizer = wx.BoxSizer(wx.HORIZONTAL)
         surname_label = wx.StaticText(self, label=_("Surname:"))
         self.surname_input = wx.TextCtrl(self)
         surname_sizer.Add(surname_label, 0, wx.ALL, 5)
         surname_sizer.Add(self.surname_input, 1, wx.EXPAND | wx.ALL, 5)
-
         email_sizer = wx.BoxSizer(wx.HORIZONTAL)
         email_label = wx.StaticText(self, label=_("Email:"))
         self.email_input = wx.TextCtrl(self)
         email_sizer.Add(email_label, 0, wx.ALL, 5)
         email_sizer.Add(self.email_input, 1, wx.EXPAND | wx.ALL, 5)
-
         password_sizer = wx.BoxSizer(wx.HORIZONTAL)
         password_label = wx.StaticText(self, label=_("Password:"))
         self.password_input = wx.TextCtrl(self, style=wx.TE_PASSWORD)
         password_sizer.Add(password_label, 0, wx.ALL, 5)
         password_sizer.Add(self.password_input, 1, wx.EXPAND | wx.ALL, 5)
-
         register_button = wx.Button(self, label=_("Register"))
         register_button.Bind(wx.EVT_BUTTON, self.on_register)
-
         show_login_button = wx.Button(self, label=_("Log in"))
         show_login_button.Bind(wx.EVT_BUTTON, self.on_show_login_btn)
-
         main_sizer.Add(name_sizer, 0, wx.EXPAND | wx.ALL, 5)
         main_sizer.Add(surname_sizer, 0, wx.EXPAND | wx.ALL, 5)
         main_sizer.Add(email_sizer, 0, wx.EXPAND | wx.ALL, 5)
         main_sizer.Add(password_sizer, 0, wx.EXPAND | wx.ALL, 5)
         main_sizer.Add(register_button, 0, wx.ALIGN_CENTER | wx.ALL, 5)
         main_sizer.Add(show_login_button, 0, wx.ALIGN_CENTER | wx.ALL, 5)
-
         self.SetSizer(main_sizer)
 
     def on_show_login_btn(self, event):
@@ -294,56 +235,59 @@ class RegisterPanel(wx.Panel):
         password = self.password_input.GetValue()
         f = self.FindWindowByName("lrframe1")
         b = bm()
-        res = b.signup(
-            first_name=name,
-            last_name=surname,
-            email=email,
-            password=password,
-            lang=f.lang,
-        )
+        res = b.signup(first_name=name, last_name=surname, email=email, password=password, lang=f.lang)
         wx.MessageBox(str(res))
         f.Close()
-
 
 class AskPanel(wx.Panel):
     ask_tmr = None
 
     def __init__(self, parent):
         super().__init__(parent)
-
         main_sizer = wx.BoxSizer(wx.VERTICAL)
-
         messages_sizer = wx.BoxSizer(wx.VERTICAL)
-        self.messages_aria = wx.TextCtrl(self, style=wx.TE_MULTILINE|wx.TE_READONLY)
-        messages_sizer.Add(self.messages_aria)
-
+        self.messages_aria = wx.TextCtrl(self, style=wx.TE_MULTILINE | wx.TE_READONLY | wx.TE_RICH2)
+        self.messages_aria.SetMinSize((600, 400))  # Увеличиваем размер окна ответа
+        messages_sizer.Add(self.messages_aria, 1, wx.EXPAND | wx.ALL, 5)
         question_sizer = wx.BoxSizer(wx.HORIZONTAL)
         question_label = wx.StaticText(self, label=_("Question:"))
-        self.question_input = wx.TextCtrl(self, style=wx.TE_MULTILINE|wx.TE_PROCESS_ENTER)
+        self.question_input = wx.TextCtrl(self, style=wx.TE_MULTILINE | wx.TE_PROCESS_ENTER)
         question_sizer.Add(question_label, 0, wx.ALL, 5)
         question_sizer.Add(self.question_input, 1, wx.EXPAND | wx.ALL, 5)
-
         send_close_sizer = wx.BoxSizer(wx.HORIZONTAL)
         self.send_button = wx.Button(self, label=_("Send"))
         self.send_button.Bind(wx.EVT_BUTTON, self.on_send)
-
         close_button = wx.Button(self, label=_("Close"))
         close_button.Bind(wx.EVT_BUTTON, self.on_close)
         send_close_sizer.Add(self.send_button)
         send_close_sizer.Add(close_button)
-
-        main_sizer.Add(messages_sizer, 0, wx.EXPAND | wx.ALL, 5)
+        main_sizer.Add(messages_sizer, 1, wx.EXPAND | wx.ALL, 5)
         main_sizer.Add(question_sizer, 0, wx.EXPAND | wx.ALL, 5)
         main_sizer.Add(send_close_sizer)
-
         self.SetSizer(main_sizer)
+        self.messages_aria.SetValue("")  # Очищаем текстовое поле при инициализации
+
+    def format_text(self, text):
+        sentences = []
+        current_sentence = ""
+        for char in text:
+            current_sentence += char
+            if char in ".!?":
+                sentences.append(current_sentence.strip())
+                current_sentence = ""
+        if current_sentence:
+            sentences.append(current_sentence.strip())
+        return "\n".join(sentences)
 
     def add_message(self, who, text, report=True):
-        if report: queueHandler.queueFunction(queueHandler.eventQueue, ui.message, f"{who}: {text}")
+        formatted_text = self.format_text(text)
+        if report:
+            queueHandler.queueFunction(queueHandler.eventQueue, ui.message, f"{who}: {text}")
         with Lock():
-            text = self.messages_aria.GetValue() + "\n" + who + ": " + text
-            self.messages_aria.SetValue(text)
+            current_text = self.messages_aria.GetValue()
+            self.messages_aria.SetValue(f"{current_text}\n{who}: {formatted_text}")
         self.Layout()
+
     def on_send(self, event):
         event.Skip()
         if not bm().bm_authorized:
@@ -352,13 +296,7 @@ class AskPanel(wx.Panel):
         self.send_button.Disable()
         if self.ask_tmr and self.ask_tmr.is_alive():
             self.ask_tmr.cancel()
-        self.ask_tmr = Timer(
-            0.1,
-            self._on_send,
-            [
-                event,
-            ],
-        )
+        self.ask_tmr = Timer(0.1, self._on_send, [event])
         queueHandler.queueFunction(queueHandler.eventQueue, ui.message, _("Wait for the Be My Eyes to type the message"))
         self.ask_tmr.start()
 
@@ -382,24 +320,18 @@ class AskPanel(wx.Panel):
         f = self.FindWindowByName("askframe1")
         f.Hide()
 
-
 class MainDialog(wx.Dialog):
     def __init__(self, parent=None, lang="en"):
         super().__init__(parent=parent, title="Manage Be My Eyes Account")
-
         self.lang = lang
-
         self.SetName("lrframe1")
-
         self.login_panel = LoginPanel(self)
         self.register_panel = RegisterPanel(self)
         self.logged_panel = LoggedInPannel(self)
-
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add(self.login_panel, 1, wx.EXPAND)
         sizer.Add(self.logged_panel, 1, wx.EXPAND)
         sizer.Add(self.register_panel, 1, wx.EXPAND)
-
         for o in (self, self.login_panel, self.logged_panel, self.register_panel):
             o.Bind(wx.EVT_KEY_UP, self.OnKeyUp)
         bmtoken = ""
@@ -409,35 +341,32 @@ class MainDialog(wx.Dialog):
         self.register_panel.Hide()
         if bm().bm_authorized:
             self.login_panel.Hide()
-            refresh_result=""
+            refresh_result = ""
             try:
                 refresh_result = bm().refresh()
             except Exception:
                 log.exception("Error get BM Account data")
                 refresh_result = "..."
-            self.logged_panel.logged_in_label.SetLabel(LOGGED_IN_TEXT+refresh_result)
+            self.logged_panel.logged_in_label.SetLabel(LOGGED_IN_TEXT + refresh_result)
             self.logged_panel.logged_in_label.SetFocus()
         else:
             self.logged_panel.Hide()
         self.SetSizer(sizer)
         self.Layout()
+
     def OnKeyUp(self, e):
         key = e.GetKeyCode()
         e.Skip()
         if key == 27:
             self.Close()
 
-
 class AskFrame(wx.Frame):
     def __init__(self, parent=None, lang="en"):
-        super().__init__(parent=None)
+        super().__init__(parent=None, style=wx.MAXIMIZE)
         self.lang = getConfig()["language"]
         self.SetTitle("Ask a question")
-
         self.SetName("askframe1")
-
         self.ask_panel = AskPanel(self)
-
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add(self.ask_panel, 1, wx.EXPAND)
         self.SetSizer(sizer)
@@ -455,6 +384,10 @@ class AskFrame(wx.Frame):
         self.Layout()
         field = self.ask_panel.question_input if bm().bm_authorized else self.ask_panel.messages_aria
         field.SetFocus()
+        cvaskargs = getattr(globalVars, "cvaskargs", None)
+        if cvaskargs:
+            self.ask_panel.add_message(*cvaskargs)
+            globalVars.cvaskargs=None
 
     def on_close(self, event):
         self.Hide()

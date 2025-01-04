@@ -233,6 +233,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 
 	def terminate(self):
 		globalVars.cvask = None
+		globalVars.cvaskargs=None
 		try:
 			gui.mainFrame.sysTrayIcon.preferencesMenu.RemoveItem(
 				self.CloudVisionSettingsItem)
@@ -360,11 +361,11 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		self.isWorking = False
 		if resp: self.last_resp = resp
 		f = wx.FindWindowByName("askframe1")
-		if f and bmgui.bm().bm_authorized:
+		if bmgui.bm().bm_authorized:
 			_t=""
 			if target=="nothing": _t="Be My Eyes"
 			else: _t="Be My Eyes & Cloud Vision"
-			if self.last_resp and bm: f.ask_panel.add_message(_t, self.last_resp, False)
+			if self.last_resp and bm: globalVars.cvaskargs=(_t, self.last_resp, False)
 		if not resp.strip(): resp = _("Error")
 		if s: self.beep_stop()
 
