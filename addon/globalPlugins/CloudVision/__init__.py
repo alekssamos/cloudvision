@@ -72,6 +72,16 @@ fileExtension = ""
 fileName = ""
 suppFiles = ["png", "jpg", "gif", "tiff", "tif", "jpeg", "webp"]
 
+
+def find_desktop_obj():
+    a=api.getForegroundObject()
+    for _i in range(4):
+        _a = a.parent
+        if _a is None:
+            break
+        a = _a
+    return a
+
 def say_message_thr(type):
 	queueHandler.queueFunction(queueHandler.eventQueue, speech.cancelSpeech)
 	if type==1:
@@ -369,7 +379,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		if not resp.strip(): resp = _("Error")
 		if s: self.beep_stop()
 
-	def _script_analyzeObject(self, gesture):
+	def _script_analyzeObject(self, gesture, fullscreen=False):
 		if not self.isVirtual: self.isVirtual = scriptHandler.getLastScriptRepeatCount()>0
 		if self.isVirtual: return True
 		if self.tmr: self.tmr.cancel()
@@ -380,7 +390,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		p = False
 		fg = api.getNavigatorObject()
 		try:
-			if (not getConfig()["prefer_navigator"]) and (
+			if (not fullscreen and not getConfig()["prefer_navigator"]) and (
 				(fg.role == api.controlTypes.Role.GRAPHIC
 					and getattr(fg, "IA2Attributes"))
 				or ((fg.role == api.controlTypes.Role.LINK
@@ -403,7 +413,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		except AttributeError:
 			pass
 		p = p or self.getFilePath()
-		if p == True or is_url == True:
+		if not fullscreen and (p == True or is_url == True):
 			say_message(1)
 		elif p == False and is_url == False:
 			try:
@@ -426,7 +436,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		self.isWorking = True
 
 		try:
-			nav = api.getNavigatorObject()
+			nav = api.getNavigatorObject() if not fullscreen else find_desktop_obj()
 		except:
 			log.exception("get nav object")
 			self.isWorking = False
@@ -521,6 +531,27 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 	"if you press twice quickly, a virtual viewer will open.")
 	script_analyzeObject.category = _('Cloud Vision')
 
+	def script_analyzeFullscreen(self, gesture):
+		global filePath
+		global fileExtension
+		global fileName
+		try:
+			self._script_analyzeObject(gesture, fullscreen=True)
+		except:
+			log.exception("script error")
+		finally:
+			filePath = ""
+			fileExtension = ""
+			fileName = ""
+			def restorework():
+				if self.tmr is not None and self.tmr.is_alive():
+					return
+				self.isWorking = False
+				self.isVirtual = False
+			Timer(3, restorework, []).start()
+	script_analyzeFullscreen.__doc__ = _("Analyze the full screen. Pressing twice will open the virtual viewer.")
+	script_analyzeFullscreen.category = _('Cloud Vision')
+
 	def script_copylastresult(self, gesture):
 		if not self.last_resp:
 			queueHandler.queueFunction(queueHandler.eventQueue, ui.message, _("Text Not Found."))
@@ -548,6 +579,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 
 	__gestures = {
 		"kb:NVDA+Control+I": "analyzeObject",
+		"kb:NVDA+Alt+F": "analyzeFullscreen",
 		"kb:NVDA+Alt+A": "askBm",
 	}
 

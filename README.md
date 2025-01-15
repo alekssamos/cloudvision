@@ -7,6 +7,7 @@ The add-on settings are in the  NVDA menu, parameters, CloudVision Settings.
 
 Keyboard shortcuts:
 * NVDA+CTRL+I - get a description of the navigator object or jpg/png file if it is in focus in Windows explorer. If you press twice quickly, the result will appear in the virtual viewer, you can read with arrows, select, copy, and so on.
+* NVDA+ALT+F - recognize full screen
 * NVDA+ALT+A - ask a question to the Be My AI (you need to log in or register to your account in the CloudVision settings)
 * Copy the last recognized result to the clipboard - the combination is not assigned, you can assign it yourself in the input gestures.
 
