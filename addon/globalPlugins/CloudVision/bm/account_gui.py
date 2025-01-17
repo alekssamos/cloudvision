@@ -153,7 +153,8 @@ class LoginPanel(wx.Panel):
         f = self.FindWindowByName("lrframe1")
         b = bm()
         res = b.login(email=email, password=password, lang=f.lang)
-        wx.MessageBox(str(res))
+        if res.get("status") != "ok":
+            wx.MessageBox(str(res))
         f.Close()
 
     def on_show_register_btn(self, event):
@@ -237,7 +238,8 @@ class RegisterPanel(wx.Panel):
         f = self.FindWindowByName("lrframe1")
         b = bm()
         res = b.signup(first_name=name, last_name=surname, email=email, password=password, lang=f.lang)
-        wx.MessageBox(str(res))
+        if res.get("status") != "ok":
+            wx.MessageBox(str(res))
         f.Close()
 
 class AskPanel(wx.Panel):
@@ -258,8 +260,10 @@ class AskPanel(wx.Panel):
         send_close_sizer = wx.BoxSizer(wx.HORIZONTAL)
         self.send_button = wx.Button(self, label=_("Send"))
         self.send_button.Bind(wx.EVT_BUTTON, self.on_send)
+        self.send_button.SetToolTip("CTRL+Enter")
         close_button = wx.Button(self, label=_("Close"))
         close_button.Bind(wx.EVT_BUTTON, self.on_close)
+        close_button.SetToolTip("ESCAPE")
         send_close_sizer.Add(self.send_button)
         send_close_sizer.Add(close_button)
         main_sizer.Add(messages_sizer, 1, wx.EXPAND | wx.ALL, 5)
@@ -267,7 +271,10 @@ class AskPanel(wx.Panel):
         main_sizer.Add(send_close_sizer)
         self.SetSizer(main_sizer)
         self.messages_aria.SetValue("")  # Очищаем текстовое поле при инициализации
-
+        
+        for s in (self.send_button, close_button, self.messages_aria, self.question_input):
+            s.Bind(wx.EVT_KEY_DOWN, self.on_key_down)
+        
     def format_text(self, text):
         sentences = []
         current_sentence = ""
@@ -301,6 +308,16 @@ class AskPanel(wx.Panel):
         queueHandler.queueFunction(queueHandler.eventQueue, ui.message, _("Wait for the Be My Eyes to type the message"))
         self.ask_tmr.start()
 
+    def on_key_down(self, event):
+        key = event.GetKeyCode()
+        if event.ControlDown() and key in [10,13,32]:
+            self.on_send(event)
+        elif key == wx.WXK_ESCAPE:
+            self.on_close(event)
+        elif (key == wx.WXK_F2 and event.GetEventObject() == self.messages_aria) or (event.ControlDown() and key in [83,115]):
+            self.save_dialog()
+        else:
+            event.Skip()
     def _on_send(self, event):
         message = self.question_input.GetValue()
         f = self.FindWindowByName("askframe1")
@@ -320,6 +337,16 @@ class AskPanel(wx.Panel):
     def on_close(self, event):
         f = self.FindWindowByName("askframe1")
         f.Hide()
+    def save_dialog(self):
+        with wx.FileDialog(self, "Save dialog", wildcard="Text files (*.txt)|*.txt", style=wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT) as fileDialog:
+            if fileDialog.ShowModal() == wx.ID_CANCEL:
+                return
+            pathname = fileDialog.GetPath()
+            try:
+                with open(pathname, 'w') as file:
+                    file.write(self.messages_aria.GetValue())
+            except IOError:
+                wx.LogError(f"Cannot save current data in file '{pathname}'.")
 
 class MainDialog(wx.Dialog):
     def __init__(self, parent=None, lang="en"):
