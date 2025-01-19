@@ -585,8 +585,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		global fileName
 		try:
 			fileExtension="png"
-			tpngfp = tempfile.NamedTemporaryFile(suffix="."+fileExtension)
-			tpng = tpngfp.name
+			tpng = tempfile.mkstemp(suffix="."+fileExtension)[1]
 			filePath = tpng
 			fileName = os.path.basename(filePath)
 			b=get_image_from_clipboard()
@@ -599,7 +598,6 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		except:
 			log.exception("script error")
 		finally:
-			tpngfp.close()
 			if os.path.isfile(tpng): os.remove(tpng)
 			filePath = ""
 			fileExtension = ""
