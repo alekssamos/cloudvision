@@ -11,6 +11,7 @@ Open NVDA menu, Preferences, CloudVision Settings.
 ### Keyboard shortcuts
 * NVDA + CTRL + I - recognize the navigator object or the selected file in Explorer. If you press twice quickly, the result will appear in the virtual viewing window.
 * NVDA+ALT+F - recognize full screen
+* NVDA+ALT+C - recognize an image from the clipboard
 * NVDA+ALT+A - ask a question to the Be My AI (you need to log in or register to your account in the CloudVision settings)
 * the gesture is not assigned - copy the last result to the clipboard. To assign, see NVDA menu, Preferences, input gestures, CloudVision category.
 

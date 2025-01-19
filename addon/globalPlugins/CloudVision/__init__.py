@@ -13,6 +13,7 @@ import os.path
 import controlTypes
 import tempfile
 import subprocess
+from ctypes import windll
 from .bm import account_gui as bmgui
 from glob import glob
 from xml.parsers import expat
@@ -73,6 +74,27 @@ fileName = ""
 suppFiles = ["png", "jpg", "gif", "tiff", "tif", "jpeg", "webp"]
 
 
+def get_image_from_clipboard():
+    # Open the clipboard
+    if wx.TheClipboard.Open():
+        # Check if the clipboard has a bitmap
+        if wx.TheClipboard.IsSupported(wx.DataFormat(wx.DF_BITMAP)):
+            # Create a bitmap data object
+            bmp_data = wx.BitmapDataObject()
+            wx.TheClipboard.GetData(bmp_data)  # Get the bitmap data
+            # Convert wx.BitmapDataObject to wx.Bitmap
+            bitmap = bmp_data.GetBitmap()
+            wx.TheClipboard.Close()
+            return bitmap
+        else:
+            log.error("The clipboard does not contain a bitmap.")
+            wx.TheClipboard.Close()
+            queueHandler.queueFunction(queueHandler.eventQueue, ui.message, _("There is no image in the clipboard"))
+            return None
+    else:
+        log.error("Could not open the clipboard.")
+        return None
+
 def find_desktop_obj():
     a=api.getForegroundObject()
     for _i in range(4):
@@ -91,8 +113,12 @@ def say_message_thr(type):
 		queueHandler.queueFunction(queueHandler.eventQueue, ui.message, _("Please disable screen curtain before using CloudVision add-on."))
 	elif type==3:
 		queueHandler.queueFunction(queueHandler.eventQueue, ui.message, _("Analyzing navigator object"))
+	elif type==4:
+		queueHandler.queueFunction(queueHandler.eventQueue, ui.message, _("Analyzing full screen"))
+	elif type==5:
+		queueHandler.queueFunction(queueHandler.eventQueue, ui.message, _("Analyzing image from clipboard"))
 	else:
-		log.error(f"1, 2 or 3. You passed {type}")
+		log.error(f"1, 2, 3, 4 or 5. You passed {type}")
 
 def say_message(type):
 	_tmr = Timer(0.6, say_message_thr, [type, ])
@@ -379,7 +405,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		if not resp.strip(): resp = _("Error")
 		if s: self.beep_stop()
 
-	def _script_analyzeObject(self, gesture, fullscreen=False):
+	def _script_analyzeObject(self, gesture, fullscreen=False, from_clipboard=False):
 		if not self.isVirtual: self.isVirtual = scriptHandler.getLastScriptRepeatCount()>0
 		if self.isVirtual: return True
 		if self.tmr: self.tmr.cancel()
@@ -388,6 +414,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		global filePath, p, fileExtension
 		is_url = False
 		p = False
+		if from_clipboard: p = True
 		fg = api.getNavigatorObject()
 		try:
 			if (not fullscreen and not getConfig()["prefer_navigator"]) and (
@@ -414,7 +441,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			pass
 		p = p or self.getFilePath()
 		if not fullscreen and (p == True or is_url == True):
-			say_message(1)
+			say_message( 1 if not from_clipboard else 5 )
 		elif p == False and is_url == False:
 			try:
 				import vision
@@ -422,14 +449,14 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 				screenCurtainId = ScreenCurtainProvider.getSettings().getId()
 				screenCurtainProviderInfo = vision.handler.getProviderInfo(screenCurtainId)
 				isScreenCurtainRunning = bool(vision.handler.getProviderInstance(screenCurtainProviderInfo))
-				if isScreenCurtainRunning:
+				if isScreenCurtainRunning and not from_clipboard:
 					say_message(2)
 					self.isWorking = False
 					self.isVirtual = False
 					return
 			except:
 				pass
-			say_message(3)
+			say_message( 3 if not fullscreen else 4 )
 
 		if self.isWorking:
 			return False
@@ -552,6 +579,39 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 	script_analyzeFullscreen.__doc__ = _("Analyze the full screen. Pressing twice will open the virtual viewer.")
 	script_analyzeFullscreen.category = _('Cloud Vision')
 
+	def script_analyzeClipboard(self, gesture):
+		global filePath
+		global fileExtension
+		global fileName
+		try:
+			fileExtension="png"
+			tpng = tempfile.mktemp(suffix="."+fileExtension)
+			filePath = tpng
+			fileName = os.path.basename(filePath)
+			b=get_image_from_clipboard()
+			if not b: return False
+			image=b.ConvertToImage()
+			if not image.SaveFile(tpng):
+				queueHandler.queueFunction(queueHandler.eventQueue, ui.message, _("Couldn't save image from clipboard"))
+				return
+			self._script_analyzeObject(gesture, fullscreen=False, from_clipboard=True)
+		except:
+			log.exception("script error")
+		finally:
+			if os.path.isfile(tpng): os.remove(tpng)
+			filePath = ""
+			fileExtension = ""
+			fileName = ""
+			tpng = ""
+			def restorework():
+				if self.tmr is not None and self.tmr.is_alive():
+					return
+				self.isWorking = False
+				self.isVirtual = False
+			Timer(3, restorework, []).start()
+	script_analyzeClipboard.__doc__ = _("Analyzing an image from the clipboard. Pressing twice will open the virtual viewer.")
+	script_analyzeClipboard.category = _('Cloud Vision')
+
 	def script_copylastresult(self, gesture):
 		if not self.last_resp:
 			queueHandler.queueFunction(queueHandler.eventQueue, ui.message, _("Text Not Found."))
@@ -580,6 +640,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 	__gestures = {
 		"kb:NVDA+Control+I": "analyzeObject",
 		"kb:NVDA+Alt+F": "analyzeFullscreen",
+		"kb:NVDA+Alt+C": "analyzeClipboard",
 		"kb:NVDA+Alt+A": "askBm",
 	}
 
