@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cloudVision\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
-"POT-Creation-Date: 2024-12-12 21:50+0300\n"
-"PO-Revision-Date: 2024-12-23 17:06+0200\n"
+"POT-Creation-Date: 2025-01-19 12:37+0300\n"
+"PO-Revision-Date: 2025-01-20 11:07+0200\n"
 "Last-Translator: Jani Kinnunen <janikinnunen340@gmail.com>\n"
 "Language-Team: fi_FI <janikinnunen340@gmail.com>\n"
 "Language: fi_FI\n"
@@ -14,118 +14,131 @@ msgstr ""
 "X-Generator: Poedit 3.5\n"
 "X-Poedit-Basepath: .\n"
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:30
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:31
 msgid "You are logged in to your account:"
 msgstr "Olet kirjautunut tilillesi:"
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:168
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:255
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:130
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:203
 msgid "Email:"
 msgstr "&Sähköposti:"
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:174
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:261
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:135
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:208
 msgid "Password:"
 msgstr "S&alasana:"
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:179
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:269
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:139
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:214
 msgid "Log in"
 msgstr "&Kirjaudu sisään"
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:182
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:141
 msgid "Create account"
 msgstr "&Luo tili"
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:220
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:174
 msgid "Logout"
 msgstr "Kirjaudu &ulos"
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:243
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:193
 msgid "Name:"
 msgstr "Etu&nimi:"
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:249
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:198
 msgid "Surname:"
 msgstr "Suk&unimi:"
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:266
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:212
 msgid "Register"
 msgstr "Re&kisteröidy"
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:321
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:256
 msgid "Question:"
 msgstr "&Kysymys:"
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:327
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:261
 msgid "Send"
 msgstr "&Lähetä"
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:330
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:264
 msgid "Close"
 msgstr "&Sulje"
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:362
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:308
 msgid "Wait for the Be My Eyes to type the message"
 msgstr "Odota, kun Be My Eyes kirjoittaa viestiä"
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:370
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:326
 msgid "You"
 msgstr "Sinä"
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:448
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:405
 msgid "First you need to log in or register"
 msgstr "Sinun täytyy ensin kirjautua sisään tai rekisteröityä."
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:449
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:406
 msgid ""
 "Open NVDA Menu, Preferences, CloudVision Settings, Manage Be My Eyes account"
 msgstr ""
 "Avaa NVDA-valikko ja sieltä Asetukset > Pilvinäkö ja valitse Be My Eyes -"
 "tilin hallinta."
 
-#: addon\globalPlugins\CloudVision\__init__.py:78
+#: addon\globalPlugins\CloudVision\__init__.py:92
+msgid "There is no image in the clipboard"
+msgstr "Leikepöydällä ei ole kuvaa"
+
+#: addon\globalPlugins\CloudVision\__init__.py:110
 msgid "Analyzing selected file"
 msgstr "Analysoidaan valittua tiedostoa"
 
 #. Translators: Reported when screen curtain is enabled.
-#: addon\globalPlugins\CloudVision\__init__.py:81
+#: addon\globalPlugins\CloudVision\__init__.py:113
 msgid "Please disable screen curtain before using CloudVision add-on."
 msgstr "Poista näyttöverho käytöstä ennen Pilvinäkö-lisäosan käyttämistä."
 
-#: addon\globalPlugins\CloudVision\__init__.py:83
+#: addon\globalPlugins\CloudVision\__init__.py:115
 msgid "Analyzing navigator object"
 msgstr "Analysoidaan navigointiobjektia"
 
-#: addon\globalPlugins\CloudVision\__init__.py:93
+#: addon\globalPlugins\CloudVision\__init__.py:117
+#| msgid "Analyzing selected file"
+msgid "Analyzing full screen"
+msgstr "Analysoidaan koko ruutu"
+
+#: addon\globalPlugins\CloudVision\__init__.py:119
+msgid "Analyzing image from clipboard"
+msgstr "Analysoidaan kuvaa leikepöydältä"
+
+#: addon\globalPlugins\CloudVision\__init__.py:129
 msgid "CloudVision Settings"
 msgstr "Pilvinäön asetukset"
 
-#: addon\globalPlugins\CloudVision\__init__.py:99
+#: addon\globalPlugins\CloudVision\__init__.py:135
 msgid "Pre&fer a navigator object instead of a file"
 msgstr "Aseta &navigointiobjekti etusijalle"
 
-#: addon\globalPlugins\CloudVision\__init__.py:103
+#: addon\globalPlugins\CloudVision\__init__.py:139
 msgid "&Play sound during recognition"
 msgstr "Toi&sta ääni tunnistuksen aikana"
 
-#: addon\globalPlugins\CloudVision\__init__.py:107
+#: addon\globalPlugins\CloudVision\__init__.py:143
 msgid "Recognize &text"
 msgstr "Tunnista t&eksti"
 
-#: addon\globalPlugins\CloudVision\__init__.py:111
+#: addon\globalPlugins\CloudVision\__init__.py:147
 msgid "Recognize &images"
 msgstr "Tunnista &kuvat"
 
-#: addon\globalPlugins\CloudVision\__init__.py:119
+#: addon\globalPlugins\CloudVision\__init__.py:155
 msgid "Read &QR / bar code"
 msgstr "Lue &QR- tai viivakoodi"
 
-#: addon\globalPlugins\CloudVision\__init__.py:123
+#: addon\globalPlugins\CloudVision\__init__.py:159
 msgid "Translate text"
 msgstr "Käännä teksti"
 
-#: addon\globalPlugins\CloudVision\__init__.py:134
+#: addon\globalPlugins\CloudVision\__init__.py:170
 msgid ""
 "Select image description language, other languages than english are more "
 "prone to translation errors"
@@ -133,31 +146,31 @@ msgstr ""
 "Valitse kuvien kuvauksen kieli (muut kuin englanti ovat alttiimpia "
 "käännösvirheille)"
 
-#: addon\globalPlugins\CloudVision\__init__.py:136
+#: addon\globalPlugins\CloudVision\__init__.py:172
 msgid "Manage Be My Eyes account"
 msgstr "Be My E&yes -tilin hallinta"
 
-#: addon\globalPlugins\CloudVision\__init__.py:140
+#: addon\globalPlugins\CloudVision\__init__.py:176
 msgid "Open site"
 msgstr "&Avaa sivu"
 
-#: addon\globalPlugins\CloudVision\__init__.py:150
+#: addon\globalPlugins\CloudVision\__init__.py:186
 msgid "Please wait..."
 msgstr "Odota..."
 
-#: addon\globalPlugins\CloudVision\__init__.py:178
+#: addon\globalPlugins\CloudVision\__init__.py:214
 msgid "Error saving settings"
 msgstr "Virhe tallennettaessa asetuksia"
 
-#: addon\globalPlugins\CloudVision\__init__.py:230
+#: addon\globalPlugins\CloudVision\__init__.py:266
 msgid "Cloud Vision settings..."
 msgstr "Pilvinäkö..."
 
-#: addon\globalPlugins\CloudVision\__init__.py:249
+#: addon\globalPlugins\CloudVision\__init__.py:286
 msgid "There have been no recognitions yet"
 msgstr "Tunnistuksia ei ole vielä suoritettu"
 
-#: addon\globalPlugins\CloudVision\__init__.py:269
+#: addon\globalPlugins\CloudVision\__init__.py:306
 msgid ""
 "To recognize files under the cursor without opening Update NVDA version to "
 "2021.1 or higher"
@@ -165,31 +178,31 @@ msgstr ""
 "Tunnista kohdistimen kohdalla oleva tiedosto avaamatta sitä päivittämällä "
 "NVDA versioksi 2021.1 tai uudemmaksi"
 
-#: addon\globalPlugins\CloudVision\__init__.py:324
+#: addon\globalPlugins\CloudVision\__init__.py:361
 msgid "File not supported"
 msgstr "Tiedostoa ei tueta"
 
-#: addon\globalPlugins\CloudVision\__init__.py:353
+#: addon\globalPlugins\CloudVision\__init__.py:390
 msgid "Analysis completed: "
 msgstr "Analyysi suoritettu: "
 
-#: addon\globalPlugins\CloudVision\__init__.py:355
+#: addon\globalPlugins\CloudVision\__init__.py:392
 msgid "CloudVision result"
 msgstr "Pilvinäön tulos"
 
-#: addon\globalPlugins\CloudVision\__init__.py:368
+#: addon\globalPlugins\CloudVision\__init__.py:405
 msgid "Error"
 msgstr "Virhe"
 
-#: addon\globalPlugins\CloudVision\__init__.py:437
+#: addon\globalPlugins\CloudVision\__init__.py:475
 msgid "This navigator object is not analyzable"
 msgstr "Tätä navigointiobjektia ei voi analysoida"
 
-#: addon\globalPlugins\CloudVision\__init__.py:457
+#: addon\globalPlugins\CloudVision\__init__.py:495
 msgid "This navigator object is too small"
 msgstr "Tämä navigointiobjekti on liian pieni"
 
-#: addon\globalPlugins\CloudVision\__init__.py:519
+#: addon\globalPlugins\CloudVision\__init__.py:557
 msgid ""
 "Gives a description on how current navigator object or selected file in "
 "Explorer looks like visually,\n"
@@ -199,24 +212,45 @@ msgstr ""
 "Resurssienhallinnassa valittuna oleva tiedosto näyttää visuaalisesti.\n"
 "Kahdesti painettaessa kuvaus avataan erilliseen ikkunaan."
 
-#: addon\globalPlugins\CloudVision\__init__.py:521
-#: addon\globalPlugins\CloudVision\__init__.py:535
+#: addon\globalPlugins\CloudVision\__init__.py:559
+#: addon\globalPlugins\CloudVision\__init__.py:580
+#: addon\globalPlugins\CloudVision\__init__.py:613
+#: addon\globalPlugins\CloudVision\__init__.py:627
+#: addon\globalPlugins\CloudVision\__init__.py:638
 msgid "Cloud Vision"
 msgstr "Pilvinäkö"
 
-#: addon\globalPlugins\CloudVision\__init__.py:525
+#: addon\globalPlugins\CloudVision\__init__.py:579
+msgid "Analyze the full screen. Pressing twice will open the virtual viewer."
+msgstr ""
+"Analysoi koko ruudun. Kahdesti painettaessa tulokset avataan erillisessä "
+"ikkunassa."
+
+#: addon\globalPlugins\CloudVision\__init__.py:595
+msgid "Couldn't save image from clipboard"
+msgstr "Kuvaa ei voitu tallentaa leikepöydältä"
+
+#: addon\globalPlugins\CloudVision\__init__.py:612
+msgid ""
+"Analyzing an image from the clipboard. Pressing twice will open the virtual "
+"viewer."
+msgstr ""
+"Analysoi leikepöydällä olevan kuvan. Kahdesti painettaessa tulokset avataan "
+"erillisessä ikkunassa."
+
+#: addon\globalPlugins\CloudVision\__init__.py:617
 msgid "Text Not Found."
 msgstr "Tekstiä ei löydy."
 
-#: addon\globalPlugins\CloudVision\__init__.py:530
+#: addon\globalPlugins\CloudVision\__init__.py:622
 msgid "Result copyed in clipboard.\n"
 msgstr "Tulos kopioitu leikepöydälle.\n"
 
-#: addon\globalPlugins\CloudVision\__init__.py:534
+#: addon\globalPlugins\CloudVision\__init__.py:626
 msgid "Copy last result in clipboard."
 msgstr "Kopioi viimeisin tulos leikepöydälle."
 
-#: addon\globalPlugins\CloudVision\__init__.py:545
+#: addon\globalPlugins\CloudVision\__init__.py:637
 msgid ""
 "Ask the bot a question. You need to log in to your be my eyes account in the "
 "add-on settings"

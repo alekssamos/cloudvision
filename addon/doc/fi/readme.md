@@ -11,6 +11,8 @@ Avaa NVDA-valikko, siirry Asetukset-alivalikkoon ja valitse "Pilvinäkö..." -va
 
 ### Pikanäppäimet
 * NVDA+Ctrl+I: Tunnista navigointiobjekti tai valittu tiedosto Resurssienhallinnassa. Kahdesti painettaessa tulos näytetään erillisessä ikkunassa.
+* NVDA+Alt+F: Tunnista koko ruutu.
+* NVDA+Alt+C: Tunnista leikepöydällä oleva kuva.
 * NVDA+Alt+A: Esitä kysymys Be My AI:lle (sinun täytyy kirjautua olemassa olevalle tilillesi tai rekisteröityä lisäosan asetuksissa).
 * Ei määritettyä näppäinkomentoa: Kopioi viimeisin tulos leikepöydälle. Määritä näppäinkomento siirtymällä NVDA-valikkoon, avaamalla Asetukset-alivalikko, valitsemalla Näppäinkomennot-vaihtoehto ja sitten Pilvinäkö-kategoria.
 
