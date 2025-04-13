@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 'CloudVision' '4.1.4'\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
-"POT-Creation-Date: 2024-12-12 21:50+0300\n"
-"PO-Revision-Date: 2024-12-22 15:56+0300\n"
+"POT-Creation-Date: 2025-01-19 12:37+0300\n"
+"PO-Revision-Date: 2025-04-13 14:58+0200\n"
 "Last-Translator: \n"
 "Language-Team: tecwindow\n"
 "Language: ar\n"
@@ -18,117 +18,129 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 3.5\n"
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:30
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:31
 msgid "You are logged in to your account:"
 msgstr "لقد قمت بتسجيل الدخول إلى حسابك:"
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:168
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:255
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:130
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:203
 msgid "Email:"
 msgstr "البريد الإلكتروني:"
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:174
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:261
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:135
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:208
 msgid "Password:"
 msgstr "كلمة المرور:"
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:179
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:269
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:139
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:214
 msgid "Log in"
 msgstr "تسجيل الدخول"
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:182
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:141
 msgid "Create account"
 msgstr "إنشاء حساب"
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:220
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:174
 msgid "Logout"
 msgstr "تسجيل الخروج"
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:243
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:193
 msgid "Name:"
 msgstr "الإسم:"
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:249
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:198
 msgid "Surname:"
 msgstr "اسم العائلة:"
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:266
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:212
 msgid "Register"
 msgstr "تسجيل"
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:321
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:256
 msgid "Question:"
 msgstr "سؤال:"
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:327
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:261
 msgid "Send"
 msgstr "إرسال"
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:330
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:264
 msgid "Close"
 msgstr "إغلاق"
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:362
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:308
 msgid "Wait for the Be My Eyes to type the message"
 msgstr "انتظر حتى يقوم Be My Eyes بكتابة الرسالة"
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:370
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:326
 msgid "You"
 msgstr "أنت"
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:448
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:405
 msgid "First you need to log in or register"
 msgstr "أولا تحتاج إلى تسجيل الدخول أو إنشاء حساب"
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:449
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:406
 msgid ""
 "Open NVDA Menu, Preferences, CloudVision Settings, Manage Be My Eyes account"
 msgstr ""
 "قم بفتح قائمة NVDA, تفضيلات, CloudVision الإعدادات, إدارة حساب Be My Eyes"
 
-#: addon\globalPlugins\CloudVision\__init__.py:78
+#: addon\globalPlugins\CloudVision\__init__.py:92
+msgid "There is no image in the clipboard"
+msgstr "لا توجد صور في الحافظة"
+
+#: addon\globalPlugins\CloudVision\__init__.py:110
 msgid "Analyzing selected file"
 msgstr "يجري تحليل الملف المحدد"
 
 #. Translators: Reported when screen curtain is enabled.
-#: addon\globalPlugins\CloudVision\__init__.py:81
+#: addon\globalPlugins\CloudVision\__init__.py:113
 msgid "Please disable screen curtain before using CloudVision add-on."
 msgstr "يرجى تعطيل ستار الشاشة قبل استخدام إضافة CloudVision."
 
-#: addon\globalPlugins\CloudVision\__init__.py:83
+#: addon\globalPlugins\CloudVision\__init__.py:115
 msgid "Analyzing navigator object"
-msgstr "يجري تحليل الكائن "
+msgstr "يجري تحليل الكائن"
 
-#: addon\globalPlugins\CloudVision\__init__.py:93
+#: addon\globalPlugins\CloudVision\__init__.py:117
+msgid "Analyzing full screen"
+msgstr "يجري تحليل الشاشة بأكملها"
+
+#: addon\globalPlugins\CloudVision\__init__.py:119
+msgid "Analyzing image from clipboard"
+msgstr "وصف الصور من الحافظة"
+
+#: addon\globalPlugins\CloudVision\__init__.py:129
 msgid "CloudVision Settings"
 msgstr "إعدادات CloudVision"
 
-#: addon\globalPlugins\CloudVision\__init__.py:99
+#: addon\globalPlugins\CloudVision\__init__.py:135
 msgid "Pre&fer a navigator object instead of a file"
 msgstr "تفضيل كائن بدلاً من ملف"
 
-#: addon\globalPlugins\CloudVision\__init__.py:103
+#: addon\globalPlugins\CloudVision\__init__.py:139
 msgid "&Play sound during recognition"
 msgstr "تشغيل الصوت أثناء التعرف"
 
-#: addon\globalPlugins\CloudVision\__init__.py:107
+#: addon\globalPlugins\CloudVision\__init__.py:143
 msgid "Recognize &text"
 msgstr "التعرف على النص"
 
-#: addon\globalPlugins\CloudVision\__init__.py:111
+#: addon\globalPlugins\CloudVision\__init__.py:147
 msgid "Recognize &images"
 msgstr "التعرف على الصور"
 
-#: addon\globalPlugins\CloudVision\__init__.py:119
+#: addon\globalPlugins\CloudVision\__init__.py:155
 msgid "Read &QR / bar code"
 msgstr "قراءة QR / bar code"
 
-#: addon\globalPlugins\CloudVision\__init__.py:123
+#: addon\globalPlugins\CloudVision\__init__.py:159
 msgid "Translate text"
 msgstr "ترجمة النص"
 
-#: addon\globalPlugins\CloudVision\__init__.py:134
+#: addon\globalPlugins\CloudVision\__init__.py:170
 msgid ""
 "Select image description language, other languages than english are more "
 "prone to translation errors"
@@ -136,31 +148,31 @@ msgstr ""
 "حدد لغة وصف الصورة، قد تكون اللغات الأخرى غير الإنجليزية أكثر عرضة للأخطاء "
 "عند الترجمة"
 
-#: addon\globalPlugins\CloudVision\__init__.py:136
+#: addon\globalPlugins\CloudVision\__init__.py:172
 msgid "Manage Be My Eyes account"
 msgstr "إدارة حساب Be My Eyes"
 
-#: addon\globalPlugins\CloudVision\__init__.py:140
+#: addon\globalPlugins\CloudVision\__init__.py:176
 msgid "Open site"
 msgstr "فتح موقع"
 
-#: addon\globalPlugins\CloudVision\__init__.py:150
+#: addon\globalPlugins\CloudVision\__init__.py:186
 msgid "Please wait..."
 msgstr "يرجى الإنتظار..."
 
-#: addon\globalPlugins\CloudVision\__init__.py:178
+#: addon\globalPlugins\CloudVision\__init__.py:214
 msgid "Error saving settings"
 msgstr "خطأ في حفظ الإعدادات"
 
-#: addon\globalPlugins\CloudVision\__init__.py:230
+#: addon\globalPlugins\CloudVision\__init__.py:266
 msgid "Cloud Vision settings..."
 msgstr "إعدادات Cloud Vision."
 
-#: addon\globalPlugins\CloudVision\__init__.py:249
+#: addon\globalPlugins\CloudVision\__init__.py:286
 msgid "There have been no recognitions yet"
 msgstr "لم تكن هناك أي تعرفات حتى الآن"
 
-#: addon\globalPlugins\CloudVision\__init__.py:269
+#: addon\globalPlugins\CloudVision\__init__.py:306
 msgid ""
 "To recognize files under the cursor without opening Update NVDA version to "
 "2021.1 or higher"
@@ -168,31 +180,31 @@ msgstr ""
 "للتعرف على الملفات الموجودة أسفل المؤشر دون فتحها قم بتحديث NVDA إلى الإصدار "
 "2021.1 أو أعلى"
 
-#: addon\globalPlugins\CloudVision\__init__.py:324
+#: addon\globalPlugins\CloudVision\__init__.py:361
 msgid "File not supported"
 msgstr "ملف غير مدعوم"
 
-#: addon\globalPlugins\CloudVision\__init__.py:353
+#: addon\globalPlugins\CloudVision\__init__.py:390
 msgid "Analysis completed: "
 msgstr "اكتمل التعرف: "
 
-#: addon\globalPlugins\CloudVision\__init__.py:355
+#: addon\globalPlugins\CloudVision\__init__.py:392
 msgid "CloudVision result"
 msgstr "نتيجة CloudVision"
 
-#: addon\globalPlugins\CloudVision\__init__.py:368
+#: addon\globalPlugins\CloudVision\__init__.py:405
 msgid "Error"
 msgstr "خطأ"
 
-#: addon\globalPlugins\CloudVision\__init__.py:437
+#: addon\globalPlugins\CloudVision\__init__.py:475
 msgid "This navigator object is not analyzable"
 msgstr "لا يمكن تحليل هذا الكائن"
 
-#: addon\globalPlugins\CloudVision\__init__.py:457
+#: addon\globalPlugins\CloudVision\__init__.py:495
 msgid "This navigator object is too small"
 msgstr "هذا الكائن صغير جدا"
 
-#: addon\globalPlugins\CloudVision\__init__.py:519
+#: addon\globalPlugins\CloudVision\__init__.py:557
 msgid ""
 "Gives a description on how current navigator object or selected file in "
 "Explorer looks like visually,\n"
@@ -201,24 +213,45 @@ msgstr ""
 "يقدم وصفًا بصريا لكيفية ظهور الكائن الحالي أو الملف المحدد في المستكشف،\n"
 "إذا قمت بالضغط مرتين بسرعة، سيتم فتح نافذة افتراضية تحتوي على النتيجة."
 
-#: addon\globalPlugins\CloudVision\__init__.py:521
-#: addon\globalPlugins\CloudVision\__init__.py:535
+#: addon\globalPlugins\CloudVision\__init__.py:559
+#: addon\globalPlugins\CloudVision\__init__.py:580
+#: addon\globalPlugins\CloudVision\__init__.py:613
+#: addon\globalPlugins\CloudVision\__init__.py:627
+#: addon\globalPlugins\CloudVision\__init__.py:638
 msgid "Cloud Vision"
 msgstr "Cloud Vision"
 
-#: addon\globalPlugins\CloudVision\__init__.py:525
+#: addon\globalPlugins\CloudVision\__init__.py:579
+msgid "Analyze the full screen. Pressing twice will open the virtual viewer."
+msgstr ""
+"وصف الشاشة بأكملها. إذا تم ضغط الاختصار مرتين، سيتم فتح الوصف في النافذة "
+"الافتراضية."
+
+#: addon\globalPlugins\CloudVision\__init__.py:595
+msgid "Couldn't save image from clipboard"
+msgstr "غير قادر على حفظ الصور من الحافظة"
+
+#: addon\globalPlugins\CloudVision\__init__.py:612
+msgid ""
+"Analyzing an image from the clipboard. Pressing twice will open the virtual "
+"viewer."
+msgstr ""
+"وصف الصورة من الحافظة. إذا تم ضغط الاختصار مرتين، سيتم فتح الصورة في عارض "
+"الصور الافتراضي."
+
+#: addon\globalPlugins\CloudVision\__init__.py:617
 msgid "Text Not Found."
 msgstr "لم يتم العثور على النص."
 
-#: addon\globalPlugins\CloudVision\__init__.py:530
+#: addon\globalPlugins\CloudVision\__init__.py:622
 msgid "Result copyed in clipboard.\n"
 msgstr "تم نسخ النتيجة إلى الحافظة\n"
 
-#: addon\globalPlugins\CloudVision\__init__.py:534
+#: addon\globalPlugins\CloudVision\__init__.py:626
 msgid "Copy last result in clipboard."
 msgstr "نسخ آخر نتيجة إلى الحافظة."
 
-#: addon\globalPlugins\CloudVision\__init__.py:545
+#: addon\globalPlugins\CloudVision\__init__.py:637
 msgid ""
 "Ask the bot a question. You need to log in to your be my eyes account in the "
 "add-on settings"
