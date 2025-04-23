@@ -31,7 +31,7 @@ class FocusedStaticText(wx.StaticText):
 LOGGED_IN_TEXT = _("You are logged in to your account:")
 
 class bm:
-    url = "https://visionbot.ru/apiv2/"
+    url = ""
 
     def __init__(self):
         self.lang = getConfig()["language"]
@@ -69,58 +69,13 @@ class bm:
         return j1["text"]
 
     def ask(self, message, lang):
-        try:
-            if int(self.bm_chat_id) == 0:
-                raise APIError("chat id not found. First, recognize the picture")
-        except ValueError:
-            raise APIError("chat id not found. First, recognize the picture")
-        params = {
-            "action": "ask",
-            "lang": lang,
-            "bmtoken": self.bm_token,
-            "bm_chat_id": self.bm_chat_id,
-            "message": message,
-        }
-        r1 = ur.urlopen(self.url + "bm.php", data=up.urlencode(params).encode()).read().decode("UTF-8")
-        j1 = json.loads(r1)
-        if j1["status"] == "error":
-            raise APIError(j1["text"])
-        params = {"id": j1["id"], "ask": "1"}
-        for _ in range(60):
-            r2 = ur.urlopen(self.url + "res.php", data=up.urlencode(params).encode()).read().decode("UTF-8")
-            j2 = json.loads(r2)
-            if j2["status"] == "error":
-                raise APIError(j2.get("text", "unknown error"))
-            if j2["status"] == "ok":
-                return j2
-            if j2["status"] == "notready":
-                time.sleep(1)
-                continue
+        raise ValueError("A feature in development. Not yet.")
 
     def login(self, email, password, lang="en"):
-        params = {"action": "login", "lang": self.lang, "email": email, "password": password}
-        r = ur.urlopen(self.url + "bm.php", data=up.urlencode(params).encode()).read().decode("UTF-8")
-        j = json.loads(r)
-        if j["status"] == "ok":
-            with open(bm_token_file, "w") as f:
-                f.write(j["bmtoken"])
-        return j
+        raise ValueError("A feature in development. Not yet.")
 
     def signup(self, first_name, last_name, email, password, lang="en"):
-        params = {
-            "action": "signup",
-            "lang": self.lang,
-            "first_name": first_name,
-            "last_name": last_name,
-            "email": email,
-            "password": password,
-        }
-        r = ur.urlopen(self.url + "bm.php", data=up.urlencode(params).encode()).read().decode("UTF-8")
-        j = json.loads(r)
-        if j["status"] == "ok":
-            with open(bm_token_file, "w") as f:
-                f.write(j["bmtoken"])
-        return j
+        raise ValueError("A feature in development. Not yet.")
 
 class LoginPanel(wx.Panel):
     def __init__(self, parent):

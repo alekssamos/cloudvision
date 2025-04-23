@@ -150,6 +150,7 @@ class SettingsDialog(gui.SettingsDialog):
 
 		self.bm = wx.CheckBox(self, label="&Be My AI")
 		self.bm.SetValue(getConfig()["bm"])
+		self.bm.Disable()
 		settingsSizerHelper.addItem(self.bm)
 
 		self.qronly = wx.CheckBox(self, label=_("Read &QR / bar code"))
@@ -171,6 +172,7 @@ class SettingsDialog(gui.SettingsDialog):
 		self.language.SetSelection(select)
 		self.manage_account_button = wx.Button(self, label=_("Manage Be My Eyes account"))
 		self.manage_account_button.Bind(wx.EVT_BUTTON, self.on_manage_account_button)
+		self.manage_account_button.Disable()
 		settingsSizerHelper.addItem(self.manage_account_button)
 		
 		self.open_visionbot_ru_button = wx.Button(self, label=_("Open site")+" VISIONBOT.RU")
@@ -216,46 +218,14 @@ class SettingsDialog(gui.SettingsDialog):
 		super(SettingsDialog, self).onOk(event)
 
 def cloudvision_request(img_str, lang = "en", target = "all", bm=0, qr = 0, translate = 0):
-	params = {
-		"lang": lang,
-		"target": target,
-		"bm": bm,
-		"qr": qr,
-		"translate": translate
-	}
-	if os.path.isfile(bm_token_file) and os.path.getsize(bm_token_file)>20:
-		log.info("Authorization in BM")
-		with open(bm_token_file, "r") as f: params["bmtoken"] = f.read(90).strip()
-	if isinstance(img_str, str):
-		lnkstart = "http"
-	else:
-		lnkstart = b"http"
-	if img_str.startswith(lnkstart):
-		params["url"] = img_str
-	else:
-		params["body"] = img_str
-	r1 = ur.urlopen("https://visionbot.ru/apiv2/in.php", data = up.urlencode(params).encode()
-	)
-	j1 = json.loads(r1.read())
-	r1.close()
-	del img_str # free memory
-	if j1["status"] != "ok":
-		raise APIError(j1["status"])
-	
-	for i in range(60):
-		r2 = ur.urlopen("https://visionbot.ru/apiv2/res.php",
-			data = up.urlencode({"id": j1["id"]}).encode())
-		j2 = json.loads(r2.read())
-		r2.close()
-		if j2["status"] == "error":
-			raise APIError(j2["status"])
-		
-		if j2["status"] == "ok":
-			return j2
-		
-		if j2["status"] == "notready":
-			time.sleep(1)
-			continue
+	from .chrome_ocr_engine import chromeOCREngine
+	from .piccy_bot import piccyBot
+	result = {}
+	if target in ["all", "image"]:
+		result["description"] = piccyBot(img_str, lang)
+	if target in ["all", "text"]:
+		result["text"] = chromeOCREngine(img_str, lang)
+	return result
 
 class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 
@@ -381,10 +351,9 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		try:
 			resx = cloudvision_request(img_str, lang, target, bm, q, t)
 			if "qr" in resx: resp = resp + resx["qr"] + "\r\n\r\n"
-			if "text" in resx: resp = resp + resx["text"]
-			if "bm_chat_id" in resx:
-				with open(bm_chat_id_file, "w") as f:
-					f.write( str(resx["bm_chat_id"]) )
+			if "text" in resx: resp = resp + resx["text"] + "\n"
+			if "description" in resx: resp = resp + "\n" + resx["description"]
+			resp = resp.strip()
 			if not self.isVirtual:
 				queueHandler.queueFunction(queueHandler.eventQueue, speech.cancelSpeech)
 				queueHandler.queueFunction(queueHandler.eventQueue, ui.message, _('Analysis completed: ') + resp)
@@ -394,8 +363,9 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		except:
 			resp = ""
 			queueHandler.queueFunction(queueHandler.eventQueue, ui.message, str(sys.exc_info()[1]))
+			log.exception("error during recognition")
 		self.isWorking = False
-		if resp: self.last_resp = resp
+		self.last_resp = resp
 		f = wx.FindWindowByName("askframe1")
 		if bmgui.bm().bm_authorized:
 			_t=""
@@ -507,11 +477,11 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 				image.SaveStream(body, wx.BITMAP_TYPE_PNG)
 			else: # Used in WXPython 4.0
 				image.SaveFile(body, wx.BITMAP_TYPE_PNG)
-			img_str = base64.b64encode(body.getvalue())
+			img_str = body.getvalue()
 		if p == True and is_url == False:
 			with open(filePath, "rb") as f:
 				body = f.read()
-			img_str = base64.b64encode(body)
+			img_str = body
 		if is_url == True:
 			img_str = body
 
