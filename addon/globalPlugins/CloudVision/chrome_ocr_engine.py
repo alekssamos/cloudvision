@@ -35,7 +35,7 @@ def chromeOCREngine(image: any, lang: str = "en"):
     request.add_header(
         "Accept-Language", "ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7,it;q=0.6"
     )
-    content = urllib.request.urlopen(request, timeout=5).read()
+    content = urllib.request.urlopen(request, timeout=9).read()
     resp = json.loads(content)
     try:
         if "ocrRegions" not in resp["results"][0]["engineResults"][0]["ocrEngine"]:
@@ -51,6 +51,5 @@ def chromeOCREngine(image: any, lang: str = "en"):
         text = text + "\n"
 
     text = re.sub(r' ([?><-_:!@№#$%^&*])', r'\1', text)
-    # text = re.sub('([\d]): ([\d])', r'\1:\2', text)
-    # text = re.sub(r'([\d]) ([$%&)\]}>])', r'\1\2', text)
+    text = re.sub(r' ([./!?,])', r'\1', text)
     return text
