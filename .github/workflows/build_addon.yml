@@ -39,7 +39,7 @@ jobs:
     - name: building addon
       run: mv README.md README.md2 && scons; mv README.md2 README.md
 
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         name: packaged_addon
         path: ./*.nvda-addon
