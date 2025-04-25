@@ -19,6 +19,7 @@ def piccyBot(image: any, lang: str = "en"):
 
     # Подготавливаем данные для запроса
     chat_data = {
+        "model": "openai41",
         "user_message": [
             {
                 "role": "user",
@@ -31,7 +32,7 @@ def piccyBot(image: any, lang: str = "en"):
                         "type": "image_url",
                     },
                     {
-                        "text": f"Description of the image. Explain only in {langname}.",
+                        "text": f"What's in this image?, Explain this only in {langname} language.",
                         "type": "text",
                     },
                 ],
@@ -52,7 +53,7 @@ def piccyBot(image: any, lang: str = "en"):
     )
 
     # Отправляем запрос и получаем ответ
-    with urllib.request.urlopen(request, timeout=29) as response:
+    with urllib.request.urlopen(request, timeout=59) as response:
         response_data = response.read()
 
     data = json.loads(response_data)
