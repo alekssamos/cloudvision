@@ -1,2 +1,7 @@
-__all__ = ['APIError',]
-class APIError(Exception): pass
+__all__ = [
+    "APIError",
+]
+
+
+class APIError(Exception):
+    pass

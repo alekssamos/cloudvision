@@ -1,7 +1,7 @@
 from .cvlangnames import LANGNAMES
 import base64
 import json
-import urllib.request
+import urllib3
 from .cvhelpers import get_image_content_from_image
 
 
@@ -43,22 +43,14 @@ def piccyBot(image: any, lang: str = "en"):
         "exp": True,
     }
 
-    json_data = json.dumps(chat_data).encode("utf-8")
+    http = urllib3.PoolManager()
+    http.headers = {
+        "Content-Type": "application/json",
+        "User-Agent": "PiccyBot/2.17.6 CFNetwork/1498.700.2 Darwin/23.6.0",
+    }
+    response = http.request("POST", url, json=chat_data)
+    data = response.json()
 
-    # Настраиваем запрос
-    request = urllib.request.Request(url, data=json_data, method="POST")
-    request.add_header("Content-Type", "application/json")
-    request.add_header(
-        "User-Agent", "PiccyBot/2.17.6 CFNetwork/1498.700.2 Darwin/23.6.0"
-    )
-
-    # Отправляем запрос и получаем ответ
-    with urllib.request.urlopen(request, timeout=59) as response:
-        response_data = response.read()
-
-    data = json.loads(response_data)
-
-    # Обработка ответа
     txt = data.get("Text", "")
     if txt == "":
         raise PBAPIError(response_data)
