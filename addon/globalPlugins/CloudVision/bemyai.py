@@ -13,6 +13,7 @@ import os.path
 import wx
 from math import floor
 from typing import Iterator, Optional
+from .cvconf import getConfig, CONFIGDIR, bm_chat_id_file, bm_token_file
 
 
 def get_image_info(filename: str) -> tuple[Optional[str], tuple[int, int], str]:
@@ -106,14 +107,13 @@ class PasswordChangeRequired(BeMyAIError):
 
 
 class BeMyAI:
-    def __init__(self, token: str = "", response_language="en-US"):
+    def __init__(self, token: str = ""):
         if not os.path.isdir(dl_folder):
             os.mkdir(dl_folder)
             log.info("created dl folder")
         else:
             log.info("dl folder already exists")
-        self.token = token
-        self.response_language = response_language
+        self.response_language = getConfig()["language"]
         self.bemyeyes_app_secret = (
             "55519e815ff7b09ab971de5564baa282eca53af1eb528385fb98a34f2010e8c7"
         )
@@ -129,6 +129,47 @@ class BeMyAI:
             "accesibility_content_size_enabled": False,
         }
         self.app_config_user_cache: Optional[dict] = None
+        if not os.path.isfile(bm_token_file):
+            with open(bm_token_file, "w") as f:
+                f.write(" ")
+        if not os.path.isfile(bm_chat_id_file):
+            with open(bm_chat_id_file, "w") as f:
+                f.write("0")
+
+    @property
+    def token(self):
+        if not os.path.isfile(bm_token_file):
+            return ""
+        with open(bm_token_file) as f:
+            return f.read(90).strip()
+
+    @property
+    def bm_chat_id(self):
+        if not os.path.isfile(bm_chat_id_file):
+            return 0
+        with open(bm_chat_id_file) as f:
+            return int(f.read(90).strip())
+
+    @bm_chat_id.setter
+    def _set_chat_id(self, v):
+        with open(bm_chat_id_file) as f:
+            f.write(f"{v}")
+
+    @token.setter
+    def _set_token(self, v):
+        if len(v) < 20:
+            return
+        with open(bm_token_file) as f:
+            f.write(v)
+
+    @property
+    def authorized(self):
+        return len(self.token) > 20
+
+    def logout(self):
+        for f in [bm_token_file, bm_chat_id_file]:
+            if os.path.isfile(f):
+                os.remove(f)
 
     @staticmethod
     def get_error_messages(r):
@@ -345,6 +386,7 @@ class BeMyAI:
             with open(path_to_image, "wb") as newfp:
                 shutil.copyfileobj(filename, newfp)
             filename = path_to_image  # type: ignore
+        self.bm_chat_id = "0"
         cnf = self.app_config_user()
         format, size, mode = get_image_info(filename=filename)
         log.info("recognizing new photo: %s" % (str(size[0]) + "x" + str(size[1])))
@@ -381,6 +423,7 @@ class BeMyAI:
             resp = http.request("POST", upload_config["url"], fields=fields)
             if resp.status >= 100 <= 206:
                 log.info("Uploaded successfully")
+                self.bm_chat_id = chat["id"]
             else:
                 log.error("Upload faild")
         log.info("removeing processed image")

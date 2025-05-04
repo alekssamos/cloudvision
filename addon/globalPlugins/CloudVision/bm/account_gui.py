@@ -6,8 +6,6 @@ import os.path
 import time
 import globalVars
 from threading import Timer, Lock
-from ..cvconf import getConfig, CONFIGDIR, bm_chat_id_file, bm_token_file
-from ..cvexceptions import APIError
 
 if sys.version_info.major == 2:
     import urllib as ur, urllib as up
@@ -15,6 +13,7 @@ elif sys.version_info.major == 3:
     import urllib.request as ur, urllib.parse as up
 
 import socket
+
 socket.setdefaulttimeout(60)
 
 import wx
@@ -22,60 +21,18 @@ import ui
 from logHandler import log
 import queueHandler
 import addonHandler
+from ..bemyai import BeMyAI, BeMyAIError
 
 addonHandler.initTranslation()
 
+
 class FocusedStaticText(wx.StaticText):
-    def AcceptsFocus(self): return True
+    def AcceptsFocus(self):
+        return True
+
 
 LOGGED_IN_TEXT = _("You are logged in to your account:")
 
-class bm:
-    url = ""
-
-    def __init__(self):
-        self.lang = getConfig()["language"]
-        if not os.path.isfile(bm_token_file):
-            with open(bm_token_file, "w") as f:
-                f.write(" ")
-        if not os.path.isfile(bm_chat_id_file):
-            with open(bm_chat_id_file, "w") as f:
-                f.write("0")
-
-    @property
-    def bm_token(self):
-        if not os.path.isfile(bm_token_file): return ""
-        with open(bm_token_file) as f:
-            return f.read(90).strip()
-
-    @property
-    def bm_chat_id(self):
-        if not os.path.isfile(bm_chat_id_file): return 0
-        with open(bm_chat_id_file) as f:
-            return int(f.read(90).strip())
-
-    @property
-    def bm_authorized(self):
-        return len(self.bm_token) > 20
-
-    def refresh(self):
-        params = {"action": "refresh", "bmtoken": self.bm_token}
-        r1 = ur.urlopen(self.url + "bm.php", data=up.urlencode(params).encode()).read().decode("UTF-8")
-        j1 = json.loads(r1)
-        if j1["status"] == "error":
-            if "detail:" in j1["text"]: os.path.remove(bm_token_file)
-            raise APIError(j1["text"])
-        log.error(str(j1))
-        return j1["text"]
-
-    def ask(self, message, lang):
-        raise ValueError("A feature in development. Not yet.")
-
-    def login(self, email, password, lang="en"):
-        raise ValueError("A feature in development. Not yet.")
-
-    def signup(self, first_name, last_name, email, password, lang="en"):
-        raise ValueError("A feature in development. Not yet.")
 
 class LoginPanel(wx.Panel):
     def __init__(self, parent):
@@ -120,6 +77,7 @@ class LoginPanel(wx.Panel):
         f.Layout()
         f.register_panel.SetFocus()
 
+
 class LoggedInPannel(wx.Panel):
     def __init__(self, parent):
         super().__init__(parent)
@@ -134,11 +92,13 @@ class LoggedInPannel(wx.Panel):
     def on_logout(self, event):
         event.Skip()
         with Lock():
-            if os.path.isfile(bm_token_file): os.remove(bm_token_file)
+            if os.path.isfile(bm_token_file):
+                os.remove(bm_token_file)
         f = self.FindWindowByName("lrframe1")
         self.Hide()
         f.login_panel.Show()
         f.login_panel.email_input.SetFocus()
+
 
 class RegisterPanel(wx.Panel):
     def __init__(self, parent):
@@ -192,10 +152,17 @@ class RegisterPanel(wx.Panel):
         password = self.password_input.GetValue()
         f = self.FindWindowByName("lrframe1")
         b = bm()
-        res = b.signup(first_name=name, last_name=surname, email=email, password=password, lang=f.lang)
+        res = b.signup(
+            first_name=name,
+            last_name=surname,
+            email=email,
+            password=password,
+            lang=f.lang,
+        )
         if res.get("status") != "ok":
             wx.MessageBox(str(res))
         f.Close()
+
 
 class AskPanel(wx.Panel):
     ask_tmr = None
@@ -204,12 +171,16 @@ class AskPanel(wx.Panel):
         super().__init__(parent)
         main_sizer = wx.BoxSizer(wx.VERTICAL)
         messages_sizer = wx.BoxSizer(wx.VERTICAL)
-        self.messages_aria = wx.TextCtrl(self, style=wx.TE_MULTILINE | wx.TE_READONLY | wx.TE_RICH2)
+        self.messages_aria = wx.TextCtrl(
+            self, style=wx.TE_MULTILINE | wx.TE_READONLY | wx.TE_RICH2
+        )
         self.messages_aria.SetMinSize((600, 400))  # Увеличиваем размер окна ответа
         messages_sizer.Add(self.messages_aria, 1, wx.EXPAND | wx.ALL, 5)
         question_sizer = wx.BoxSizer(wx.HORIZONTAL)
         question_label = wx.StaticText(self, label=_("Question:"))
-        self.question_input = wx.TextCtrl(self, style=wx.TE_MULTILINE | wx.TE_PROCESS_ENTER)
+        self.question_input = wx.TextCtrl(
+            self, style=wx.TE_MULTILINE | wx.TE_PROCESS_ENTER
+        )
         question_sizer.Add(question_label, 0, wx.ALL, 5)
         question_sizer.Add(self.question_input, 1, wx.EXPAND | wx.ALL, 5)
         send_close_sizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -226,10 +197,15 @@ class AskPanel(wx.Panel):
         main_sizer.Add(send_close_sizer)
         self.SetSizer(main_sizer)
         self.messages_aria.SetValue("")  # Очищаем текстовое поле при инициализации
-        
-        for s in (self.send_button, close_button, self.messages_aria, self.question_input):
+
+        for s in (
+            self.send_button,
+            close_button,
+            self.messages_aria,
+            self.question_input,
+        ):
             s.Bind(wx.EVT_KEY_DOWN, self.on_key_down)
-        
+
     def format_text(self, text):
         sentences = []
         current_sentence = ""
@@ -245,7 +221,9 @@ class AskPanel(wx.Panel):
     def add_message(self, who, text, report=True):
         formatted_text = self.format_text(text)
         if report:
-            queueHandler.queueFunction(queueHandler.eventQueue, ui.message, f"{who}: {text}")
+            queueHandler.queueFunction(
+                queueHandler.eventQueue, ui.message, f"{who}: {text}"
+            )
         with Lock():
             current_text = self.messages_aria.GetValue()
             self.messages_aria.SetValue(f"{current_text}\n{who}: {formatted_text}")
@@ -253,26 +231,33 @@ class AskPanel(wx.Panel):
 
     def on_send(self, event):
         event.Skip()
-        if not bm().bm_authorized:
+        if not BeMyAI().authorized:
             self.messages_aria.SetFocus()
             return
         self.send_button.Disable()
         if self.ask_tmr and self.ask_tmr.is_alive():
             self.ask_tmr.cancel()
         self.ask_tmr = Timer(0.1, self._on_send, [event])
-        queueHandler.queueFunction(queueHandler.eventQueue, ui.message, _("Wait for the Be My Eyes to type the message"))
+        queueHandler.queueFunction(
+            queueHandler.eventQueue,
+            ui.message,
+            _("Wait for the Be My Eyes to type the message"),
+        )
         self.ask_tmr.start()
 
     def on_key_down(self, event):
         key = event.GetKeyCode()
-        if event.ControlDown() and key in [10,13,32]:
+        if event.ControlDown() and key in [10, 13, 32]:
             self.on_send(event)
         elif key == wx.WXK_ESCAPE:
             self.on_close(event)
-        elif (key == wx.WXK_F2 and event.GetEventObject() == self.messages_aria) or (event.ControlDown() and key in [83,115]):
+        elif (key == wx.WXK_F2 and event.GetEventObject() == self.messages_aria) or (
+            event.ControlDown() and key in [83, 115]
+        ):
             self.save_dialog()
         else:
             event.Skip()
+
     def _on_send(self, event):
         message = self.question_input.GetValue()
         f = self.FindWindowByName("askframe1")
@@ -281,7 +266,7 @@ class AskPanel(wx.Panel):
             self.add_message(_("You"), message)
             self.question_input.SetValue("")
             res = b.ask(message=message, lang=f.lang)
-        except APIError:
+        except BeMyAIError:
             wx.MessageBox(str(sys.exc_info()[1]), style=wx.ICON_ERROR)
             return False
         finally:
@@ -292,21 +277,27 @@ class AskPanel(wx.Panel):
     def on_close(self, event):
         f = self.FindWindowByName("askframe1")
         f.Hide()
+
     def save_dialog(self):
-        with wx.FileDialog(self, "Save dialog", wildcard="Text files (*.txt)|*.txt", style=wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT) as fileDialog:
+        with wx.FileDialog(
+            self,
+            "Save dialog",
+            wildcard="Text files (*.txt)|*.txt",
+            style=wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT,
+        ) as fileDialog:
             if fileDialog.ShowModal() == wx.ID_CANCEL:
                 return
             pathname = fileDialog.GetPath()
             try:
-                with open(pathname, 'w') as file:
+                with open(pathname, "w") as file:
                     file.write(self.messages_aria.GetValue())
             except IOError:
                 wx.LogError(f"Cannot save current data in file '{pathname}'.")
 
+
 class MainDialog(wx.Dialog):
     def __init__(self, parent=None, lang="en"):
         super().__init__(parent=parent, title="Manage Be My Eyes Account")
-        self.lang = lang
         self.SetName("lrframe1")
         self.login_panel = LoginPanel(self)
         self.register_panel = RegisterPanel(self)
@@ -322,11 +313,11 @@ class MainDialog(wx.Dialog):
             with open(bm_token_file, "r") as f:
                 bmtoken = f.read(90).strip()
         self.register_panel.Hide()
-        if bm().bm_authorized:
+        if BeMyAI().authorized:
             self.login_panel.Hide()
             refresh_result = ""
             try:
-                refresh_result = bm().refresh()
+                refresh_result = BeMyAI().refresh()
             except Exception:
                 log.exception("Error get BM Account data")
                 refresh_result = "..."
@@ -343,10 +334,10 @@ class MainDialog(wx.Dialog):
         if key == 27:
             self.Close()
 
+
 class AskFrame(wx.Frame):
     def __init__(self, parent=None, lang="en"):
         super().__init__(parent=None, style=wx.MAXIMIZE)
-        self.lang = getConfig()["language"]
         self.SetTitle("Ask a question")
         self.SetName("askframe1")
         self.ask_panel = AskPanel(self)
@@ -355,22 +346,30 @@ class AskFrame(wx.Frame):
         self.SetSizer(sizer)
         self.Layout()
         self.Bind(wx.EVT_CLOSE, self.on_close)
-        if not bm().bm_authorized:
-            _t = "\n".join([
-                _("First you need to log in or register"),
-                _("Open NVDA Menu, Preferences, CloudVision Settings, Manage Be My Eyes account")
-            ])
+        if not BeMyAI().authorized:
+            _t = "\n".join(
+                [
+                    _("First you need to log in or register"),
+                    _(
+                        "Open NVDA Menu, Preferences, CloudVision Settings, Manage Be My Eyes account"
+                    ),
+                ]
+            )
             self.ask_panel.messages_aria.SetValue(_t)
             queueHandler.queueFunction(queueHandler.eventQueue, ui.message, _t)
 
     def postInit(self):
         self.Layout()
-        field = self.ask_panel.question_input if bm().bm_authorized else self.ask_panel.messages_aria
+        field = (
+            self.ask_panel.question_input
+            if BeMyAI().authorized
+            else self.ask_panel.messages_aria
+        )
         field.SetFocus()
         cvaskargs = getattr(globalVars, "cvaskargs", None)
         if cvaskargs:
             self.ask_panel.add_message(*cvaskargs)
-            globalVars.cvaskargs=None
+            globalVars.cvaskargs = None
 
     def on_close(self, event):
         self.Hide()

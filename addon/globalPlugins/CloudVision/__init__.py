@@ -32,8 +32,8 @@ except ImportError:
     from io import BytesIO  ## 3
     from io import StringIO  ## 3
 
-from .cvconf import getConfig, supportedLocales, bm_chat_id_file, bm_token_file
-from .cvexceptions import APIError
+from .cvconf import getConfig, supportedLocales
+from .bemyai import BeMyAI, BeMyAIError
 import tones
 import wx
 import config
@@ -299,7 +299,6 @@ def cloudvision_request(img_str, lang="en", target="all", bm=0, qr=0, translate=
 class GlobalPlugin(globalPluginHandler.GlobalPlugin):
     def __init__(self):
         super(globalPluginHandler.GlobalPlugin, self).__init__()
-        bmgui.bm()
         self.CloudVisionSettingsItem = gui.mainFrame.sysTrayIcon.preferencesMenu.Append(
             wx.ID_ANY, _("Cloud Vision settings...")
         )
@@ -479,7 +478,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
         self.isWorking = False
         self.last_resp = resp
         f = wx.FindWindowByName("askframe1")
-        if bmgui.bm().bm_authorized:
+        if BeMyAI().authorized:
             _t = ""
             if target == "nothing":
                 _t = "Be My Eyes"
