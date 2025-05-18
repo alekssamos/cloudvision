@@ -2,6 +2,7 @@ from .cvlangnames import LANGNAMES
 import base64
 import json
 import urllib3
+from .advanced_http_pool import AdvancedHttpPool
 from .cvhelpers import get_image_content_from_image
 
 
@@ -43,7 +44,7 @@ def piccyBot(image: any, lang: str = "en"):
         "exp": True,
     }
 
-    http = urllib3.PoolManager()
+    http = AdvancedHttpPool().Pool
     http.headers = {
         "Content-Type": "application/json",
         "User-Agent": "PiccyBot/2.17.6 CFNetwork/1498.700.2 Darwin/23.6.0",

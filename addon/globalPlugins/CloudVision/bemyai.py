@@ -3,10 +3,10 @@ unofficial API BeMyAI from Android app
 """
 
 import os
-import urllib3
 import tempfile
 import json
 import shutil
+from .advanced_http_pool import AdvancedHttpPool
 from logHandler import log
 from datetime import datetime, timezone, timedelta
 import os.path
@@ -137,13 +137,6 @@ class BeMyAI:
                 f.write("0")
 
     @property
-    def token(self):
-        if not os.path.isfile(bm_token_file):
-            return ""
-        with open(bm_token_file) as f:
-            return f.read(90).strip()
-
-    @property
     def bm_chat_id(self):
         if not os.path.isfile(bm_chat_id_file):
             return 0
@@ -151,12 +144,19 @@ class BeMyAI:
             return int(f.read(90).strip())
 
     @bm_chat_id.setter
-    def _set_chat_id(self, v):
+    def bm_chat_id(self, v):
         with open(bm_chat_id_file) as f:
             f.write(f"{v}")
 
+    @property
+    def token(self):
+        if not os.path.isfile(bm_token_file):
+            return ""
+        with open(bm_token_file) as f:
+            return f.read(90).strip()
+
     @token.setter
-    def _set_token(self, v):
+    def token(self, v):
         if len(v) < 20:
             return
         with open(bm_token_file) as f:
@@ -219,8 +219,8 @@ class BeMyAI:
         if headers is None:
             headers = self.headers
         log.debug(f"making {method} request to {url}...")
-        http = urllib3.PoolManager()
-        resp = http.request(method=method, url=url, fields=params, body=data, json=json)
+        http = AdvancedHttpPool().Pool
+        resp = http.request(method=method, url=url, fields=params, headers=headers, body=data, json=json)
         if "json" not in resp.headers.get("Content-Type").lower():
             if resp.status < 300:
                 return resp.data.decode("UTF-8")
@@ -418,9 +418,9 @@ class BeMyAI:
                 "x-amz-signature": upload_config["fields"]["x-amz-signature"],
                 "file": ("file", fp),
             }
-            http = urllib3.PoolManager()
+            http = AdvancedHttpPool().Pool
             http.headers = ({"User-Agent": self.User_Agent},)
-            resp = http.request("POST", upload_config["url"], fields=fields)
+            resp = http.request("POST", upload_config["url"], headers=self.headers, fields=fields)
             if resp.status >= 100 <= 206:
                 log.info("Uploaded successfully")
                 self.bm_chat_id = chat["id"]

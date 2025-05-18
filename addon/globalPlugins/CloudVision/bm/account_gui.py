@@ -63,10 +63,12 @@ class LoginPanel(wx.Panel):
         email = self.email_input.GetValue()
         password = self.password_input.GetValue()
         f = self.FindWindowByName("lrframe1")
-        b = bm()
-        res = b.login(email=email, password=password, lang=f.lang)
-        if res.get("status") != "ok":
-            wx.MessageBox(str(res))
+        b = BeMyAI()
+        try:
+            res = b.login(email=email, password=password)
+        except BeMyAIError:
+            log.exception("Be My AI API error")
+            wx.MessageBox(str(sys.exc_info()[1]))
         f.Close()
 
     def on_show_register_btn(self, event):
@@ -91,9 +93,7 @@ class LoggedInPannel(wx.Panel):
 
     def on_logout(self, event):
         event.Skip()
-        with Lock():
-            if os.path.isfile(bm_token_file):
-                os.remove(bm_token_file)
+        BeMyAI().logout()
         f = self.FindWindowByName("lrframe1")
         self.Hide()
         f.login_panel.Show()
@@ -151,16 +151,17 @@ class RegisterPanel(wx.Panel):
         email = self.email_input.GetValue()
         password = self.password_input.GetValue()
         f = self.FindWindowByName("lrframe1")
-        b = bm()
-        res = b.signup(
-            first_name=name,
-            last_name=surname,
-            email=email,
-            password=password,
-            lang=f.lang,
-        )
-        if res.get("status") != "ok":
-            wx.MessageBox(str(res))
+        try:
+            b = BeMyAI()
+            res = b.signup(
+                first_name=name,
+                last_name=surname,
+                email=email,
+                password=password,
+            )
+        except BeMyAIError:
+            log.exception("Be My AI API error")
+            wx.MessageBox(str(sys.exc_info()[1]))
         f.Close()
 
 
@@ -262,16 +263,28 @@ class AskPanel(wx.Panel):
         message = self.question_input.GetValue()
         f = self.FindWindowByName("askframe1")
         try:
-            b = bm()
+            b = BeMyAI()
             self.add_message(_("You"), message)
             self.question_input.SetValue("")
-            res = b.ask(message=message, lang=f.lang)
+            res = ""
+            sid, chat_id, result = b.send_text_message(
+                chat_id=b.bm_chat_id, text=message
+            )
+            for x in range(3):
+                if res != "":
+                    break
+                for message in b.receive_messages(sid):
+                    if message.get("user"):
+                        continue
+                    res = message["data"]
+                    break
         except BeMyAIError:
+            log.exception("Be My AI API error")
             wx.MessageBox(str(sys.exc_info()[1]), style=wx.ICON_ERROR)
             return False
         finally:
             self.send_button.Enable()
-        self.add_message("Be My Eyes", res["text"])
+        self.add_message("Be My Eyes", res)
         self.messages_aria.SetFocus()
 
     def on_close(self, event):
@@ -308,17 +321,18 @@ class MainDialog(wx.Dialog):
         sizer.Add(self.register_panel, 1, wx.EXPAND)
         for o in (self, self.login_panel, self.logged_panel, self.register_panel):
             o.Bind(wx.EVT_KEY_UP, self.OnKeyUp)
-        bmtoken = ""
-        if os.path.isfile(bm_token_file):
-            with open(bm_token_file, "r") as f:
-                bmtoken = f.read(90).strip()
         self.register_panel.Hide()
         if BeMyAI().authorized:
             self.login_panel.Hide()
             refresh_result = ""
             try:
-                refresh_result = BeMyAI().refresh()
-            except Exception:
+                res = BeMyAI().refresh()
+                refresh_result = "{} {} \n {}".format(
+                    res["user"]["first_name"],
+                    res["user"]["last_name"],
+                    res["user"]["email"],
+                )
+            except BeMyAIError:
                 log.exception("Error get BM Account data")
                 refresh_result = "..."
             self.logged_panel.logged_in_label.SetLabel(LOGGED_IN_TEXT + refresh_result)

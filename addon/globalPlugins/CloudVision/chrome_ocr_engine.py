@@ -3,6 +3,7 @@ import re
 import json
 import base64
 import urllib3
+from .advanced_http_pool import AdvancedHttpPool
 from .cvhelpers import get_image_content_from_image
 
 
@@ -26,7 +27,7 @@ def chromeOCREngine(image: any, lang: str = "en"):
             }
         ]
     }
-    http = urllib3.PoolManager()
+    http = AdvancedHttpPool().Pool
     http.headers = {
         "X-Goog-Api-Key": "AIzaSyBOti4mM-6x9WDnZIjIeyEU21OpBXqWBgw",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.97 Safari/537.36",

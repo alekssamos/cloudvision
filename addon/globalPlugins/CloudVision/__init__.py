@@ -17,6 +17,8 @@ import subprocess
 sys.path.insert(0, os.path.dirname(__file__))
 import socks
 import sockshandler
+import advanced_http_pool
+from advanced_http_pool import AdvancedHttpPool
 
 del sys.path[0]
 from ctypes import windll
@@ -169,6 +171,9 @@ class SettingsDialog(gui.SettingsDialog):
         self.SetName("cvsettings")
         settingsSizerHelper = gui.guiHelper.BoxSizerHelper(self, sizer=sizer)
 
+        self.ahp = AdvancedHttpPool()
+        self.ahp._loadSettings()
+
         self.prefer_navigator = wx.CheckBox(
             self, label=_("Pre&fer a navigator object instead of a file")
         )
@@ -222,7 +227,7 @@ class SettingsDialog(gui.SettingsDialog):
             self, label=_("Manage Be My Eyes account")
         )
         self.manage_account_button.Bind(wx.EVT_BUTTON, self.on_manage_account_button)
-        self.manage_account_button.Disable()
+        # self.manage_account_button.Disable()
         settingsSizerHelper.addItem(self.manage_account_button)
 
         self.open_visionbot_ru_button = wx.Button(
@@ -232,9 +237,54 @@ class SettingsDialog(gui.SettingsDialog):
             wx.EVT_BUTTON, self.on_open_visionbot_ru_button
         )
         settingsSizerHelper.addItem(self.open_visionbot_ru_button)
+        self.useProxy = wx.CheckBox(self, label=_("&Use proxy server"))
+        self.useProxy.SetValue(self.ahp.proxyEnabled)
+        self.useProxy.Bind(wx.EVT_CHECKBOX, self.onUseProxy)
+        settingsSizerHelper.addItem(self.useProxy)
+
+        self.proxy_protocol = settingsSizerHelper.addLabeledControl(
+            _("Proxy &protocol:"), wx.Choice, choices=self.ahp._proxy_protocols
+        )
+
+        self.proxy_protocol.SetStringSelection(self.ahp.proxyProtocol)
+
+        self.proxy_host = settingsSizerHelper.addLabeledControl(
+            _("Proxy &host:"), wx.TextCtrl, value=self.ahp.proxyHost
+        )
+        self.proxy_port = settingsSizerHelper.addLabeledControl(
+            _("Proxy p&ort:"), wx.SpinCtrl, value=str(self.ahp.proxyPort)
+        )
+        self.proxy_port.SetRange(1, 65535)
+        self.proxy_username = settingsSizerHelper.addLabeledControl(
+            _("Proxy &login:"), wx.TextCtrl, value=self.ahp.proxyLogin
+        )
+        self.proxy_password = settingsSizerHelper.addLabeledControl(
+            _("Proxy p&assword:"),
+            wx.TextCtrl,
+            value=self.ahp.proxyPassword,
+            style=wx.TE_PASSWORD,
+        )
 
     def postInit(self):
         self.sound.SetFocus()
+        self.onUseProxy(None)
+
+    def onUseProxy(self, event):
+        items = frozenset(
+            [
+                self.proxy_host,
+                self.proxy_password,
+                self.proxy_port,
+                self.proxy_protocol,
+                self.proxy_username,
+            ]
+        )
+        if self.useProxy.Value:
+            for elem in items:
+                elem.Enable()
+        else:
+            for elem in items:
+                elem.Disable()
 
     def on_manage_account_button(self, event):
         if event:
@@ -257,6 +307,17 @@ class SettingsDialog(gui.SettingsDialog):
 
     def onOk(self, event):
         event.Skip()
+        self.ahp.proxyEnabled = self.useProxy.IsChecked()
+        self.ahp.proxyAuth = (
+            self.proxy_username.GetValue().strip() != ""
+            and self.proxy_password.GetValue().strip() != ""
+        )
+        self.ahp.proxyProtocol = self.proxy_protocol.GetStringSelection() or "http"
+        self.ahp.proxyLogin = self.proxy_username.GetValue().strip()
+        self.ahp.proxyPassword = self.proxy_password.GetValue().strip()
+        self.ahp.proxyHost = self.proxy_host.GetValue().strip()
+        self.ahp.proxyPort = int(self.proxy_port.GetValue())
+        self.ahp.save()
         if (
             not self.textonly.IsChecked()
             and not self.imageonly.IsChecked()
@@ -302,9 +363,12 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
         self.CloudVisionSettingsItem = gui.mainFrame.sysTrayIcon.preferencesMenu.Append(
             wx.ID_ANY, _("Cloud Vision settings...")
         )
+        popupSettingsDialog = getattr(
+            gui.mainFrame, "popupSettingsDialog", "_popupSettingsDialog"
+        )
         gui.mainFrame.sysTrayIcon.Bind(
             wx.EVT_MENU,
-            lambda evt: gui.mainFrame._popupSettingsDialog(SettingsDialog),
+            lambda evt: popupSettingsDialog(SettingsDialog),
             self.CloudVisionSettingsItem,
         )
 
@@ -599,10 +663,10 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
         if is_url == False and (p == False) and (width < 16 or height < 16):
             perferm_size = " {width}X{height}".format(width=width, height=height)
             """
-			If you do and, not or, then an error * will occur
-			* wx._core.wxAssertionError: C++ assertion ""w > 0 && h > 0"" failed at ..\..\src\msw\bitmap.cpp(752) in wxBitmap::DoCreate(): invalid bitmap size
-			This happens in the Firefox browser in some posts on the VK social network at the time of April 1, 2023.
-			"""
+            If you do and, not or, then an error * will occur
+            * wx._core.wxAssertionError: C++ assertion ""w > 0 && h > 0"" failed at ..\..\src\msw\bitmap.cpp(752) in wxBitmap::DoCreate(): invalid bitmap size
+            This happens in the Firefox browser in some posts on the VK social network at the time of April 1, 2023.
+            """
             log.error("This navigator object is too small. " + perferm_size)
             speech.cancelSpeech()
             queueHandler.queueFunction(
