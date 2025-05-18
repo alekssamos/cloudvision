@@ -5,3 +5,4 @@
 .sconsign.dblite
 *.pot
 *.html
+proxydata.json
