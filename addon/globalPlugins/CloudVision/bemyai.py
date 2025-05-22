@@ -220,7 +220,9 @@ class BeMyAI:
             headers = self.headers
         log.debug(f"making {method} request to {url}...")
         http = AdvancedHttpPool().Pool
-        resp = http.request(method=method, url=url, fields=params, headers=headers, body=data, json=json)
+        resp = http.request(
+            method=method, url=url, fields=params, headers=headers, body=data, json=json
+        )
         if "json" not in resp.headers.get("Content-Type").lower():
             if resp.status < 300:
                 return resp.data.decode("UTF-8")
@@ -420,7 +422,9 @@ class BeMyAI:
             }
             http = AdvancedHttpPool().Pool
             http.headers = ({"User-Agent": self.User_Agent},)
-            resp = http.request("POST", upload_config["url"], headers=self.headers, fields=fields)
+            resp = http.request(
+                "POST", upload_config["url"], headers=self.headers, fields=fields
+            )
             if resp.status >= 100 <= 206:
                 log.info("Uploaded successfully")
                 self.bm_chat_id = chat["id"]

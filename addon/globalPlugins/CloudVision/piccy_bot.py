@@ -1,7 +1,9 @@
 from .cvlangnames import LANGNAMES
 import base64
 import json
+import tempfile
 import urllib3
+import os.path
 from .advanced_http_pool import AdvancedHttpPool
 from .cvhelpers import get_image_content_from_image
 
@@ -10,11 +12,18 @@ class PBAPIError(Exception):
     pass
 
 
-def piccyBot(image: any, lang: str = "en"):
+lastImageFilePath = os.path.join(tempfile.gettempdir(), "cv_last_image")
+
+
+def piccyBot(image: any, lang: str = "en", prompt: str = "Describe it in as much detail as possible what's in this image?"):
     langname = LANGNAMES.get(lang, "English")
     if len(lang) > 3:
         langname = lang.lower().capitalize()
-    image_content = get_image_content_from_image(image)
+    if image:
+        image_content = get_image_content_from_image(image)
+    elif os.path.isfile(lastImageFilePath) and os.path.getsize(lastImageFilePath) > 50:
+        with open(lastImageFilePath, "rb") as f:
+            image_content = base64.b64encode(f.read())
 
     url = "https://sparklingapps.com/piccybotapi/index.php/chat"
 
@@ -33,7 +42,7 @@ def piccyBot(image: any, lang: str = "en"):
                         "type": "image_url",
                     },
                     {
-                        "text": f"What's in this image?, Explain this only in {langname} language.",
+                        "text": f"{prompt}, Explain this only in {langname} language.",
                         "type": "text",
                     },
                 ],
@@ -57,4 +66,6 @@ def piccyBot(image: any, lang: str = "en"):
         raise PBAPIError(response_data)
     txt = txt.replace("*", "")
 
+    with open(lastImageFilePath, "wb") as fp:
+        fp.write(image_content)
     return txt

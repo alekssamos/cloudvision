@@ -25,4 +25,4 @@ def get_image_content_from_image(image: any):
     except Exception:
         return False
 
-    return image_content + b"\x00"
+    return image_content

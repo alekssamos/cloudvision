@@ -227,7 +227,7 @@ class SettingsDialog(gui.SettingsDialog):
             self, label=_("Manage Be My Eyes account")
         )
         self.manage_account_button.Bind(wx.EVT_BUTTON, self.on_manage_account_button)
-        # self.manage_account_button.Disable()
+        self.manage_account_button.Disable()
         settingsSizerHelper.addItem(self.manage_account_button)
 
         self.open_visionbot_ru_button = wx.Button(
