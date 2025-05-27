@@ -15,7 +15,11 @@ class PBAPIError(Exception):
 lastImageFilePath = os.path.join(tempfile.gettempdir(), "cv_last_image")
 
 
-def piccyBot(image: any, lang: str = "en", prompt: str = "Describe it in as much detail as possible what's in this image?"):
+def piccyBot(
+    image: any,
+    lang: str = "en",
+    prompt: str = "Describe it in as much detail as possible what's in this image?",
+):
     langname = LANGNAMES.get(lang, "English")
     if len(lang) > 3:
         langname = lang.lower().capitalize()
@@ -23,11 +27,10 @@ def piccyBot(image: any, lang: str = "en", prompt: str = "Describe it in as much
         image_content = get_image_content_from_image(image)
     elif os.path.isfile(lastImageFilePath) and os.path.getsize(lastImageFilePath) > 50:
         with open(lastImageFilePath, "rb") as f:
-            image_content = base64.b64encode(f.read())
+            image_content = f.read()
 
     url = "https://sparklingapps.com/piccybotapi/index.php/chat"
 
-    # Подготавливаем данные для запроса
     chat_data = {
         "model": "openai41",
         "user_message": [

@@ -348,10 +348,31 @@ class SettingsDialog(gui.SettingsDialog):
 def cloudvision_request(img_str, lang="en", target="all", bm=0, qr=0, translate=0):
     from .chrome_ocr_engine import chromeOCREngine
     from .piccy_bot import piccyBot
+    from .cvhelpers import get_image_content_from_image
 
     result = {}
     if target in ["all", "image"]:
-        result["description"] = piccyBot(img_str, lang)
+        if not BeMyAI().authorized:
+            result["description"] = piccyBot(img_str, lang)
+        else:
+            img_content = get_image_content_from_image(img_str)
+            img_file = os.path.join(os.path.dirname(__file__), "tempimage.png")
+            with open(img_file) as fp:
+                fp.write(img_content)
+            bm = BeMyAI()
+            sid, chat_id = bm.take_photo(img_content)
+            os.remove(img_file)
+            img_content = None
+            res = ""
+            for x in range(3):
+                if res != "":
+                    break
+                for message in bm.receive_messages(sid):
+                    if message.get("user"):
+                        continue
+                    res = message["data"]
+                    break
+            result["description"] = res
     if target in ["all", "text"]:
         result["text"] = chromeOCREngine(img_str, lang)
     return result
@@ -547,7 +568,9 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
             if target == "nothing":
                 _t = "Be My Eyes"
             else:
-                _t = "Be My Eyes & Cloud Vision"
+                _t = "Be My Eyes & Chrome OCR"
+        else:
+            _t = "PiccyBot"
             if self.last_resp and bm:
                 globalVars.cvaskargs = (_t, self.last_resp, False)
         if not resp.strip():
@@ -852,14 +875,11 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
         queueHandler.queueFunction(queueHandler.eventQueue, self.on_ask_bm, None)
 
     def _askBm(self, gesture):
-        ui.message("xxxxxzzzx")
         ask_frame = bmgui.AskFrame()
         ask_frame.Show()
         ask_frame.postInit()
 
-    script_askBm.__doc__ = _(
-        "Ask the bot a question. You need to log in to your be my eyes account in the add-on settings"
-    )
+    script_askBm.__doc__ = _("Ask the bot a question.")
     script_askBm.category = _("Cloud Vision")
 
     __gestures = {

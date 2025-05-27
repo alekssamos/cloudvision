@@ -22,6 +22,8 @@ from logHandler import log
 import queueHandler
 import addonHandler
 from ..bemyai import BeMyAI, BeMyAIError
+from ..piccy_bot import lastImageFilePath, piccyBot, PBAPIError
+from ..cvconf import getConfig
 
 addonHandler.initTranslation()
 
@@ -232,9 +234,6 @@ class AskPanel(wx.Panel):
 
     def on_send(self, event):
         event.Skip()
-        if not BeMyAI().authorized:
-            self.messages_aria.SetFocus()
-            return
         self.send_button.Disable()
         if self.ask_tmr and self.ask_tmr.is_alive():
             self.ask_tmr.cancel()
@@ -242,7 +241,7 @@ class AskPanel(wx.Panel):
         queueHandler.queueFunction(
             queueHandler.eventQueue,
             ui.message,
-            _("Wait for the Be My Eyes to type the message"),
+            _("Wait for the Bot to type the message"),
         )
         self.ask_tmr.start()
 
@@ -259,32 +258,37 @@ class AskPanel(wx.Panel):
         else:
             event.Skip()
 
+    def _bm_ask_process(self, message):
+        b = BeMyAI()
+        res = ""
+        sid, chat_id, result = b.send_text_message(chat_id=b.bm_chat_id, text=message)
+        for x in range(3):
+            if res != "":
+                break
+            for message in b.receive_messages(sid):
+                if message.get("user"):
+                    continue
+                res = message["data"]
+                break
+        return res
+
     def _on_send(self, event):
         message = self.question_input.GetValue()
         f = self.FindWindowByName("askframe1")
         try:
-            b = BeMyAI()
-            self.add_message(_("You"), message)
             self.question_input.SetValue("")
-            res = ""
-            sid, chat_id, result = b.send_text_message(
-                chat_id=b.bm_chat_id, text=message
-            )
-            for x in range(3):
-                if res != "":
-                    break
-                for message in b.receive_messages(sid):
-                    if message.get("user"):
-                        continue
-                    res = message["data"]
-                    break
-        except BeMyAIError:
-            log.exception("Be My AI API error")
+            self.add_message(_("You"), message)
+            if BeMyAI().authorized:
+                res = self._bm_ask_process(message)
+            else:
+                res = piccyBot(None, getConfig()["language"], message)
+        except (BeMyAIError, PBAPIError, urllib3.exceptions.TimeoutError):
+            log.exception("API error")
             wx.MessageBox(str(sys.exc_info()[1]), style=wx.ICON_ERROR)
             return False
         finally:
             self.send_button.Enable()
-        self.add_message("Be My Eyes", res)
+        self.add_message("Be My Eyes" if BeMyAI().authorized else "PiccyBot", res)
         self.messages_aria.SetFocus()
 
     def on_close(self, event):
@@ -360,6 +364,7 @@ class AskFrame(wx.Frame):
         self.SetSizer(sizer)
         self.Layout()
         self.Bind(wx.EVT_CLOSE, self.on_close)
+        return
         if not BeMyAI().authorized:
             _t = "\n".join(
                 [

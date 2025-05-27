@@ -111,8 +111,6 @@ class BeMyAI:
         if not os.path.isdir(dl_folder):
             os.mkdir(dl_folder)
             log.info("created dl folder")
-        else:
-            log.info("dl folder already exists")
         self.response_language = getConfig()["language"]
         self.bemyeyes_app_secret = (
             "55519e815ff7b09ab971de5564baa282eca53af1eb528385fb98a34f2010e8c7"
@@ -393,7 +391,7 @@ class BeMyAI:
         format, size, mode = get_image_info(filename=filename)
         log.info("recognizing new photo: %s" % (str(size[0]) + "x" + str(size[1])))
         chat_config = self.get_chat_config()
-        self.authinticate(chat_config.sid)
+        self.authinticate(chat_config["sid"])
         self.enable_chat(chat_config["sid"])
         chat = self.chats()
         path_to_processed_image = os.path.join(dl_folder, "processed_image.png")
@@ -465,7 +463,7 @@ class BeMyAI:
         log.debug("Getting chat config...")
         text = self.receive_raw_events(get_new_sid=True)
         result = json.loads(text[1::])
-        if self.sid != result.sid:
+        if self.sid != result["sid"]:
             log.debug("received new session id")
         self.sid = result["sid"]
         return result
