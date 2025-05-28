@@ -4,9 +4,10 @@ unofficial API BeMyAI from Android app
 
 import os
 import tempfile
-import json
+import json as jsonlib
 import shutil
 from .advanced_http_pool import AdvancedHttpPool
+from urllib.parse import urlencode
 from logHandler import log
 from datetime import datetime, timezone, timedelta
 import os.path
@@ -162,6 +163,7 @@ class BeMyAI:
 
     @property
     def authorized(self):
+        return False   # stub
         return len(self.token) > 20
 
     def logout(self):
@@ -218,9 +220,14 @@ class BeMyAI:
             headers = self.headers
         log.debug(f"making {method} request to {url}...")
         http = AdvancedHttpPool().Pool
-        resp = http.request(
-            method=method, url=url, fields=params, headers=headers, body=data, json=json
-        )
+        kw = {}
+        if params:
+            url = url + "?" + urlencode(params)
+        if data:
+            kw["body"] = data
+        if json:
+            kw["json"] = json
+        resp = http.request(method=method, url=url, **kw)
         if "json" not in resp.headers.get("Content-Type").lower():
             if resp.status < 300:
                 return resp.data.decode("UTF-8")
@@ -462,7 +469,7 @@ class BeMyAI:
         "Get sid and other settings"
         log.debug("Getting chat config...")
         text = self.receive_raw_events(get_new_sid=True)
-        result = json.loads(text[1::])
+        result = jsonlib.loads(text[1::])
         if self.sid != result["sid"]:
             log.debug("received new session id")
         self.sid = result["sid"]
@@ -494,7 +501,7 @@ class BeMyAI:
                 continue
             for response_part in text.split(self.lp_delimeter):
                 if '"NEW_CHAT_MESSAGE"' in response_part:
-                    message = json.loads(response_part[2:])[1]
+                    message = jsonlib.loads(response_part[2:])[1]
                     log.info("Got new message")
                     yield message
                     if not message.user:

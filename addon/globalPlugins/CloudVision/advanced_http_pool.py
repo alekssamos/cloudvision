@@ -3,6 +3,7 @@ import os
 import os.path
 import json
 import urllib3
+import globalVars
 from urllib3.util import make_headers
 from urllib3.contrib.socks import SOCKSProxyManager
 
@@ -28,8 +29,16 @@ class AdvancedHttpPool:
     # proxyPassword: str = ""
 
     def __init__(self):
-        self._proxyData = {"proxyAuth": False, "proxyEnabled": False, "proxyPort": 0}
-        self.proxyfile = os.path.join(os.path.dirname(__file__), "proxydata.json")
+        self._proxyData = {
+            "proxyProtocol": self._proxy_protocols[0],
+            "proxyAuth": False,
+            "proxyEnabled": False,
+            "proxyHost": "",
+            "proxyPort": 0,
+            "proxyLogin": "",
+            "proxyPassword": "",
+        }
+        self.proxyfile = os.path.join(globalVars.appArgs.configPath, "proxydata.json")
 
         self._loadSettings()
 
@@ -38,7 +47,7 @@ class AdvancedHttpPool:
             return self._proxyData[item]
         if hasattr(self.Pool, item):
             return getattr(self.Pool, item)
-        super().__getattr__(item)
+        super().__getattribute__(item)
         # raise AttributeError(
         # f"'{self.__class__.__name__}' object has no attribute '{item}'"
         # )
