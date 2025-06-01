@@ -1,5 +1,17 @@
+from urllib.parse import unquote
 import urllib.request
 import os.path
+from .cvconf import getConfig
+
+
+def get_prompt():
+    briefOrDetailed, promptInput = (getConfig()["briefOrDetailed"], getConfig()["promptInput"])
+    prompts = [
+        "Briefly describe what's in this image?",
+        "Describe it in as much detail as possible what's in this image?",
+        unquote(promptInput),
+    ]
+    return prompts[briefOrDetailed]
 
 
 def get_image_content_from_image(image: any):

@@ -13,10 +13,10 @@ import os.path
 import controlTypes
 import tempfile
 import subprocess
+from urllib.parse import quote, unquote
 
 sys.path.insert(0, os.path.dirname(__file__))
 import socks
-import sockshandler
 import advanced_http_pool
 from advanced_http_pool import AdvancedHttpPool
 
@@ -192,17 +192,44 @@ class SettingsDialog(gui.SettingsDialog):
         self.imageonly.SetValue(getConfig()["imageonly"])
         settingsSizerHelper.addItem(self.imageonly)
 
-        self.bm = wx.CheckBox(self, label="&Be My AI")
-        self.bm.SetValue(getConfig()["bm"])
-        self.bm.Disable()
-        settingsSizerHelper.addItem(self.bm)
+        self.gptAPI = settingsSizerHelper.addLabeledControl(
+            "API:",
+            wx.Choice,
+            choices=("PiccyBot", "Be My Eyes"),
+        )
+        self.gptAPI.SetSelection( getConfig()["gptAPI"] )
+        self.gptAPI.Bind(wx.EVT_CHOICE, self.onGptAPI)
+        self.gptAPI.Disable()
+
+        self.briefOrDetailed = settingsSizerHelper.addLabeledControl(
+            _("What descriptions will be requested?"),
+            wx.Choice,
+            choices=(_("Brief"), _("Detailed"), _("Your prompt")),
+        )
+        self.briefOrDetailed.SetSelection( getConfig()["briefOrDetailed"] )
+        self.briefOrDetailed.Bind(wx.EVT_CHOICE, self.onBriefOrDetailed)
+
+        self.promptInput = wx.TextCtrl(self)
+        self.promptInput.SetValue(unquote( getConfig()["promptInput"] or "" ))
+        self.promptInput.Bind(wx.EVT_KEY_DOWN, self.onKeyDown)
+        settingsSizerHelper.addItem(self.promptInput, proportion=1, flag=wx.EXPAND|wx.ALL)
+
+        self.manage_account_button = wx.Button(
+            self, label=_("Manage Be My Eyes account")
+        )
+        self.manage_account_button.Bind(wx.EVT_BUTTON, self.on_manage_account_button)
+        settingsSizerHelper.addItem(self.manage_account_button)
 
         self.qronly = wx.CheckBox(self, label=_("Read &QR / bar code"))
         self.qronly.SetValue(getConfig()["qronly"])
+        self.qronly.Disable()
+        self.qronly.Hide()
         settingsSizerHelper.addItem(self.qronly)
 
         self.trtext = wx.CheckBox(self, label=_("Translate text"))
         self.trtext.SetValue(getConfig()["trtext"])
+        self.trtext.Disable()
+        self.trtext.Hide()
         settingsSizerHelper.addItem(self.trtext)
 
         langs = sorted(supportedLocales)
@@ -223,12 +250,6 @@ class SettingsDialog(gui.SettingsDialog):
             choices=choices,
         )
         self.language.SetSelection(select)
-        self.manage_account_button = wx.Button(
-            self, label=_("Manage Be My Eyes account")
-        )
-        self.manage_account_button.Bind(wx.EVT_BUTTON, self.on_manage_account_button)
-        self.manage_account_button.Disable()
-        settingsSizerHelper.addItem(self.manage_account_button)
 
         self.open_visionbot_ru_button = wx.Button(
             self, label=_("Open site") + " VISIONBOT.RU"
@@ -266,10 +287,43 @@ class SettingsDialog(gui.SettingsDialog):
         )
 
     def postInit(self):
-        self.sound.SetFocus()
+        self.prefer_navigator.SetFocus()
+        self.onGptAPI(None)
+        self.onBriefOrDetailed(None)
         self.onUseProxy(None)
 
+    def onGptAPI(self, event):
+        selection = self.gptAPI.GetCurrentSelection()
+        if selection == 0:
+            self.manage_account_button.Disable()
+        elif selection == 1:
+            self.manage_account_button.Enable()
+
+    def onBriefOrDetailed(self, event):
+        if event:
+            event.Skip()
+        selection = self.briefOrDetailed.GetCurrentSelection()
+        if selection == 2:
+            self.promptInput.Enable()
+            if event:
+                self.promptInput.SetFocus()
+        else:
+            self.promptInput.Disable()
+
+    def onKeyDown(self, event):
+        if event:
+            event.Skip()
+        else:
+            return
+        key = event.GetKeyCode()
+        if key in [315, 366]:
+            self.briefOrDetailed.SetSelection(1)
+            self.briefOrDetailed.SetFocus()
+            self.onBriefOrDetailed(event)
+
     def onUseProxy(self, event):
+        if event:
+            event.Skip()
         items = frozenset(
             [
                 self.proxy_host,
@@ -307,6 +361,7 @@ class SettingsDialog(gui.SettingsDialog):
 
     def onOk(self, event):
         event.Skip()
+        getConfig()["gptAPI"] = self.gptAPI.GetCurrentSelection()
         self.ahp.proxyEnabled = self.useProxy.IsChecked()
         self.ahp.proxyAuth = (
             self.proxy_username.GetValue().strip() != ""
@@ -321,7 +376,6 @@ class SettingsDialog(gui.SettingsDialog):
         if (
             not self.textonly.IsChecked()
             and not self.imageonly.IsChecked()
-            and not self.bm.IsChecked()
         ):
             self.textonly.SetValue(True)
             self.imageonly.SetValue(True)
@@ -329,8 +383,13 @@ class SettingsDialog(gui.SettingsDialog):
         getConfig()["sound"] = self.sound.IsChecked()
         getConfig()["textonly"] = self.textonly.IsChecked()
         getConfig()["imageonly"] = self.imageonly.IsChecked()
+        promptInputValue = quote(self.promptInput.GetValue() or "").strip()[0:512]
+        if not promptInputValue:
+            self.briefOrDetailed.SetSelection(1)
+            self.onBriefOrDetailed(event)
+        getConfig()["briefOrDetailed"] = self.briefOrDetailed.GetSelection()
+        getConfig()["promptInput"] = promptInputValue
         getConfig()["trtext"] = self.trtext.IsChecked()
-        getConfig()["bm"] = self.bm.IsChecked()
         getConfig()["qronly"] = self.qronly.IsChecked()
         getConfig()["language"] = supportedLocales[self.language.GetSelection()]
 
@@ -348,12 +407,12 @@ class SettingsDialog(gui.SettingsDialog):
 def cloudvision_request(img_str, lang="en", target="all", bm=0, qr=0, translate=0):
     from .chrome_ocr_engine import chromeOCREngine
     from .piccy_bot import piccyBot
-    from .cvhelpers import get_image_content_from_image
+    from .cvhelpers import get_prompt, get_image_content_from_image
 
     result = {}
     if target in ["all", "image"]:
         if not BeMyAI().authorized:
-            result["description"] = piccyBot(img_str, lang)
+            result["description"] = piccyBot(img_str, lang, get_prompt())
         else:
             img_content = get_image_content_from_image(img_str)
             img_file = os.path.join(os.path.dirname(__file__), "tempimage.png")
@@ -525,7 +584,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
         return True
 
     def thr_analyzeObject(
-        self, gesture, img_str, lang, s=0, target="all", t=0, bm=0, q=0
+        self, gesture, img_str, lang, s=0, target="all", t=0, q=0
     ):
         if s:
             self.beep_start()
@@ -740,7 +799,6 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
         t = 0
         if trtext:
             t = 1
-        bm = 1 if getConfig()["bm"] else 0
         qronly = getConfig()["qronly"]
         q = 0
         if qronly:
@@ -748,7 +806,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
         lang = getConfig()["language"]
 
         self.tmr = Timer(
-            0.1, self.thr_analyzeObject, [gesture, img_str, lang, s, target, t, bm, q]
+            0.1, self.thr_analyzeObject, [gesture, img_str, lang, s, target, t, q]
         )
         self.tmr.start()
 

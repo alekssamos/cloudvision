@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: 'CloudVision' '5.0.0'\n"
+"Project-Id-Version: 'CloudVision' '5.0.1'\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
-"POT-Creation-Date: 2025-05-28 16:00+0300\n"
+"POT-Creation-Date: 2025-06-01 19:44+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -129,140 +129,156 @@ msgstr ""
 msgid "Recognize &images"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:200
+#: addon\globalPlugins\CloudVision\__init__.py:205
+msgid "What descriptions will be requested?"
+msgstr ""
+
+#: addon\globalPlugins\CloudVision\__init__.py:207
+msgid "Brief"
+msgstr ""
+
+#: addon\globalPlugins\CloudVision\__init__.py:207
+msgid "Detailed"
+msgstr ""
+
+#: addon\globalPlugins\CloudVision\__init__.py:207
+msgid "Your prompt"
+msgstr ""
+
+#: addon\globalPlugins\CloudVision\__init__.py:218
+msgid "Manage Be My Eyes account"
+msgstr ""
+
+#: addon\globalPlugins\CloudVision\__init__.py:223
 msgid "Read &QR / bar code"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:204
+#: addon\globalPlugins\CloudVision\__init__.py:229
 msgid "Translate text"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:220
+#: addon\globalPlugins\CloudVision\__init__.py:247
 msgid ""
 "Select image description language, other languages than english are more "
 "prone to translation errors"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:227
-msgid "Manage Be My Eyes account"
-msgstr ""
-
-#: addon\globalPlugins\CloudVision\__init__.py:234
+#: addon\globalPlugins\CloudVision\__init__.py:255
 msgid "Open site"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:240
+#: addon\globalPlugins\CloudVision\__init__.py:261
 msgid "&Use proxy server"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:246
+#: addon\globalPlugins\CloudVision\__init__.py:267
 msgid "Proxy &protocol:"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:252
+#: addon\globalPlugins\CloudVision\__init__.py:273
 msgid "Proxy &host:"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:255
+#: addon\globalPlugins\CloudVision\__init__.py:276
 msgid "Proxy p&ort:"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:259
+#: addon\globalPlugins\CloudVision\__init__.py:280
 msgid "Proxy &login:"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:262
+#: addon\globalPlugins\CloudVision\__init__.py:283
 msgid "Proxy p&assword:"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:294
+#: addon\globalPlugins\CloudVision\__init__.py:348
 msgid "Please wait..."
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:342
+#: addon\globalPlugins\CloudVision\__init__.py:401
 msgid "Error saving settings"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:385
+#: addon\globalPlugins\CloudVision\__init__.py:444
 msgid "Cloud Vision settings..."
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:416
+#: addon\globalPlugins\CloudVision\__init__.py:475
 msgid "There have been no recognitions yet"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:443
+#: addon\globalPlugins\CloudVision\__init__.py:502
 msgid ""
 "To recognize files under the cursor without opening Update NVDA version to "
 "2021.1 or higher"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:506
+#: addon\globalPlugins\CloudVision\__init__.py:565
 msgid "File not supported"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:547
+#: addon\globalPlugins\CloudVision\__init__.py:606
 msgid "Analysis completed: "
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:554
+#: addon\globalPlugins\CloudVision\__init__.py:613
 msgid "CloudVision result"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:577
+#: addon\globalPlugins\CloudVision\__init__.py:636
 msgid "Error"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:674
+#: addon\globalPlugins\CloudVision\__init__.py:733
 msgid "This navigator object is not analyzable"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:698
+#: addon\globalPlugins\CloudVision\__init__.py:757
 msgid "This navigator object is too small"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:777
+#: addon\globalPlugins\CloudVision\__init__.py:835
 msgid ""
 "Gives a description on how current navigator object or selected file in "
 "Explorer looks like visually,\n"
 "if you press twice quickly, a virtual viewer will open."
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:780
-#: addon\globalPlugins\CloudVision\__init__.py:806
-#: addon\globalPlugins\CloudVision\__init__.py:850
-#: addon\globalPlugins\CloudVision\__init__.py:872
-#: addon\globalPlugins\CloudVision\__init__.py:883
+#: addon\globalPlugins\CloudVision\__init__.py:838
+#: addon\globalPlugins\CloudVision\__init__.py:864
+#: addon\globalPlugins\CloudVision\__init__.py:908
+#: addon\globalPlugins\CloudVision\__init__.py:930
+#: addon\globalPlugins\CloudVision\__init__.py:941
 msgid "Cloud Vision"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:804
+#: addon\globalPlugins\CloudVision\__init__.py:862
 msgid "Analyze the full screen. Pressing twice will open the virtual viewer."
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:825
+#: addon\globalPlugins\CloudVision\__init__.py:883
 msgid "Couldn't save image from clipboard"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:848
+#: addon\globalPlugins\CloudVision\__init__.py:906
 msgid ""
 "Analyzing an image from the clipboard. Pressing twice will open the virtual "
 "viewer."
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:855
+#: addon\globalPlugins\CloudVision\__init__.py:913
 msgid "Text Not Found."
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:866
+#: addon\globalPlugins\CloudVision\__init__.py:924
 msgid "Result copyed in clipboard.\n"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:871
+#: addon\globalPlugins\CloudVision\__init__.py:929
 msgid "Copy last result in clipboard."
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:882
+#: addon\globalPlugins\CloudVision\__init__.py:940
 msgid "Ask the bot a question."
 msgstr ""
 

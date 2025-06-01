@@ -11,12 +11,8 @@ This module provides a Handler which you can use with urllib2 to allow it to tun
 import socket
 import ssl
 
-try:
-    import urllib2
-    import httplib
-except ImportError:  # Python 3
-    import urllib.request as urllib2
-    import http.client as httplib
+import urllib.request as urllib2
+import http.client as httplib
 
 import socks  # $ pip install PySocks
 
