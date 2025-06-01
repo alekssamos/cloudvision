@@ -163,7 +163,7 @@ class BeMyAI:
 
     @property
     def authorized(self):
-        return len(self.token) > 20 and getConfig()["GptAPI"] == 1
+        return len(self.token) > 20 and getConfig()["gptAPI"] == 1
 
     def logout(self):
         for f in [bm_token_file, bm_chat_id_file]:
