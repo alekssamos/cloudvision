@@ -28,7 +28,9 @@ def get_image_info(filename: str) -> "Tuple[Optional[str], Tuple[int, int], str]
     return None
 
 
-def compute_image_size(width: int, height: int, max_dimension=2000) -> "tuple[int, int]":
+def compute_image_size(
+    width: int, height: int, max_dimension=2000
+) -> "tuple[int, int]":
     width_changed, height_changed = (0, 0)
     if (width <= max_dimension and height <= max_dimension) or (width == height):
         return (width, height)

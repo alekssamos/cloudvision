@@ -4,7 +4,6 @@
 # Add-on that gets description of current navigator object based on visual features,
 # the computer vision heavy computations are made in the cloud.
 # VISIONBOT.RU
-CloudVisionVersion = "3.3"
 import sys
 import json
 import time
@@ -88,6 +87,24 @@ fileName = ""
 suppFiles = ["png", "jpg", "gif", "tiff", "tif", "jpeg", "webp"]
 
 
+prompt_choices = (_("Brief"), _("Detailed"), _("Your prompt"))
+
+
+def _prompt_switcher():
+    x = getConfig()["briefOrDetailed"]
+    x += 1
+    if x > 2:
+        x = 0
+    promptInputValue = unquote(getConfig()["promptInput"] or "")
+    if not promptInputValue and x == 2:
+        x = 0
+    message = (
+        promptInputValue if x == 2 else prompt_choices[x]
+    )
+    getConfig()["briefOrDetailed"] = x
+    queueHandler.queueFunction(queueHandler.eventQueue, ui.message, message)
+
+
 def get_image_from_clipboard():
     # Open the clipboard
     if wx.TheClipboard.Open():
@@ -125,32 +142,23 @@ def find_desktop_obj():
 
 
 def say_message_thr(type):
+    message = ""
     queueHandler.queueFunction(queueHandler.eventQueue, speech.cancelSpeech)
     if type == 1:
-        queueHandler.queueFunction(
-            queueHandler.eventQueue, ui.message, _("Analyzing selected file")
-        )
+        message = _("Analyzing selected file")
     elif type == 2:
         # Translators: Reported when screen curtain is enabled.
-        queueHandler.queueFunction(
-            queueHandler.eventQueue,
-            ui.message,
-            _("Please disable screen curtain before using CloudVision add-on."),
-        )
+        message = (_("Please disable screen curtain before using CloudVision add-on."),)
     elif type == 3:
-        queueHandler.queueFunction(
-            queueHandler.eventQueue, ui.message, _("Analyzing navigator object")
-        )
+        message = _("Analyzing navigator object")
     elif type == 4:
-        queueHandler.queueFunction(
-            queueHandler.eventQueue, ui.message, _("Analyzing full screen")
-        )
+        message = _("Analyzing full screen")
     elif type == 5:
-        queueHandler.queueFunction(
-            queueHandler.eventQueue, ui.message, _("Analyzing image from clipboard")
-        )
+        message = _("Analyzing image from clipboard")
     else:
         log.error(f"1, 2, 3, 4 or 5. You passed {type}")
+    if message:
+        queueHandler.queueFunction(queueHandler.eventQueue, ui.message, message)
 
 
 def say_message(type):
@@ -198,22 +206,24 @@ class SettingsDialog(gui.SettingsDialog):
             wx.Choice,
             choices=("PiccyBot", "Be My Eyes"),
         )
-        self.gptAPI.SetSelection( getConfig()["gptAPI"] )
+        self.gptAPI.SetSelection(getConfig()["gptAPI"])
         self.gptAPI.Bind(wx.EVT_CHOICE, self.onGptAPI)
         self.gptAPI.Disable()
 
         self.briefOrDetailed = settingsSizerHelper.addLabeledControl(
             _("What descriptions will be requested?"),
             wx.Choice,
-            choices=(_("Brief"), _("Detailed"), _("Your prompt")),
+            choices=prompt_choices,
         )
-        self.briefOrDetailed.SetSelection( getConfig()["briefOrDetailed"] )
+        self.briefOrDetailed.SetSelection(getConfig()["briefOrDetailed"])
         self.briefOrDetailed.Bind(wx.EVT_CHOICE, self.onBriefOrDetailed)
 
         self.promptInput = wx.TextCtrl(self)
-        self.promptInput.SetValue(unquote( getConfig()["promptInput"] or "" ))
+        self.promptInput.SetValue(unquote(getConfig()["promptInput"] or ""))
         self.promptInput.Bind(wx.EVT_KEY_UP, self.onKeyDown)
-        settingsSizerHelper.addItem(self.promptInput, proportion=1, flag=wx.EXPAND|wx.ALL)
+        settingsSizerHelper.addItem(
+            self.promptInput, proportion=1, flag=wx.EXPAND | wx.ALL
+        )
 
         self.manage_account_button = wx.Button(
             self, label=_("Manage Be My Eyes account")
@@ -358,7 +368,7 @@ class SettingsDialog(gui.SettingsDialog):
         event.Skip()
         import webbrowser as wb
 
-        wb.open("https://visionbot.ru/?fromaddon=1&addonversion=" + CloudVisionVersion)
+        wb.open("https://visionbot.ru/?fromaddon=1")
 
     def onOk(self, event):
         event.Skip()
@@ -374,10 +384,7 @@ class SettingsDialog(gui.SettingsDialog):
         self.ahp.proxyHost = self.proxy_host.GetValue().strip()
         self.ahp.proxyPort = int(self.proxy_port.GetValue())
         self.ahp.save()
-        if (
-            not self.textonly.IsChecked()
-            and not self.imageonly.IsChecked()
-        ):
+        if not self.textonly.IsChecked() and not self.imageonly.IsChecked():
             self.textonly.SetValue(True)
             self.imageonly.SetValue(True)
         getConfig()["prefer_navigator"] = self.prefer_navigator.IsChecked()
@@ -444,9 +451,10 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
         self.CloudVisionSettingsItem = gui.mainFrame.sysTrayIcon.preferencesMenu.Append(
             wx.ID_ANY, _("Cloud Vision settings...")
         )
-        popupSettingsDialog = getattr(
-            gui.mainFrame, "popupSettingsDialog", None
-        ) or gui.mainFrame._popupSettingsDialog
+        popupSettingsDialog = (
+            getattr(gui.mainFrame, "popupSettingsDialog", None)
+            or gui.mainFrame._popupSettingsDialog
+        )
         gui.mainFrame.sysTrayIcon.Bind(
             wx.EVT_MENU,
             lambda evt: popupSettingsDialog(SettingsDialog),
@@ -584,9 +592,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
             pass
         return True
 
-    def thr_analyzeObject(
-        self, gesture, img_str, lang, s=0, target="all", t=0, q=0
-    ):
+    def thr_analyzeObject(self, gesture, img_str, lang, s=0, target="all", t=0, q=0):
         if s:
             self.beep_start()
         resp = ""
@@ -838,6 +844,12 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
     )
     script_analyzeObject.category = _("Cloud Vision")
 
+    def script_switch_prompt(self, gesture):
+        _prompt_switcher()
+
+    script_switch_prompt.category = _("Cloud Vision")
+    script_switch_prompt.__doc__ = _("Switching between prompts")
+
     def script_analyzeFullscreen(self, gesture):
         global filePath
         global fileExtension
@@ -946,4 +958,5 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
         "kb:NVDA+Alt+F": "analyzeFullscreen",
         "kb:NVDA+Alt+C": "analyzeClipboard",
         "kb:NVDA+Alt+A": "askBm",
+        "kb:NVDA+Alt+P": "switch_prompt",
     }
