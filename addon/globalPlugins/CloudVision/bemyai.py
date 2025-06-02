@@ -13,11 +13,11 @@ from datetime import datetime, timezone, timedelta
 import os.path
 import wx
 from math import floor
-from typing import Iterator, Optional
+from typing import Iterator, Optional, Tuple
 from .cvconf import getConfig, CONFIGDIR, bm_chat_id_file, bm_token_file
 
 
-def get_image_info(filename: str) -> tuple[Optional[str], tuple[int, int], str]:
+def get_image_info(filename: str) -> "Tuple[Optional[str], Tuple[int, int], str]":
     im = None
     try:
         im = wx.Image()
@@ -28,7 +28,7 @@ def get_image_info(filename: str) -> tuple[Optional[str], tuple[int, int], str]:
     return None
 
 
-def compute_image_size(width: int, height: int, max_dimension=2000) -> tuple[int, int]:
+def compute_image_size(width: int, height: int, max_dimension=2000) -> "tuple[int, int]":
     width_changed, height_changed = (0, 0)
     if (width <= max_dimension and height <= max_dimension) or (width == height):
         return (width, height)
@@ -49,7 +49,7 @@ def process_image(
     path_to_image: str,
     path_to_processed_image: str,
     max_dimension: int = 2000,
-) -> tuple[int, int]:
+) -> "Tuple[int, int]":
     """
     Process the image for API requirements.
     processed image will be saved in `path_to_processed_image`
@@ -330,7 +330,7 @@ class BeMyAI:
         log.info("get app user config from internet")
         return self.app_config_user_cache  # type: ignore
 
-    def send_text_message(self, chat_id: int, text: str) -> tuple[str, int, dict]:
+    def send_text_message(self, chat_id: int, text: str) -> "Tuple[str, int, dict]":
         "Send a text message to the chat"
         if not isinstance(chat_id, int):
             raise TabError("chat_id must be int")
@@ -385,7 +385,7 @@ class BeMyAI:
         )
         return resp
 
-    def take_photo(self, filename: str) -> tuple[str, int]:
+    def take_photo(self, filename: str) -> "Tuple[str, int]":
         path_to_image = None
         if not isinstance(filename, str):
             path_to_image = os.path.join(dl_folder, f"image_{str(uuid4())}.tmp")

@@ -17,6 +17,7 @@ from urllib.parse import quote, unquote
 
 sys.path.insert(0, os.path.dirname(__file__))
 import socks
+import urllib3
 import advanced_http_pool
 from advanced_http_pool import AdvancedHttpPool
 
@@ -211,7 +212,7 @@ class SettingsDialog(gui.SettingsDialog):
 
         self.promptInput = wx.TextCtrl(self)
         self.promptInput.SetValue(unquote( getConfig()["promptInput"] or "" ))
-        self.promptInput.Bind(wx.EVT_KEY_DOWN, self.onKeyDown)
+        self.promptInput.Bind(wx.EVT_KEY_UP, self.onKeyDown)
         settingsSizerHelper.addItem(self.promptInput, proportion=1, flag=wx.EXPAND|wx.ALL)
 
         self.manage_account_button = wx.Button(
@@ -384,7 +385,7 @@ class SettingsDialog(gui.SettingsDialog):
         getConfig()["textonly"] = self.textonly.IsChecked()
         getConfig()["imageonly"] = self.imageonly.IsChecked()
         promptInputValue = quote(self.promptInput.GetValue() or "").strip()[0:512]
-        if not promptInputValue:
+        if not promptInputValue and self.briefOrDetailed.GetSelection() == 2:
             self.briefOrDetailed.SetSelection(1)
             self.onBriefOrDetailed(event)
         getConfig()["briefOrDetailed"] = self.briefOrDetailed.GetSelection()
@@ -444,8 +445,8 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
             wx.ID_ANY, _("Cloud Vision settings...")
         )
         popupSettingsDialog = getattr(
-            gui.mainFrame, "popupSettingsDialog", "_popupSettingsDialog"
-        )
+            gui.mainFrame, "popupSettingsDialog", None
+        ) or gui.mainFrame._popupSettingsDialog
         gui.mainFrame.sysTrayIcon.Bind(
             wx.EVT_MENU,
             lambda evt: popupSettingsDialog(SettingsDialog),
