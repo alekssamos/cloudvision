@@ -98,9 +98,7 @@ def _prompt_switcher():
     promptInputValue = unquote(getConfig()["promptInput"] or "")
     if not promptInputValue and x == 2:
         x = 0
-    message = (
-        promptInputValue if x == 2 else prompt_choices[x]
-    )
+    message = promptInputValue if x == 2 else prompt_choices[x]
     getConfig()["briefOrDetailed"] = x
     queueHandler.queueFunction(queueHandler.eventQueue, ui.message, message)
 
@@ -218,8 +216,12 @@ class SettingsDialog(gui.SettingsDialog):
         self.briefOrDetailed.SetSelection(getConfig()["briefOrDetailed"])
         self.briefOrDetailed.Bind(wx.EVT_CHOICE, self.onBriefOrDetailed)
 
+        promptInputLimit = 700
         self.promptInput = wx.TextCtrl(self)
-        self.promptInput.SetValue(unquote(getConfig()["promptInput"] or ""))
+        self.promptInput.SetMaxLength(promptInputLimit)
+        self.promptInput.SetValue(
+            unquote(getConfig()["promptInput"] or "")[0:promptInputLimit]
+        )
         self.promptInput.Bind(wx.EVT_KEY_UP, self.onKeyDown)
         settingsSizerHelper.addItem(
             self.promptInput, proportion=1, flag=wx.EXPAND | wx.ALL
