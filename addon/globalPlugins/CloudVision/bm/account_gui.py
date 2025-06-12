@@ -404,5 +404,6 @@ class AskFrame(wx.Frame):
 if __name__ == "__main__":
     app = wx.App()
     dialog = MainDialog()
+    dialog.Bind(wx.EVT_KEY_UP, dialog.OnKeyUp)
     dialog.ShowModal()
     app.MainLoop()

@@ -308,8 +308,10 @@ class SettingsDialog(gui.SettingsDialog):
         selection = self.gptAPI.GetCurrentSelection()
         if selection == 0:
             self.manage_account_button.Disable()
+            self.briefOrDetailed.Enable()
         elif selection == 1:
             self.manage_account_button.Enable()
+            self.briefOrDetailed.Disable()
 
     def onBriefOrDetailed(self, event):
         if event:
@@ -606,6 +608,8 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
         resp = ""
         try:
             resx = cloudvision_request(img_str, lang, target, bm, q, t)
+            if resx is None:
+                return
             if "qr" in resx:
                 resp = resp + resx["qr"] + "\r\n\r\n"
             if "text" in resx:

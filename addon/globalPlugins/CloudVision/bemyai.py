@@ -228,7 +228,7 @@ class BeMyAI:
             kw["body"] = data
         if json:
             kw["json"] = json
-        resp = http.request(method=method, url=url, **kw)
+        resp = http.request(method=method, url=url, headers=headers, **kw)
         if "json" not in resp.headers.get("Content-Type").lower():
             if resp.status < 300:
                 return resp.data.decode("UTF-8")
