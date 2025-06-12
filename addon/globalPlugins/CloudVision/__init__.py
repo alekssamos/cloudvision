@@ -34,7 +34,7 @@ except ImportError:
     from io import BytesIO  ## 3
     from io import StringIO  ## 3
 
-from .cvconf import getConfig, supportedLocales
+from .cvconf import getConfig, supportedLocales, promptInputLimit
 from .bemyai import BeMyAI, BeMyAIError
 import tones
 import wx
@@ -146,7 +146,7 @@ def say_message_thr(type):
         message = _("Analyzing selected file")
     elif type == 2:
         # Translators: Reported when screen curtain is enabled.
-        message = (_("Please disable screen curtain before using CloudVision add-on."),)
+        message = _("Please disable screen curtain before using CloudVision add-on.")
     elif type == 3:
         message = _("Analyzing navigator object")
     elif type == 4:
@@ -206,7 +206,7 @@ class SettingsDialog(gui.SettingsDialog):
         )
         self.gptAPI.SetSelection(getConfig()["gptAPI"])
         self.gptAPI.Bind(wx.EVT_CHOICE, self.onGptAPI)
-        self.gptAPI.Disable()
+        # self.gptAPI.Disable()
 
         self.briefOrDetailed = settingsSizerHelper.addLabeledControl(
             _("What descriptions will be requested?"),
@@ -216,7 +216,6 @@ class SettingsDialog(gui.SettingsDialog):
         self.briefOrDetailed.SetSelection(getConfig()["briefOrDetailed"])
         self.briefOrDetailed.Bind(wx.EVT_CHOICE, self.onBriefOrDetailed)
 
-        promptInputLimit = 700
         self.promptInput = wx.TextCtrl(self)
         self.promptInput.SetMaxLength(promptInputLimit)
         self.promptInput.SetValue(
@@ -421,14 +420,21 @@ def cloudvision_request(img_str, lang="en", target="all", bm=0, qr=0, translate=
 
     result = {}
     if target in ["all", "image"]:
-        if not BeMyAI().authorized:
+        if getConfig()["gptAPI"] == 0:
             result["description"] = piccyBot(img_str, lang, get_prompt())
-        else:
+        elif getConfig()["gptAPI"] == 1:
+            bm = BeMyAI()
+            if not bm.authorized:
+                queueHandler.queueFunction(
+                    queueHandler.eventQueue,
+                    ui.message,
+                    _("You need to log in to your account"),
+                )
+                return
             img_content = get_image_content_from_image(img_str)
             img_file = os.path.join(os.path.dirname(__file__), "tempimage.png")
             with open(img_file) as fp:
                 fp.write(img_content)
-            bm = BeMyAI()
             sid, chat_id = bm.take_photo(img_content)
             os.remove(img_file)
             img_content = None

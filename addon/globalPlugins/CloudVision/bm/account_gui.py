@@ -23,7 +23,7 @@ import queueHandler
 import addonHandler
 from ..bemyai import BeMyAI, BeMyAIError
 from ..piccy_bot import lastImageFilePath, piccyBot, PBAPIError
-from ..cvconf import getConfig
+from ..cvconf import getConfig, promptInputLimit
 
 addonHandler.initTranslation()
 
@@ -43,11 +43,13 @@ class LoginPanel(wx.Panel):
         email_sizer = wx.BoxSizer(wx.HORIZONTAL)
         email_label = wx.StaticText(self, label=_("Email:"))
         self.email_input = wx.TextCtrl(self)
+        self.email_input.SetMaxLength(100)
         email_sizer.Add(email_label, 0, wx.ALL, 5)
         email_sizer.Add(self.email_input, 1, wx.EXPAND | wx.ALL, 5)
         password_sizer = wx.BoxSizer(wx.HORIZONTAL)
         password_label = wx.StaticText(self, label=_("Password:"))
         self.password_input = wx.TextCtrl(self, style=wx.TE_PASSWORD)
+        self.password_input.SetMaxLength(100)
         password_sizer.Add(password_label, 0, wx.ALL, 5)
         password_sizer.Add(self.password_input, 1, wx.EXPAND | wx.ALL, 5)
         login_button = wx.Button(self, label=_("Log in"))
@@ -109,21 +111,25 @@ class RegisterPanel(wx.Panel):
         name_sizer = wx.BoxSizer(wx.HORIZONTAL)
         name_label = wx.StaticText(self, label=_("Name:"))
         self.name_input = wx.TextCtrl(self)
+        self.name_input.SetMaxLength(100)
         name_sizer.Add(name_label, 0, wx.ALL, 5)
         name_sizer.Add(self.name_input, 1, wx.EXPAND | wx.ALL, 5)
         surname_sizer = wx.BoxSizer(wx.HORIZONTAL)
         surname_label = wx.StaticText(self, label=_("Surname:"))
         self.surname_input = wx.TextCtrl(self)
+        self.surname_input.SetMaxLength(100)
         surname_sizer.Add(surname_label, 0, wx.ALL, 5)
         surname_sizer.Add(self.surname_input, 1, wx.EXPAND | wx.ALL, 5)
         email_sizer = wx.BoxSizer(wx.HORIZONTAL)
         email_label = wx.StaticText(self, label=_("Email:"))
         self.email_input = wx.TextCtrl(self)
+        self.email_input.SetMaxLength(100)
         email_sizer.Add(email_label, 0, wx.ALL, 5)
         email_sizer.Add(self.email_input, 1, wx.EXPAND | wx.ALL, 5)
         password_sizer = wx.BoxSizer(wx.HORIZONTAL)
         password_label = wx.StaticText(self, label=_("Password:"))
         self.password_input = wx.TextCtrl(self, style=wx.TE_PASSWORD)
+        self.password_input.SetMaxLength(100)
         password_sizer.Add(password_label, 0, wx.ALL, 5)
         password_sizer.Add(self.password_input, 1, wx.EXPAND | wx.ALL, 5)
         register_button = wx.Button(self, label=_("Register"))
@@ -184,6 +190,7 @@ class AskPanel(wx.Panel):
         self.question_input = wx.TextCtrl(
             self, style=wx.TE_MULTILINE | wx.TE_PROCESS_ENTER
         )
+        self.question_input.SetMaxLength(promptInputLimit)
         question_sizer.Add(question_label, 0, wx.ALL, 5)
         question_sizer.Add(self.question_input, 1, wx.EXPAND | wx.ALL, 5)
         send_close_sizer = wx.BoxSizer(wx.HORIZONTAL)

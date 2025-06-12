@@ -32,7 +32,10 @@ __all__ = [
     "bm_token_file",
     "getDefaultLanguage",
     "supportedLocales",
+    "promptInputLimit",
 ]
+
+promptInputLimit = 700
 
 CONFIGDIR = globalVars.appArgs.configPath
 bm_token_file = os.path.join(CONFIGDIR, "bm_token.txt")
