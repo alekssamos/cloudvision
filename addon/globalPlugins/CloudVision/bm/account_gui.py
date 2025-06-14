@@ -50,8 +50,11 @@ class LoginPanel(wx.Panel):
         password_label = wx.StaticText(self, label=_("Password:"))
         self.password_input = wx.TextCtrl(self, style=wx.TE_PASSWORD)
         self.password_input.SetMaxLength(100)
+        restore_button = wx.Button(self, label=_("Recover"))
+        restore_button.Bind(wx.EVT_BUTTON, self.on_restore)
         password_sizer.Add(password_label, 0, wx.ALL, 5)
         password_sizer.Add(self.password_input, 1, wx.EXPAND | wx.ALL, 5)
+        password_sizer.Add(restore_button, 1, wx.EXPAND | wx.ALL, 5)
         login_button = wx.Button(self, label=_("Log in"))
         login_button.Bind(wx.EVT_BUTTON, self.on_login)
         show_register_button = wx.Button(self, label=_("Create account"))
@@ -61,6 +64,23 @@ class LoginPanel(wx.Panel):
         main_sizer.Add(login_button, 0, wx.ALIGN_CENTER | wx.ALL, 5)
         main_sizer.Add(show_register_button, 0, wx.ALIGN_CENTER | wx.ALL, 5)
         self.SetSizer(main_sizer)
+
+    def on_restore(self, event):
+        event.Skip()
+        email = self.email_input.GetValue().strip()
+        if not email or "@" not in email or "." not in email:
+            wx.MessageBox(_("Enter your email address here and click on the button to reset your password."))
+            self.email_input.SetFocus()
+            return
+        f = self.FindWindowByName("lrframe1")
+        b = BeMyAI()
+        try:
+            b.send_reset_password(email=email).strip()
+            wx.MessageBox(_("A link has been sent to your email. Click on it, set a new password in the form, and then enter the password here."))
+        except BeMyAIError:
+            log.exception("Be My AI API error")
+            wx.MessageBox(str(sys.exc_info()[1]))
+        self.password_input.SetFocus()
 
     def on_login(self, event):
         event.Skip()
