@@ -240,8 +240,6 @@ class SettingsDialog(gui.SettingsDialog):
 
         self.trtext = wx.CheckBox(self, label=_("Translate text"))
         self.trtext.SetValue(getConfig()["trtext"])
-        self.trtext.Disable()
-        self.trtext.Hide()
         settingsSizerHelper.addItem(self.trtext)
 
         langs = sorted(supportedLocales)
@@ -418,7 +416,7 @@ class SettingsDialog(gui.SettingsDialog):
 def cloudvision_request(img_str, lang="en", target="all", bm=0, qr=0, translate=0):
     from .chrome_ocr_engine import chromeOCREngine
     from .piccy_bot import piccyBot
-    from .cvhelpers import get_prompt, get_image_content_from_image
+    from .cvhelpers import get_prompt, get_image_content_from_image, translate_text
 
     result = {}
     if target in ["all", "image"]:
@@ -452,6 +450,8 @@ def cloudvision_request(img_str, lang="en", target="all", bm=0, qr=0, translate=
             result["description"] = res
     if target in ["all", "text"]:
         result["text"] = chromeOCREngine(img_str, lang)
+        if translate:
+            result["text"] = translate_text(result["text"], lang)
     return result
 
 

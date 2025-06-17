@@ -241,7 +241,6 @@ class Retry(object):
         # TODO: Deprecated, remove in v2.0
         method_whitelist=_Default,
     ):
-
         if method_whitelist is not _Default:
             if allowed_methods is not _Default:
                 raise ValueError(

@@ -69,14 +69,22 @@ class LoginPanel(wx.Panel):
         event.Skip()
         email = self.email_input.GetValue().strip()
         if not email or "@" not in email or "." not in email:
-            wx.MessageBox(_("Enter your email address here and click on the button to reset your password."))
+            wx.MessageBox(
+                _(
+                    "Enter your email address here and click on the button to reset your password."
+                )
+            )
             self.email_input.SetFocus()
             return
         f = self.FindWindowByName("lrframe1")
         b = BeMyAI()
         try:
             b.send_reset_password(email=email).strip()
-            wx.MessageBox(_("A link has been sent to your email. Click on it, set a new password in the form, and then enter the password here."))
+            wx.MessageBox(
+                _(
+                    "A link has been sent to your email. Click on it, set a new password in the form, and then enter the password here."
+                )
+            )
         except BeMyAIError:
             log.exception("Be My AI API error")
             wx.MessageBox(str(sys.exc_info()[1]))

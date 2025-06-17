@@ -465,9 +465,8 @@ class ProxyManager(PoolManager):
         proxy_headers=None,
         proxy_ssl_context=None,
         use_forwarding_for_https=False,
-        **connection_pool_kw
+        **connection_pool_kw,
     ):
-
         if isinstance(proxy_url, HTTPConnectionPool):
             proxy_url = "%s://%s:%i" % (
                 proxy_url.scheme,

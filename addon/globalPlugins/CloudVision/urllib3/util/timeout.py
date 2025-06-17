@@ -135,8 +135,7 @@ class Timeout(object):
 
         if isinstance(value, bool):
             raise ValueError(
-                "Timeout cannot be a boolean value. It must "
-                "be an int, float or None."
+                "Timeout cannot be a boolean value. It must be an int, float or None."
             )
         try:
             float(value)
