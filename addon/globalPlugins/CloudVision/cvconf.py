@@ -112,6 +112,8 @@ promptInput=string(default="")
 qronly=boolean(default=False)
 trtext=boolean(default=False)
 language=string(default={defaultLanguage})
+useMathpix=boolean(default=False)
+mathpixAPIKey=string(default="")
 """.format(defaultLanguage=getDefaultLanguage())
 )
 
