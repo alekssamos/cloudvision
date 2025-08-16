@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: 'CloudVision' '5.0.2'\n"
+"Project-Id-Version: 'CloudVision' '5.0.3'\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
-"POT-Creation-Date: 2025-06-14 07:49+0300\n"
+"POT-Creation-Date: 2025-08-16 13:00+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,12 +22,12 @@ msgid "You are logged in to your account:"
 msgstr ""
 
 #: addon\globalPlugins\CloudVision\bm\account_gui.py:44
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:144
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:152
 msgid "Email:"
 msgstr ""
 
 #: addon\globalPlugins\CloudVision\bm\account_gui.py:50
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:150
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:158
 msgid "Password:"
 msgstr ""
 
@@ -36,7 +36,7 @@ msgid "Recover"
 msgstr ""
 
 #: addon\globalPlugins\CloudVision\bm\account_gui.py:58
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:157
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:165
 msgid "Log in"
 msgstr ""
 
@@ -44,58 +44,58 @@ msgstr ""
 msgid "Create account"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:72
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:74
 msgid ""
 "Enter your email address here and click on the button to reset your password."
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:79
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:85
 msgid ""
 "A link has been sent to your email. Click on it, set a new password in the "
 "form, and then enter the password here."
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:113
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:121
 msgid "Logout"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:132
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:140
 msgid "Name:"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:138
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:146
 msgid "Surname:"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:155
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:163
 msgid "Register"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:209
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:217
 msgid "Question:"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:217
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:225
 msgid "Send"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:220
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:228
 msgid "Close"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:271
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:279
 msgid "Wait for the Bot to type the message"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:307
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:315
 msgid "You"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:398
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:406
 msgid "First you need to log in or register"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:400
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:408
 msgid ""
 "Open NVDA Menu, Preferences, CloudVision Settings, Manage Be My Eyes account"
 msgstr ""
@@ -173,138 +173,171 @@ msgstr ""
 msgid "Translate text"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:259
+#: addon\globalPlugins\CloudVision\__init__.py:245
+msgid "Use &Mathpix for math formulas recognition"
+msgstr ""
+
+#: addon\globalPlugins\CloudVision\__init__.py:250
+msgid "Mathpix API &Key:"
+msgstr ""
+
+#: addon\globalPlugins\CloudVision\__init__.py:268
 msgid ""
 "Select image description language, other languages than english are more "
 "prone to translation errors"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:267
+#: addon\globalPlugins\CloudVision\__init__.py:276
 msgid "Open site"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:273
+#: addon\globalPlugins\CloudVision\__init__.py:282
 msgid "&Use proxy server"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:279
+#: addon\globalPlugins\CloudVision\__init__.py:288
 msgid "Proxy &protocol:"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:285
+#: addon\globalPlugins\CloudVision\__init__.py:294
 msgid "Proxy &host:"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:288
+#: addon\globalPlugins\CloudVision\__init__.py:297
 msgid "Proxy p&ort:"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:292
+#: addon\globalPlugins\CloudVision\__init__.py:301
 msgid "Proxy &login:"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:295
+#: addon\globalPlugins\CloudVision\__init__.py:304
 msgid "Proxy p&assword:"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:362
+#: addon\globalPlugins\CloudVision\__init__.py:371
 msgid "Please wait..."
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:412
+#: addon\globalPlugins\CloudVision\__init__.py:423
 msgid "Error saving settings"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:433
+#: addon\globalPlugins\CloudVision\__init__.py:441
+msgid "Mathpix API key is not set in settings"
+msgstr ""
+
+#: addon\globalPlugins\CloudVision\__init__.py:457
 msgid "You need to log in to your account"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:462
+#: addon\globalPlugins\CloudVision\__init__.py:490
+msgid "Math formulas (Mathpix):"
+msgstr ""
+
+#: addon\globalPlugins\CloudVision\__init__.py:501
 msgid "Cloud Vision settings..."
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:494
+#: addon\globalPlugins\CloudVision\__init__.py:533
 msgid "There have been no recognitions yet"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:521
+#: addon\globalPlugins\CloudVision\__init__.py:560
 msgid ""
 "To recognize files under the cursor without opening Update NVDA version to "
 "2021.1 or higher"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:584
+#: addon\globalPlugins\CloudVision\__init__.py:623
 msgid "File not supported"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:625
-msgid "Analysis completed: "
+#: addon\globalPlugins\CloudVision\__init__.py:657
+msgid "No mathematical formulas found"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:632
+#: addon\globalPlugins\CloudVision\__init__.py:675
 msgid "CloudVision result"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:655
+#: addon\globalPlugins\CloudVision\__init__.py:675
+msgid "Mathpix result"
+msgstr ""
+
+#: addon\globalPlugins\CloudVision\__init__.py:682
+msgid "Analysis completed: "
+msgstr ""
+
+#: addon\globalPlugins\CloudVision\__init__.py:708
 msgid "Error"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:752
+#: addon\globalPlugins\CloudVision\__init__.py:805
 msgid "This navigator object is not analyzable"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:776
+#: addon\globalPlugins\CloudVision\__init__.py:829
 msgid "This navigator object is too small"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:854
+#: addon\globalPlugins\CloudVision\__init__.py:907
 msgid ""
 "Gives a description on how current navigator object or selected file in "
 "Explorer looks like visually,\n"
-"if you press twice quickly, a virtual viewer will open."
+"if you press twice quickly, a virtual viewer will open.\n"
+"If Mathpix is enabled in settings, it will also recognize mathematical "
+"formulas."
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:857
-#: addon\globalPlugins\CloudVision\__init__.py:862
-#: addon\globalPlugins\CloudVision\__init__.py:889
-#: addon\globalPlugins\CloudVision\__init__.py:933
-#: addon\globalPlugins\CloudVision\__init__.py:955
-#: addon\globalPlugins\CloudVision\__init__.py:966
+#: addon\globalPlugins\CloudVision\__init__.py:911
+#: addon\globalPlugins\CloudVision\__init__.py:916
+#: addon\globalPlugins\CloudVision\__init__.py:943
+#: addon\globalPlugins\CloudVision\__init__.py:987
+#: addon\globalPlugins\CloudVision\__init__.py:1009
+#: addon\globalPlugins\CloudVision\__init__.py:1020
+#: addon\globalPlugins\CloudVision\__init__.py:1052
 msgid "Cloud Vision"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:863
+#: addon\globalPlugins\CloudVision\__init__.py:917
 msgid "Switching between prompts"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:887
+#: addon\globalPlugins\CloudVision\__init__.py:941
 msgid "Analyze the full screen. Pressing twice will open the virtual viewer."
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:908
+#: addon\globalPlugins\CloudVision\__init__.py:962
 msgid "Couldn't save image from clipboard"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:931
+#: addon\globalPlugins\CloudVision\__init__.py:985
 msgid ""
 "Analyzing an image from the clipboard. Pressing twice will open the virtual "
 "viewer."
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:938
+#: addon\globalPlugins\CloudVision\__init__.py:992
 msgid "Text Not Found."
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:949
+#: addon\globalPlugins\CloudVision\__init__.py:1003
 msgid "Result copyed in clipboard.\n"
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:954
+#: addon\globalPlugins\CloudVision\__init__.py:1008
 msgid "Copy last result in clipboard."
 msgstr ""
 
-#: addon\globalPlugins\CloudVision\__init__.py:965
+#: addon\globalPlugins\CloudVision\__init__.py:1019
 msgid "Ask the bot a question."
+msgstr ""
+
+#: addon\globalPlugins\CloudVision\__init__.py:1051
+msgid ""
+"Recognize mathematical formulas using Mathpix service. Opens virtual viewer "
+"automatically."
 msgstr ""
 
 #. Add-on summary, usually the user visible name of the addon.

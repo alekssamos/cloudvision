@@ -321,9 +321,54 @@ msgstr "Результат скопирован в буфер обмена.\n"
 msgid "Copy last result in clipboard."
 msgstr "Копировать последний результат в буфер обмена."
 
-#: addon\globalPlugins\CloudVision\__init__.py:965
+#: addon\globalPlugins\CloudVision\__init__.py:1019
 msgid "Ask the bot a question."
 msgstr "&Задайте вопрос боту."
+
+#: addon\globalPlugins\CloudVision\__init__.py:245
+msgid "Use &Mathpix for math formulas recognition"
+msgstr "&Использовать Mathpix для распознавания математических формул"
+
+#: addon\globalPlugins\CloudVision\__init__.py:250
+msgid "Mathpix API &Key:"
+msgstr "&Ключ API Mathpix:"
+
+#: addon\globalPlugins\CloudVision\__init__.py:441
+msgid "Mathpix API key is not set in settings"
+msgstr "Ключ API Mathpix не указан в настройках"
+
+#: addon\globalPlugins\CloudVision\__init__.py:490
+msgid "Math formulas (Mathpix):"
+msgstr "Математические формулы (Mathpix):"
+
+#: addon\globalPlugins\CloudVision\__init__.py:657
+msgid "No mathematical formulas found"
+msgstr "Математические формулы не найдены"
+
+#: addon\globalPlugins\CloudVision\__init__.py:675
+msgid "Mathpix result"
+msgstr "Результат Mathpix"
+
+#: addon\globalPlugins\CloudVision\__init__.py:1051
+msgid ""
+"Recognize mathematical formulas using Mathpix service. Opens virtual viewer "
+"automatically."
+msgstr ""
+"Распознавание математических формул с помощью сервиса Mathpix. Автоматически "
+"открывает виртуальный просмотрщик."
+
+#: addon\globalPlugins\CloudVision\__init__.py:907
+msgid ""
+"Gives a description on how current navigator object or selected file in "
+"Explorer looks like visually,\n"
+"if you press twice quickly, a virtual viewer will open.\n"
+"If Mathpix is enabled in settings, it will also recognize mathematical "
+"formulas."
+msgstr ""
+"Предоставляет описание того, как текущий объект навигатора или выбранный "
+"файл в Проводнике выглядит визуально,\n"
+"если нажать два раза быстро, откроется виртуальный просмотрщик.\n"
+"Если Mathpix включен в настройках, также будут распознаны математические формулы."
 
 #. Add-on summary, usually the user visible name of the addon.
 #. Translators: Summary for this add-on to be shown on installation and add-on information.
