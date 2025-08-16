@@ -9,6 +9,7 @@ Previously, there were Microsoft and Be My Eyes, but the former blocked access, 
 The add-on settings are in the  NVDA menu, parameters, CloudVision Settings.
 
 Keyboard shortcuts:
+
 * NVDA+CTRL+I - get a description of the navigator object or jpg/png file if it is in focus in Windows explorer. If you press twice quickly, the result will appear in the virtual viewer, you can read with arrows, select, copy, and so on;
 * NVDA+ALT+F - recognize full screen;
 * NVDA+ALT+C - recognize an image from the clipboard;
