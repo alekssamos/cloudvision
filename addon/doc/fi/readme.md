@@ -1,40 +1,32 @@
 ### Pilvinäkö
 
-Tässä lisäosassa on seuraavat ominaisuudet:
-* Valokuvien kuvailu (esim. hymyilevä 23-vuotias tyttö, jolla on vaaleat hiukset)
-* Tekstintunnistus
-* Tekstin kääntäminen toiselle kielelle
-* QR- ja viivakoodien lukeminen
-* Matemaattisten kaavojen tunnistus Mathpixin avulla
+Tämä lisäosa mahdollistaa kuvan kuvailun tekoälyn avulla.
 
-### Lisäosan asetukset
-Avaa NVDA-valikko, siirry Asetukset-alivalikkoon ja valitse "Pilvinäkö..." -vaihtoehto.
+Se hyödyntää Google Chromen tekstintunnistusta, PiccyBotia ja Mathpix-palvelua matemaattisten kaavojen ja yhtälöiden tunnistamiseen.
 
-### Pikanäppäimet
-* NVDA+Ctrl+I: Tunnista navigointiobjekti tai valittu tiedosto Resurssienhallinnassa. Kahdesti painettaessa tulos näytetään erillisessä ikkunassa.
+Aiemmin käytössä olivat myös Microsoft ja Be My Eyes, mutta Microsoft esti pääsyn palveluunsa ja Be My Eyes alkoi suojautua epäviralliselta rajapinnan käytöltä.
+
+Lisäosan asetukset löytyvät kohdasta NVDA-valikko > Mukautukset > Pilvinäkö.
+
+Pikanäppäimet:
+
+* NVDA+Ctrl+I: Kuvaile navigointiobjekti tai valittuna oleva JPG/PNG-kuva Resurssienhallinnassa. Kahdesti painettaessa tulos avautuu virtuaali-ikkunaan, jossa voit lukea sitä nuolilla, valita, kopioida jne.
 * NVDA+Alt+F: Tunnista koko ruutu.
 * NVDA+Alt+C: Tunnista leikepöydällä oleva kuva.
-* NVDA+Alt+A: Esitä kysymys Be My AI:lle (sinun täytyy kirjautua olemassa olevalle tilillesi tai rekisteröityä lisäosan asetuksissa).
-* Ei määritettyä näppäinkomentoa: Analysoi objekti Mathpixillä (matemaattisia kaavoja varten). Määritä näppäinkomento siirtymällä NVDA-valikkoon, avaamalla Asetukset-alivalikko, valitsemalla Näppäinkomennot-vaihtoehto ja sitten Pilvinäkö-kategoria.
-* Ei määritettyä näppäinkomentoa: Kopioi viimeisin tulos leikepöydälle. Määritä näppäinkomento siirtymällä NVDA-valikkoon, avaamalla Asetukset-alivalikko, valitsemalla Näppäinkomennot-vaihtoehto ja sitten Pilvinäkö-kategoria.
-
-Tunnistuta navigointiobjekti siirtämällä se haluamaasi paikkaan ja painamalla asianmukaista pikanäppäintä, jonka jälkeen lisäosa tunnistaa sen.
-Tiedoston tunnistus tapahtuu valitsemalla se Resurssienhallinnassa ja painamalla tunnistuspikanäppäintä.
-Vain jpg-, png- ja gif-formaatteja tuetaan.
-PDF-tukea ei ole lisätty, koska sen tunnistus voi kestää 40 minuuttia tai kauemminkin.
-
-Valittujen tiedostojen idea ja koodi on otettu Nao (NVDA Advanced OCR) -lisäosasta.
-
-Kirjautumista Googlen, Applen tai muiden palveluiden kautta ei tueta. Jos virheitä ilmenee, luo uusi tili uutta, toimivaa sähköpostiosoitetta käyttäen.
+* NVDA+Alt+A: Esitä botille kysymys viimeksi tunnistetusta kuvasta.
+* Analysoi objekti Mathpixillä (matemaattisia kaavoja varten): Näppäinkomentoa ei ole määritetty. Voit määrittää sen Näppäinkomennot-valintaikkunassa.
+* Kopioi viimeisin tunnistuksen tulos leikepöydälle: Pikanäppäintä ei ole määritetty. Voit määrittää sen Näppäinkomennot-valintaikkunassa.
+* NVDA+Alt+P: Vaihtaa kehotetta (lyhyt, yksityiskohtainen, oma).
 
 ### Mathpix-integraatio
 
 Mathpixin käyttäminen matemaattisten kaavojen ja yhtälöiden tunnistamiseen:
 
 1. Hanki API-avain [mathpix.com](https://mathpix.com)-sivustolta
-2. Syötä API-avaimesi Pilvinäön asetusikkunaan
-3. Ota käyttöön "Käytä Mathpixiä matemaattisten kaavojen tunnistamiseen" -asetus
+2. Syötä saamasi avain Pilvinäön asetusikkunaan
+3. Ota käyttöön asetus "Käytä Mathpixiä matemaattisten kaavojen tunnistamiseen"
 
 Voit käyttää Mathpixiä kahdella tavalla:
 * Kun asetus on käytössä, Mathpixiä käytetään muiden tunnistuspalveluiden rinnalla tavallisen tunnistuksen aikana (NVDA+Ctrl+I)
-* Voit määrittää pikanäppäimen "Analysoi objekti Mathpixillä" -komennolle NVDA:n näppäinkomentovalintaikkunassa käyttääksesi Mathpixiä suoraan
+* Voit käyttää Mathpixiä suoraan määrittämällä pikanäppäimen komennolle "Analysoi objekti Mathpix-palvelulla" NVDA:n Näppäinkomennot-valintaikkunassa
+
