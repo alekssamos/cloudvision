@@ -365,7 +365,7 @@ class MainDialog(wx.Dialog):
             self.login_panel.Hide()
             refresh_result = ""
             try:
-                res = BeMyAI().refresh()
+                res = BeMyAI().refresh_token()
                 refresh_result = "{} {} \n {}".format(
                     res["user"]["first_name"],
                     res["user"]["last_name"],

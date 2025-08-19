@@ -459,7 +459,7 @@ def cloudvision_request(img_str, lang="en", target="all", bm=0, qr=0, translate=
                 return
             img_content = get_image_content_from_image(img_str)
             img_file = os.path.join(os.path.dirname(__file__), "tempimage.png")
-            with open(img_file) as fp:
+            with open(img_file, "wb") as fp:
                 fp.write(img_content)
             sid, chat_id = bm.take_photo(img_content)
             os.remove(img_file)
