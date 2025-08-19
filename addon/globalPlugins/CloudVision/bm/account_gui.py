@@ -36,13 +36,12 @@ class FocusedStaticText(wx.StaticText):
 LOGGED_IN_TEXT = _("You are logged in to your account:")
 
 
-class AuthMixinPannel:
+class AuthMixinPannel():
     def on_key_down(self, event):
         event.Skip()
         key = event.GetKeyCode()
         if key == wx.WXK_ESCAPE:
             self.FindWindowByName("lrframe1").Close()
-
     def bind_keydown(self, elements):
         for s in elements:
             s.Bind(wx.EVT_KEY_DOWN, self.on_key_down)
@@ -76,15 +75,10 @@ class LoginPanel(wx.Panel, AuthMixinPannel):
         main_sizer.Add(login_button, 0, wx.ALIGN_CENTER | wx.ALL, 5)
         main_sizer.Add(show_register_button, 0, wx.ALIGN_CENTER | wx.ALL, 5)
         self.SetSizer(main_sizer)
-        self.bind_keydown(
-            (
-                login_button,
-                show_register_button,
-                restore_button,
-                self.email_input,
-                self.password_input,
-            )
-        )
+        self.bind_keydown((
+                login_button, show_register_button,
+                restore_button, self.email_input, self.password_input
+        ))
 
     def on_restore(self, event):
         event.Skip()
@@ -100,7 +94,7 @@ class LoginPanel(wx.Panel, AuthMixinPannel):
         f = self.FindWindowByName("lrframe1")
         b = BeMyAI()
         try:
-            b.send_reset_password(email=email).strip()
+            b.send_reset_password(email=email)
             wx.MessageBox(
                 _(
                     "A link has been sent to your email. Click on it, set a new password in the form, and then enter the password here."
