@@ -54,7 +54,7 @@ def translate_text(text, lang):
     url = "https://translate.yandex.net/api/v1/tr.json/translate?srv=ios&ucid=9676696D-0B56-4F13-B4D5-4A3DA2A3344D&sid=1A5A10A952AB4A3B82533F44B87EE696&id=1A5A10A952AB4A3B82533F44B87EE696-0-0"
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:135.0) Gecko/20100101 Firefox/135.0",
-        "Content-Type": "application/x-www-form-urlencoded"
+        "Content-Type": "application/x-www-form-urlencoded",
     }
     textsresults = []
     for txt in texts:

@@ -146,7 +146,7 @@ class BeMyAI:
 
     @bm_chat_id.setter
     def bm_chat_id(self, v):
-        with open(bm_chat_id_file) as f:
+        with open(bm_chat_id_file, "w") as f:
             f.write(f"{v}")
 
     @property
@@ -165,9 +165,10 @@ class BeMyAI:
 
     @property
     def authorized(self):
-        return len(self.token) > 20 #  and getConfig()["gptAPI"] == 1
+        return len(self.token) > 20
 
     def logout(self):
+        log.info("logout from bm account")
         for f in [bm_token_file, bm_chat_id_file]:
             if os.path.isfile(f):
                 os.remove(f)
@@ -229,6 +230,8 @@ class BeMyAI:
         if json:
             kw["json"] = json
         resp = http.request(method=method, url=url, headers=headers, **kw)
+        if resp.status == 401:
+            self.logout()
         if "json" not in resp.headers.get("Content-Type").lower():
             if resp.status < 300:
                 return resp.data.decode("UTF-8")
@@ -389,11 +392,6 @@ class BeMyAI:
 
     def take_photo(self, filename: str) -> "Tuple[str, int]":
         path_to_image = None
-        if not isinstance(filename, str):
-            path_to_image = os.path.join(dl_folder, f"image_{str(uuid4())}.tmp")
-            with open(path_to_image, "wb") as newfp:
-                shutil.copyfileobj(filename, newfp)
-            filename = path_to_image  # type: ignore
         self.bm_chat_id = "0"
         cnf = self.app_config_user()
         format, size, mode = get_image_info(filename=filename)
