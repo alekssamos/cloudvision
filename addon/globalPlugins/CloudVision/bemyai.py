@@ -160,12 +160,12 @@ class BeMyAI:
     def token(self, v):
         if len(v) < 20:
             return
-        with open(bm_token_file) as f:
+        with open(bm_token_file, "w") as f:
             f.write(v)
 
     @property
     def authorized(self):
-        return len(self.token) > 20  # and getConfig()["gptAPI"] == 1
+        return len(self.token) > 20 and getConfig()["gptAPI"] == 1
 
     def logout(self):
         for f in [bm_token_file, bm_chat_id_file]:
