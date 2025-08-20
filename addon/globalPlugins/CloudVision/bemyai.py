@@ -60,22 +60,28 @@ def process_image(
     """
     log.debug("start image process")
     im = None
+    width = 0
+    height = 0
     try:
-        im = wx.Image(path_to_image)
-        im.LoadFile(p)
-    finally:
-        im.Destroy()
-    width, height = (im.GetWidth(), im.GetHeight())
-    if width > max_dimension or height > max_dimension:
-        log.info("resizing image")
-        im.Rescale(
-            *compute_image_size(width=width, height=height, max_dimension=max_dimension)
-        )
+        im = wx.Image()
+        im.LoadFile(path_to_image)
+        width, height = (im.GetWidth(), im.GetHeight())
+        if width == 0 or height == 0:
+            log.error("error process image " + path_to_image)
+            return False
+        if width > max_dimension or height > max_dimension:
+            log.info("resizing image")
+            im.Rescale(
+                *compute_image_size(
+                    width=width, height=height, max_dimension=max_dimension
+                )
+            )
         im.SaveFile(path_to_processed_image, "image/png")
         width, height = (im.GetWidth(), im.GetHeight())
         log.info("image processed: %s, %dx%d" % (format, width, height))
+        assert os.path.isfile(path_to_processed_image), "The processed file not found"
+    finally:
         im.Destroy()
-    assert os.path.isfile(path_to_processed_image), "The processed file not found"
     return (width, height)
 
 
@@ -146,7 +152,7 @@ class BeMyAI:
 
     @bm_chat_id.setter
     def bm_chat_id(self, v):
-        with open(bm_chat_id_file) as f:
+        with open(bm_chat_id_file, "w") as f:
             f.write(f"{v}")
 
     @property
@@ -160,14 +166,15 @@ class BeMyAI:
     def token(self, v):
         if len(v) < 20:
             return
-        with open(bm_token_file) as f:
+        with open(bm_token_file, "w") as f:
             f.write(v)
 
     @property
     def authorized(self):
-        return len(self.token) > 20  # and getConfig()["gptAPI"] == 1
+        return len(self.token) > 20
 
     def logout(self):
+        log.info("logout from bm account")
         for f in [bm_token_file, bm_chat_id_file]:
             if os.path.isfile(f):
                 os.remove(f)
@@ -229,6 +236,8 @@ class BeMyAI:
         if json:
             kw["json"] = json
         resp = http.request(method=method, url=url, headers=headers, **kw)
+        if resp.status == 401:
+            self.logout()
         if "json" not in resp.headers.get("Content-Type").lower():
             if resp.status < 300:
                 return resp.data.decode("UTF-8")
@@ -374,11 +383,11 @@ class BeMyAI:
         log.info("requested upload image config")
         cnf = self.app_config_user()
         if (
-            width > cnf.chat_image_max_dimension
-            or height > cnf.chat_image_max_dimension
+            width > cnf["chat_image_max_dimension"]
+            or height > cnf["chat_image_max_dimension"]
         ):
             raise ValueError(
-                f"width or height must be less than or equal to {cnf.chat_image_max_dimension}"
+                f"width or height must be less than or equal to {cnf['chat_image_max_dimension']}"
             )
         resp = self.request(
             "POST",
@@ -389,11 +398,6 @@ class BeMyAI:
 
     def take_photo(self, filename: str) -> "Tuple[str, int]":
         path_to_image = None
-        if not isinstance(filename, str):
-            path_to_image = os.path.join(dl_folder, f"image_{str(uuid4())}.tmp")
-            with open(path_to_image, "wb") as newfp:
-                shutil.copyfileobj(filename, newfp)
-            filename = path_to_image  # type: ignore
         self.bm_chat_id = "0"
         cnf = self.app_config_user()
         format, size, mode = get_image_info(filename=filename)
@@ -420,11 +424,11 @@ class BeMyAI:
                 "Content-Type": upload_config["fields"]["Content-Type"],
                 "key": upload_config["fields"]["key"],
                 "x-amz-algorithm": upload_config["fields"]["x-amz-algorithm"],
-                "x-amz-credential": ["upload_config"]["fields"]["x-amz-credential"],
+                "x-amz-credential": upload_config["fields"]["x-amz-credential"],
                 "x-amz-date": upload_config["fields"]["x-amz-date"],
                 "policy": upload_config["fields"]["policy"],
                 "x-amz-signature": upload_config["fields"]["x-amz-signature"],
-                "file": ("file", fp),
+                "file": ("file", fp.read()),
             }
             http = AdvancedHttpPool().Pool
             http.headers = ({"User-Agent": self.User_Agent},)
@@ -505,7 +509,7 @@ class BeMyAI:
                     message = jsonlib.loads(response_part[2:])[1]
                     log.info("Got new message")
                     yield message
-                    if not message.user:
+                    if "user" not in message:
                         break
                 else:
                     log.debug(response_part[2:-1])

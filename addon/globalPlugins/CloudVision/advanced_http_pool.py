@@ -98,8 +98,6 @@ class AdvancedHttpPool:
         if self.proxyAuth:
             url = url + f"{self.proxyLogin}:{self.proxyPassword}@"
         url = url + f"{self.proxyHost}:{self.proxyPort}/"
-        with open(r"E:\url.txt", "w") as fp:
-            fp.write(url)
         return url
 
     @property

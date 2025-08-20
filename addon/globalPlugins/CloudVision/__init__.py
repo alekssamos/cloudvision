@@ -242,7 +242,9 @@ class SettingsDialog(gui.SettingsDialog):
         self.trtext.SetValue(getConfig()["trtext"])
         settingsSizerHelper.addItem(self.trtext)
 
-        self.useMathpix = wx.CheckBox(self, label=_("Use &Mathpix for math formulas recognition"))
+        self.useMathpix = wx.CheckBox(
+            self, label=_("Use &Mathpix for math formulas recognition")
+        )
         self.useMathpix.SetValue(getConfig()["useMathpix"])
         settingsSizerHelper.addItem(self.useMathpix)
 
@@ -250,7 +252,7 @@ class SettingsDialog(gui.SettingsDialog):
             _("Mathpix API &Key:"),
             wx.TextCtrl,
             value=getConfig()["mathpixAPIKey"],
-            style=wx.TE_PASSWORD
+            style=wx.TE_PASSWORD,
         )
 
         langs = sorted(supportedLocales)
@@ -370,10 +372,18 @@ class SettingsDialog(gui.SettingsDialog):
         queueHandler.queueFunction(
             queueHandler.eventQueue, ui.message, _("Please wait...")
         )
-        account_dialog = bmgui.MainDialog(
-            self.FindWindowByName("cvsettings"),
-        )
-        account_dialog.ShowModal()
+        try:
+            account_dialog = bmgui.MainDialog(
+                self.FindWindowByName("cvsettings"),
+            )
+            account_dialog.ShowModal()
+        except Exception:
+            log.exception("error while opening manage account dialog")
+            queueHandler.queueFunction(
+                queueHandler.eventQueue,
+                ui.message,
+                _("Error") + " " + str(sys.exc_info()[1]),
+            )
         self.manage_account_button.Enable()
 
     def on_open_visionbot_ru_button(self, event):
@@ -426,14 +436,16 @@ class SettingsDialog(gui.SettingsDialog):
         super(SettingsDialog, self).onOk(event)
 
 
-def cloudvision_request(img_str, lang="en", target="all", bm=0, qr=0, translate=0, mathpix_only=False):
+def cloudvision_request(
+    img_str, lang="en", target="all", bm=0, qr=0, translate=0, mathpix_only=False
+):
     from .chrome_ocr_engine import chromeOCREngine
     from .piccy_bot import piccyBot
     from .cvhelpers import get_prompt, get_image_content_from_image, translate_text
     from .mathpix import mathpixOCR
 
     result = {}
-    
+
     # Если запрос только к Mathpix, игнорируем другие сервисы
     if mathpix_only:
         try:
@@ -444,7 +456,7 @@ def cloudvision_request(img_str, lang="en", target="all", bm=0, qr=0, translate=
         except Exception as e:
             log.error(f"Ошибка при распознавании с помощью Mathpix: {e}")
             raise
-    
+
     if target in ["all", "image"]:
         if getConfig()["gptAPI"] == 0:
             result["description"] = piccyBot(img_str, lang, get_prompt())
@@ -459,9 +471,9 @@ def cloudvision_request(img_str, lang="en", target="all", bm=0, qr=0, translate=
                 return
             img_content = get_image_content_from_image(img_str)
             img_file = os.path.join(os.path.dirname(__file__), "tempimage.png")
-            with open(img_file) as fp:
+            with open(img_file, "wb") as fp:
                 fp.write(img_content)
-            sid, chat_id = bm.take_photo(img_content)
+            sid, chat_id = bm.take_photo(img_file)
             os.remove(img_file)
             img_content = None
             res = ""
@@ -481,14 +493,16 @@ def cloudvision_request(img_str, lang="en", target="all", bm=0, qr=0, translate=
                 result["math"] = mathpixOCR(img_str, lang)
             except Exception as e:
                 log.error(f"Ошибка при распознавании с помощью Mathpix: {e}")
-        
+
         # Стандартное распознавание текста
         result["text"] = chromeOCREngine(img_str, lang)
-        
+
         # Если есть результат от Mathpix, добавляем его к тексту
         if "math" in result and result["math"]:
-            result["text"] += "\n\n" + _("Math formulas (Mathpix):") + "\n" + result["math"]
-        
+            result["text"] += (
+                "\n\n" + _("Math formulas (Mathpix):") + "\n" + result["math"]
+            )
+
         if translate:
             result["text"] = translate_text(result["text"], lang)
     return result
@@ -641,7 +655,9 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
             pass
         return True
 
-    def thr_analyzeObject(self, gesture, img_str, lang, s=0, target="all", t=0, q=0, mathpix_only=False):
+    def thr_analyzeObject(
+        self, gesture, img_str, lang, s=0, target="all", t=0, q=0, mathpix_only=False
+    ):
         if s:
             self.beep_start()
         resp = ""
@@ -663,16 +679,18 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
                     resp = resp + resx["text"] + "\n"
                 if "description" in resx:
                     resp = resp + "\n" + resx["description"]
-            
+
             resp = resp.strip()
-            
+
             # Если это запрос только к Mathpix или установлен флаг виртуального просмотрщика
             if mathpix_only or self.isVirtual:
                 queueHandler.queueFunction(
                     queueHandler.eventQueue,
                     ui.browseableMessage,
                     resp,
-                    _("CloudVision result") if not mathpix_only else _("Mathpix result"),
+                    _("CloudVision result")
+                    if not mathpix_only
+                    else _("Mathpix result"),
                 )
             else:
                 queueHandler.queueFunction(queueHandler.eventQueue, speech.cancelSpeech)
@@ -681,7 +699,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
                     ui.message,
                     _("Analysis completed: ") + resp,
                 )
-            
+
             # Сбрасываем флаг виртуального просмотрщика только если это не запрос к Mathpix
             if not mathpix_only:
                 self.isVirtual = False
@@ -709,7 +727,9 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
         if s:
             self.beep_stop()
 
-    def _script_analyzeObject(self, gesture, fullscreen=False, from_clipboard=False, mathpix_only=False):
+    def _script_analyzeObject(
+        self, gesture, fullscreen=False, from_clipboard=False, mathpix_only=False
+    ):
         if not self.isVirtual:
             self.isVirtual = scriptHandler.getLastScriptRepeatCount() > 0
         if self.isVirtual and not mathpix_only:
@@ -878,7 +898,9 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
         lang = getConfig()["language"]
 
         self.tmr = Timer(
-            0.1, self.thr_analyzeObject, [gesture, img_str, lang, s, target, t, q, mathpix_only]
+            0.1,
+            self.thr_analyzeObject,
+            [gesture, img_str, lang, s, target, t, q, mathpix_only],
         )
         self.tmr.start()
 
@@ -1018,7 +1040,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 
     script_askBm.__doc__ = _("Ask the bot a question.")
     script_askBm.category = _("Cloud Vision")
-    
+
     def script_analyzeObjectMathpix(self, gesture):
         """
         Распознает математические формулы на изображении с помощью Mathpix.
@@ -1030,7 +1052,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
         try:
             # Устанавливаем флаг виртуального просмотрщика
             self.isVirtual = True
-            
+
             # Вызываем стандартный метод с параметром mathpix_only=True
             self._script_analyzeObject(gesture, mathpix_only=True)
         except:
@@ -1039,16 +1061,18 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
             filePath = ""
             fileExtension = ""
             fileName = ""
-            
+
             def restorework():
                 if self.tmr is not None and self.tmr.is_alive():
                     return
                 self.isWorking = False
                 self.isVirtual = False
-            
+
             Timer(3, restorework, []).start()
-    
-    script_analyzeObjectMathpix.__doc__ = _("Recognize mathematical formulas using Mathpix service. Opens virtual viewer automatically.")
+
+    script_analyzeObjectMathpix.__doc__ = _(
+        "Recognize mathematical formulas using Mathpix service. Opens virtual viewer automatically."
+    )
     script_analyzeObjectMathpix.category = _("Cloud Vision")
 
     __gestures = {

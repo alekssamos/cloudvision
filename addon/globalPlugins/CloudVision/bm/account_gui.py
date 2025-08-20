@@ -36,7 +36,21 @@ class FocusedStaticText(wx.StaticText):
 LOGGED_IN_TEXT = _("You are logged in to your account:")
 
 
-class LoginPanel(wx.Panel):
+class AuthMixinPannel:
+    def on_key_down(self, event):
+        event.Skip()
+        key = event.GetKeyCode()
+        if key == wx.WXK_ESCAPE:
+            self.FindWindowByName("lrframe1").Close()
+
+    def bind_keydown(self, elements, window):
+        for s in elements:
+            if not hasattr(s, "binded"):
+                s.Bind(wx.EVT_KEY_DOWN, self.on_key_down, window)
+                s.binded = True
+
+
+class LoginPanel(wx.Panel, AuthMixinPannel):
     def __init__(self, parent):
         super().__init__(parent)
         main_sizer = wx.BoxSizer(wx.VERTICAL)
@@ -64,6 +78,17 @@ class LoginPanel(wx.Panel):
         main_sizer.Add(login_button, 0, wx.ALIGN_CENTER | wx.ALL, 5)
         main_sizer.Add(show_register_button, 0, wx.ALIGN_CENTER | wx.ALL, 5)
         self.SetSizer(main_sizer)
+        self.bind_keydown(
+            (
+                self,
+                login_button,
+                show_register_button,
+                restore_button,
+                self.email_input,
+                self.password_input,
+            ),
+            self.FindWindowByName("lrframe1"),
+        )
 
     def on_restore(self, event):
         event.Skip()
@@ -79,7 +104,7 @@ class LoginPanel(wx.Panel):
         f = self.FindWindowByName("lrframe1")
         b = BeMyAI()
         try:
-            b.send_reset_password(email=email).strip()
+            b.send_reset_password(email=email)
             wx.MessageBox(
                 _(
                     "A link has been sent to your email. Click on it, set a new password in the form, and then enter the password here."
@@ -105,14 +130,14 @@ class LoginPanel(wx.Panel):
 
     def on_show_register_btn(self, event):
         event.Skip()
-        self.Hide()
         f = self.FindWindowByName("lrframe1")
+        f.login_panel.Hide()
         f.register_panel.Show()
-        f.Layout()
         f.register_panel.SetFocus()
+        f.Layout()
 
 
-class LoggedInPannel(wx.Panel):
+class LoggedInPannel(wx.Panel, AuthMixinPannel):
     def __init__(self, parent):
         super().__init__(parent)
         self.logged_in_h_sizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -122,6 +147,10 @@ class LoggedInPannel(wx.Panel):
         self.logged_in_h_sizer.Add(self.logout_button, 0, 0, 0)
         self.SetSizer(self.logged_in_h_sizer)
         self.logout_button.Bind(wx.EVT_BUTTON, self.on_logout)
+        self.bind_keydown(
+            (self, self.logout_button, self.logged_in_label),
+            self.FindWindowByName("lrframe1"),
+        )
 
     def on_logout(self, event):
         event.Skip()
@@ -132,7 +161,7 @@ class LoggedInPannel(wx.Panel):
         f.login_panel.email_input.SetFocus()
 
 
-class RegisterPanel(wx.Panel):
+class RegisterPanel(wx.Panel, AuthMixinPannel):
     def __init__(self, parent):
         super().__init__(parent)
         main_sizer = wx.BoxSizer(wx.VERTICAL)
@@ -171,14 +200,26 @@ class RegisterPanel(wx.Panel):
         main_sizer.Add(register_button, 0, wx.ALIGN_CENTER | wx.ALL, 5)
         main_sizer.Add(show_login_button, 0, wx.ALIGN_CENTER | wx.ALL, 5)
         self.SetSizer(main_sizer)
+        self.bind_keydown(
+            (
+                self,
+                self.name_input,
+                self.surname_input,
+                self.email_input,
+                self.password_input,
+                show_login_button,
+                register_button,
+            ),
+            self.FindWindowByName("lrframe1"),
+        )
 
     def on_show_login_btn(self, event):
         event.Skip()
-        self.Hide()
         f = self.FindWindowByName("lrframe1")
+        f.register_panel.Hide()
         f.login_panel.Show()
-        f.Layout()
         f.login_panel.SetFocus()
+        f.Layout()
 
     def on_register(self, event):
         event.Skip()
@@ -347,13 +388,17 @@ class AskPanel(wx.Panel):
                 wx.LogError(f"Cannot save current data in file '{pathname}'.")
 
 
-class MainDialog(wx.Dialog):
+class MainDialog(wx.Dialog, AuthMixinPannel):
     def __init__(self, parent=None, lang="en"):
         super().__init__(parent=parent, title="Manage Be My Eyes Account")
         self.SetName("lrframe1")
         self.login_panel = LoginPanel(self)
         self.register_panel = RegisterPanel(self)
         self.logged_panel = LoggedInPannel(self)
+        self.bind_keydown(
+            (self, self.logged_panel, self.login_panel, self.register_panel),
+            self.FindWindowByName("lrframe1"),
+        )
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add(self.login_panel, 1, wx.EXPAND)
         sizer.Add(self.logged_panel, 1, wx.EXPAND)
@@ -365,7 +410,7 @@ class MainDialog(wx.Dialog):
             self.login_panel.Hide()
             refresh_result = ""
             try:
-                res = BeMyAI().refresh()
+                res = BeMyAI().refresh_token()
                 refresh_result = "{} {} \n {}".format(
                     res["user"]["first_name"],
                     res["user"]["last_name"],
