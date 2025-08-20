@@ -372,10 +372,18 @@ class SettingsDialog(gui.SettingsDialog):
         queueHandler.queueFunction(
             queueHandler.eventQueue, ui.message, _("Please wait...")
         )
-        account_dialog = bmgui.MainDialog(
-            self.FindWindowByName("cvsettings"),
-        )
-        account_dialog.ShowModal()
+        try:
+            account_dialog = bmgui.MainDialog(
+                self.FindWindowByName("cvsettings"),
+            )
+            account_dialog.ShowModal()
+        except Exception:
+            log.exception("error while opening manage account dialog")
+            queueHandler.queueFunction(
+                queueHandler.eventQueue,
+                ui.message,
+                _("Error") + " " + str(sys.exc_info()[1]),
+            )
         self.manage_account_button.Enable()
 
     def on_open_visionbot_ru_button(self, event):
@@ -465,7 +473,7 @@ def cloudvision_request(
             img_file = os.path.join(os.path.dirname(__file__), "tempimage.png")
             with open(img_file, "wb") as fp:
                 fp.write(img_content)
-            sid, chat_id = bm.take_photo(img_content)
+            sid, chat_id = bm.take_photo(img_file)
             os.remove(img_file)
             img_content = None
             res = ""
