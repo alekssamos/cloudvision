@@ -431,11 +431,9 @@ class BeMyAI:
                 "file": ("file", fp.read()),
             }
             http = AdvancedHttpPool().Pool
-            http.headers = ({"User-Agent": self.User_Agent},)
-            resp = http.request(
-                "POST", upload_config["url"], headers=self.headers, fields=fields
-            )
-            if resp.status >= 100 <= 206:
+            http.headers = {"User-Agent": self.User_Agent}
+            resp = http.request("POST", upload_config["url"], fields=fields)
+            if resp.status >= 100 and resp.status <= 206:
                 log.info("Uploaded successfully")
                 self.bm_chat_id = chat["id"]
             else:
