@@ -24,6 +24,7 @@ import addonHandler
 from ..bemyai import BeMyAI, BeMyAIError
 from ..piccy_bot import lastImageFilePath, piccyBot, PBAPIError
 from ..cvconf import getConfig, promptInputLimit
+from ..cvhelpers import beep_start, beep_stop
 
 addonHandler.initTranslation()
 
@@ -320,6 +321,7 @@ class AskPanel(wx.Panel):
             _("Wait for the Bot to type the message"),
         )
         self.ask_tmr.start()
+        if getConfig()["sound"]: beep_start()
 
     def on_key_down(self, event):
         key = event.GetKeyCode()
@@ -354,7 +356,7 @@ class AskPanel(wx.Panel):
         try:
             self.question_input.SetValue("")
             self.add_message(_("You"), message)
-            if BeMyAI().authorized:
+            if getConfig()["gptAPI"] == 1:
                 res = self._bm_ask_process(message)
             else:
                 res = piccyBot(None, getConfig()["language"], message)
@@ -364,7 +366,10 @@ class AskPanel(wx.Panel):
             return False
         finally:
             self.send_button.Enable()
-        self.add_message("Be My Eyes" if BeMyAI().authorized else "PiccyBot", res)
+            if getConfig()["sound"]: beep_stop()
+        self.add_message(
+            "Be My Eyes" if getConfig()["gptAPI"] == 1 else "PiccyBot", res
+        )
         self.messages_aria.SetFocus()
 
     def on_close(self, event):

@@ -1,6 +1,8 @@
+# -*- coding: utf-8 -*-
+
 # CloudVision
 # Author: alekssamos
-# Copyright 2020, released under GPL.
+# Copyright 2020 - 2025, released under GPL.
 # Add-on that gets description of current navigator object based on visual features,
 # the computer vision heavy computations are made in the cloud.
 # VISIONBOT.RU
@@ -19,6 +21,7 @@ import socks
 import urllib3
 import advanced_http_pool
 from advanced_http_pool import AdvancedHttpPool
+from cvhelpers import beep_start, beep_stop
 
 del sys.path[0]
 from ctypes import windll
@@ -36,7 +39,6 @@ except ImportError:
 
 from .cvconf import getConfig, supportedLocales, promptInputLimit
 from .bemyai import BeMyAI, BeMyAIError
-import tones
 import wx
 import config
 import globalVars
@@ -153,8 +155,10 @@ def say_message_thr(type):
         message = _("Analyzing full screen")
     elif type == 5:
         message = _("Analyzing image from clipboard")
+    elif type == 6:
+        message = _("Analyzing the active window")
     else:
-        log.error(f"1, 2, 3, 4 or 5. You passed {type}")
+        log.error(f"1, 2, 3, 4, 5 or 6. You passed {type}")
     if message:
         queueHandler.queueFunction(queueHandler.eventQueue, ui.message, message)
 
@@ -540,7 +544,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
     isWorking = False
 
     def on_ask_bm(self, evt):
-        if not self.last_resp:
+        if not self.last_resp or not getattr(globalVars, "cvaskargs", None):
             queueHandler.queueFunction(
                 queueHandler.eventQueue,
                 ui.message,
@@ -638,28 +642,13 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
             )
             return False  # It is a file format not supported so end the process.
 
-    def beep_start(self, thrc=False):
-        if thrc and not self.isWorking:
-            return False
-        self.isWorking = True
-        tones.beep(500, 100)
-        self.bp = Timer(1, self.beep_start, [True])
-        self.bp.start()
-        return True
-
-    def beep_stop(self):
-        self.isWorking = False
-        try:
-            self.bp.cancel()
-        except:
-            pass
-        return True
-
     def thr_analyzeObject(
         self, gesture, img_str, lang, s=0, target="all", t=0, q=0, mathpix_only=False
     ):
         if s:
-            self.beep_start()
+            beep_start()
+            self.isWorking = True
+
         resp = ""
         try:
             resx = cloudvision_request(img_str, lang, target, bm, q, t, mathpix_only)
@@ -710,25 +699,30 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
             )
             log.exception("error during recognition")
         self.isWorking = False
-        self.last_resp = resp
-        f = wx.FindWindowByName("askframe1")
-        if BeMyAI().authorized:
-            _t = ""
-            if target == "nothing":
-                _t = "Be My Eyes"
-            else:
-                _t = "Be My Eyes & Chrome OCR"
-        else:
-            _t = "PiccyBot"
-            if self.last_resp and bm:
-                globalVars.cvaskargs = (_t, self.last_resp, False)
         if not resp.strip():
             resp = _("Error")
+        self.last_resp = resp
+        f = wx.FindWindowByName("askframe1")
+        _t = ""
+        if getConfig()["gptAPI"] == 1:
+            _t = "Be My Eyes"
+        else:
+            _t = "PiccyBot"
+        if "text" in resx:
+            _t = _t + " & Chrome OCR"
+        if "description" in resx:
+            globalVars.cvaskargs = (_t, self.last_resp, False)
         if s:
-            self.beep_stop()
+            beep_stop()
+            self.isWorking = False
 
     def _script_analyzeObject(
-        self, gesture, fullscreen=False, from_clipboard=False, mathpix_only=False
+        self,
+        gesture,
+        fullscreen=False,
+        from_clipboard=False,
+        mathpix_only=False,
+        active_window=False,
     ):
         if not self.isVirtual:
             self.isVirtual = scriptHandler.getLastScriptRepeatCount() > 0
@@ -746,7 +740,11 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
             p = True
         fg = api.getNavigatorObject()
         try:
-            if (not fullscreen and not getConfig()["prefer_navigator"]) and (
+            if (
+                not fullscreen
+                and not active_window
+                and not getConfig()["prefer_navigator"]
+            ) and (
                 (
                     fg.role == api.controlTypes.Role.GRAPHIC
                     and getattr(fg, "IA2Attributes")
@@ -780,7 +778,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
         except AttributeError:
             pass
         p = p or self.getFilePath()
-        if not fullscreen and (p == True or is_url == True):
+        if not fullscreen and not active_window and (p == True or is_url == True):
             say_message(1 if not from_clipboard else 5)
         elif p == False and is_url == False:
             try:
@@ -803,14 +801,25 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
                     return
             except:
                 pass
-            say_message(3 if not fullscreen else 4)
+            x = 3
+            if fullscreen:
+                x = 4
+            elif active_window:
+                x = 6
+            say_message(x)
 
         if self.isWorking:
             return False
         self.isWorking = True
 
         try:
-            nav = api.getNavigatorObject() if not fullscreen else find_desktop_obj()
+            nav = None
+            if not fullscreen:
+                nav = api.getNavigatorObject()
+            if fullscreen:
+                nav = find_desktop_obj()
+            if active_window:
+                nav = globalVars.foregroundObject
         except:
             log.exception("get nav object")
             self.isWorking = False
@@ -964,6 +973,32 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
     )
     script_analyzeFullscreen.category = _("Cloud Vision")
 
+    def script_analyzeActiveWindow(self, gesture):
+        global filePath
+        global fileExtension
+        global fileName
+        try:
+            self._script_analyzeObject(gesture, active_window=True)
+        except:
+            log.exception("script error")
+        finally:
+            filePath = ""
+            fileExtension = ""
+            fileName = ""
+
+            def restorework():
+                if self.tmr is not None and self.tmr.is_alive():
+                    return
+                self.isWorking = False
+                self.isVirtual = False
+
+            Timer(3, restorework, []).start()
+
+    script_analyzeActiveWindow.__doc__ = _(
+        "Analyze the active window. Pressing twice will open the virtual viewer."
+    )
+    script_analyzeActiveWindow.category = _("Cloud Vision")
+
     def script_analyzeClipboard(self, gesture):
         global filePath
         global fileExtension
@@ -1078,6 +1113,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
     __gestures = {
         "kb:NVDA+Control+I": "analyzeObject",
         "kb:NVDA+Alt+F": "analyzeFullscreen",
+        "kb:NVDA+Alt+W": "analyzeActiveWindow",
         "kb:NVDA+Alt+C": "analyzeClipboard",
         "kb:NVDA+Alt+A": "askBm",
         "kb:NVDA+Alt+P": "switch_prompt",

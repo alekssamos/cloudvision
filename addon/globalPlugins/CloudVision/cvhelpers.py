@@ -1,12 +1,41 @@
 from logHandler import log
 from urllib.parse import unquote
+import os.path
+import sys
+sys.path.insert(0, os.path.dirname(__file__))
 import urllib3
 import urllib.request
 from urllib.parse import urlencode
+from threading import Timer
 import os.path
-from .cvconf import getConfig
-from .utils import smartsplit
-from .advanced_http_pool import AdvancedHttpPool
+import winsound
+from cvconf import getConfig
+from advanced_http_pool import AdvancedHttpPool
+del sys.path[0]
+
+BME_WAV = os.path.join(
+    os.path.dirname(__file__),
+    "bmai.wav"
+)
+
+_beep_thr = None
+def beep_start(fthr=False):
+    global _beep_thr
+    if _beep_thr is None and fthr: return
+    winsound.PlaySound(BME_WAV, True)
+    _beep_thr= Timer(11, beep_start, (True,))
+    _beep_thr.start()
+    return True
+
+def beep_stop():
+    global _beep_thr
+    winsound.PlaySound(None, True)
+    try:
+        if _beep_thr: _beep_thr.cancel()
+    except RuntimeError as e:
+        log.exception("cancel beep")
+    _beep_thr=None
+    return True
 
 
 def get_prompt():
@@ -71,3 +100,37 @@ def translate_text(text, lang):
             log.exception(f"translate error: {resp}")
             textsresults.append(txt)
     return " ".join(textsresults)
+
+def smartsplit(t, s, e):
+    """
+    smartsplit(text, start_position, end_position)
+    Splits a string into parts according to the number of characters.
+    If there is a space between the start and end positions, split before a space, the word will not end in the middle.
+    If there are no spaces in the specified range, divide as is, by the finite number of characters.
+    """
+    t = t.replace("\r\n", "\n").replace("\r", "\n")
+    if e >= len(t):
+        return [t]
+    l = []
+    tmp = ""
+    i = 0
+    for sim in t:
+        i = i + 1
+        tmp = tmp + sim
+        if i < s:
+            continue
+        if i == e:
+            l.append(tmp)
+            tmp = ""
+            i = 0
+            continue
+        if (i > s and i < e) and (
+            sim == chr(160) or sim == chr(9) or sim == chr(10) or sim == chr(32)
+        ):
+            l.append(tmp)
+            tmp = ""
+            i = 0
+            continue
+    if len(tmp) > 0:
+        l.append(tmp)
+    return l

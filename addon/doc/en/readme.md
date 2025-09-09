@@ -12,6 +12,7 @@ Keyboard shortcuts:
 
 * NVDA+CTRL+I - get a description of the navigator object or jpg/png file if it is in focus in Windows explorer. If you press twice quickly, the result will appear in the virtual viewer, you can read with arrows, select, copy, and so on;
 * NVDA+ALT+F - recognize full screen;
+* NVDA+ALT+W - recognize the active Window;
 * NVDA+ALT+C - recognize an image from the clipboard;
 * NVDA+ALT+A - ask a question to bot about the last recognized image;
 * Analyze object with Mathpix (for mathematical formulas) - the combination is not assigned, you can assign it yourself in the input gestures;
