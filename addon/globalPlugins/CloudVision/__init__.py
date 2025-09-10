@@ -119,11 +119,6 @@ def get_filenames_from_clipboard():
             wx.TheClipboard.Close()
             return filenames
         else:
-            queueHandler.queueFunction(
-                queueHandler.eventQueue,
-                ui.message,
-                NO_IMAGE_IN_THE_CLIPBOARD,
-            )
             wx.TheClipboard.Close()
             return []
     else:
@@ -1038,6 +1033,9 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
                 if not b:
                     return False
                 image = b.ConvertToImage()
+                fileExtension = "png"
+                tpng = tempfile.mkstemp(suffix="." + fileExtension)[1]
+                filePath = tpng
                 if not image.SaveFile(tpng):
                     queueHandler.queueFunction(
                         queueHandler.eventQueue,
@@ -1045,9 +1043,6 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
                         _("Couldn't save image from clipboard"),
                     )
                     return
-                fileExtension = "png"
-                tpng = tempfile.mkstemp(suffix="." + fileExtension)[1]
-                filePath = tpng
             elif files_from_clipboard:
                 filePath = os.path.abspath(files_from_clipboard[0])
                 fileExtension = filePath.split(".")[-1]
