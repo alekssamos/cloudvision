@@ -1,8 +1,6 @@
-# -*- coding: utf-8 -*-
-
 # CloudVision
 # Author: alekssamos
-# Copyright 2020 - 2025, released under GPL.
+# Copyright 2020, released under GPL.
 # Add-on that gets description of current navigator object based on visual features,
 # the computer vision heavy computations are made in the cloud.
 # VISIONBOT.RU
@@ -104,6 +102,33 @@ def _prompt_switcher():
     getConfig()["briefOrDetailed"] = x
     queueHandler.queueFunction(queueHandler.eventQueue, ui.message, message)
 
+NO_IMAGE_IN_THE_CLIPBOARD = _("There is no image in the clipboard")
+
+def get_filenames_from_clipboard():
+    # a variable for file names
+    filenames = []
+
+    # Open the clipboard
+    if wx.TheClipboard.Open():
+        # Check if the clipboard has a filename
+        if wx.TheClipboard.IsSupported(wx.DataFormat(wx.DF_FILENAME)):
+            # Create a file data object
+            file_data = wx.FileDataObject()
+            wx.TheClipboard.GetData(file_data)  # Get the file data
+            filenames = file_data.GetFilenames()
+            wx.TheClipboard.Close()
+            return filenames
+        else:
+            queueHandler.queueFunction(
+                queueHandler.eventQueue,
+                ui.message,
+                NO_IMAGE_IN_THE_CLIPBOARD,
+            )
+            wx.TheClipboard.Close()
+            return []
+    else:
+        log.error("Could not open the clipboard.")
+        return []
 
 def get_image_from_clipboard():
     # Open the clipboard
@@ -123,7 +148,7 @@ def get_image_from_clipboard():
             queueHandler.queueFunction(
                 queueHandler.eventQueue,
                 ui.message,
-                _("There is no image in the clipboard"),
+                NO_IMAGE_IN_THE_CLIPBOARD,
             )
             return None
     else:
@@ -743,6 +768,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
             if (
                 not fullscreen
                 and not active_window
+                and not from_clipboard
                 and not getConfig()["prefer_navigator"]
             ) and (
                 (
@@ -1003,22 +1029,35 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
         global filePath
         global fileExtension
         global fileName
+        files_from_clipboard = []
+        tpng = ""
         try:
-            fileExtension = "png"
-            tpng = tempfile.mkstemp(suffix="." + fileExtension)[1]
-            filePath = tpng
+            files_from_clipboard = get_filenames_from_clipboard()
+            if not files_from_clipboard:
+                b = get_image_from_clipboard()
+                if not b:
+                    return False
+                image = b.ConvertToImage()
+                if not image.SaveFile(tpng):
+                    queueHandler.queueFunction(
+                        queueHandler.eventQueue,
+                        ui.message,
+                        _("Couldn't save image from clipboard"),
+                    )
+                    return
+                fileExtension = "png"
+                tpng = tempfile.mkstemp(suffix="." + fileExtension)[1]
+                filePath = tpng
+            elif files_from_clipboard:
+                filePath = os.path.abspath(files_from_clipboard[0])
+                fileExtension = filePath.split(".")[-1]
+                tpng = ""
+            elif api.getClipData().startswith("http"):
+                filePath = ur.urlretrieve(
+                    api.getClipData(),
+                    os.path.join(globalVars.appArgs.configPath, "tempclip.png")
+                )[0]
             fileName = os.path.basename(filePath)
-            b = get_image_from_clipboard()
-            if not b:
-                return False
-            image = b.ConvertToImage()
-            if not image.SaveFile(tpng):
-                queueHandler.queueFunction(
-                    queueHandler.eventQueue,
-                    ui.message,
-                    _("Couldn't save image from clipboard"),
-                )
-                return
             self._script_analyzeObject(gesture, fullscreen=False, from_clipboard=True)
         except:
             log.exception("script error")
