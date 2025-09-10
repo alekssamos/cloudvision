@@ -1028,7 +1028,12 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
         tpng = ""
         try:
             files_from_clipboard = get_filenames_from_clipboard()
-            if not files_from_clipboard:
+            if api.getClipData().startswith("http"):
+                filePath = ur.urlretrieve(
+                    api.getClipData(),
+                    os.path.join(globalVars.appArgs.configPath, "tempclip.png")
+                )[0]
+            elif not files_from_clipboard:
                 b = get_image_from_clipboard()
                 if not b:
                     return False
@@ -1047,11 +1052,6 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
                 filePath = os.path.abspath(files_from_clipboard[0])
                 fileExtension = filePath.split(".")[-1]
                 tpng = ""
-            elif api.getClipData().startswith("http"):
-                filePath = ur.urlretrieve(
-                    api.getClipData(),
-                    os.path.join(globalVars.appArgs.configPath, "tempclip.png")
-                )[0]
             fileName = os.path.basename(filePath)
             self._script_analyzeObject(gesture, fullscreen=False, from_clipboard=True)
         except:
