@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cloudVision\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
-"POT-Creation-Date: 2025-08-16 13:00+0300\n"
-"PO-Revision-Date: 2025-08-16 20:02+0300\n"
+"POT-Creation-Date: 2025-09-09 23:37+0300\n"
+"PO-Revision-Date: 2025-09-11 01:37+0300\n"
 "Last-Translator: Jani Kinnunen <janikinnunen340@gmail.com>\n"
 "Language-Team: fi_FI <janikinnunen340@gmail.com>\n"
 "Language: fi_FI\n"
@@ -11,43 +11,43 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.6\n"
+"X-Generator: Poedit 3.7\n"
 "X-Poedit-Basepath: .\n"
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:36
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:37
 msgid "You are logged in to your account:"
 msgstr "Olet kirjautunut tilillesi:"
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:44
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:152
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:59
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:182
 msgid "Email:"
 msgstr "&Sähköposti:"
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:50
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:158
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:65
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:188
 msgid "Password:"
 msgstr "S&alasana:"
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:53
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:68
 msgid "Recover"
 msgstr "Palauta"
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:58
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:165
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:73
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:195
 msgid "Log in"
 msgstr "&Kirjaudu sisään"
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:60
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:75
 msgid "Create account"
 msgstr "&Luo tili"
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:74
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:100
 msgid ""
 "Enter your email address here and click on the button to reset your password."
 msgstr ""
 "Syötä tähän sähköpostiosoitteesi ja nollaa salasanasi painamalla painiketta."
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:85
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:111
 msgid ""
 "A link has been sent to your email. Click on it, set a new password in the "
 "form, and then enter the password here."
@@ -55,135 +55,139 @@ msgstr ""
 "Sähköpostiisi on lähetetty linkki. Napsauta sitä, luo lomakkeessa uusi "
 "salasana ja syötä se tähän."
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:121
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:147
 msgid "Logout"
 msgstr "Kirjaudu &ulos"
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:140
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:170
 msgid "Name:"
 msgstr "Etu&nimi:"
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:146
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:176
 msgid "Surname:"
 msgstr "Suk&unimi:"
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:163
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:193
 msgid "Register"
 msgstr "Re&kisteröidy"
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:217
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:259
 msgid "Question:"
 msgstr "&Kysymys:"
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:225
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:267
 msgid "Send"
 msgstr "&Lähetä"
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:228
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:270
 msgid "Close"
 msgstr "&Sulje"
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:279
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:321
 msgid "Wait for the Bot to type the message"
 msgstr "Odota, kun botti kirjoittaa viestiä"
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:315
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:358
 msgid "You"
 msgstr "Sinä"
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:406
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:456
 msgid "First you need to log in or register"
 msgstr "Sinun täytyy ensin kirjautua sisään tai rekisteröityä."
 
-#: addon\globalPlugins\CloudVision\bm\account_gui.py:408
+#: addon\globalPlugins\CloudVision\bm\account_gui.py:458
 msgid ""
 "Open NVDA Menu, Preferences, CloudVision Settings, Manage Be My Eyes account"
 msgstr ""
 "Avaa NVDA-valikko ja sitten Mukautukset > Pilvinäkö ja valitse Be My Eyes "
 "-tilin hallinta."
 
-#: addon\globalPlugins\CloudVision\__init__.py:90
+#: addon\globalPlugins\CloudVision\__init__.py:92
 msgid "Brief"
 msgstr "Lyhyt"
 
-#: addon\globalPlugins\CloudVision\__init__.py:90
+#: addon\globalPlugins\CloudVision\__init__.py:92
 msgid "Detailed"
 msgstr "Yksityiskohtainen"
 
-#: addon\globalPlugins\CloudVision\__init__.py:90
+#: addon\globalPlugins\CloudVision\__init__.py:92
 msgid "Your prompt"
 msgstr "Oma kehote"
 
-#: addon\globalPlugins\CloudVision\__init__.py:124
+#: addon\globalPlugins\CloudVision\__init__.py:126
 msgid "There is no image in the clipboard"
 msgstr "Leikepöydällä ei ole kuvaa"
 
-#: addon\globalPlugins\CloudVision\__init__.py:146
+#: addon\globalPlugins\CloudVision\__init__.py:148
 msgid "Analyzing selected file"
 msgstr "Analysoidaan valittua tiedostoa"
 
 #. Translators: Reported when screen curtain is enabled.
-#: addon\globalPlugins\CloudVision\__init__.py:149
+#: addon\globalPlugins\CloudVision\__init__.py:151
 msgid "Please disable screen curtain before using CloudVision add-on."
 msgstr "Poista näyttöverho käytöstä ennen Pilvinäkö-lisäosan käyttämistä."
 
-#: addon\globalPlugins\CloudVision\__init__.py:151
+#: addon\globalPlugins\CloudVision\__init__.py:153
 msgid "Analyzing navigator object"
 msgstr "Analysoidaan navigointiobjektia"
 
-#: addon\globalPlugins\CloudVision\__init__.py:153
+#: addon\globalPlugins\CloudVision\__init__.py:155
 msgid "Analyzing full screen"
 msgstr "Analysoidaan koko ruutu"
 
-#: addon\globalPlugins\CloudVision\__init__.py:155
+#: addon\globalPlugins\CloudVision\__init__.py:157
 msgid "Analyzing image from clipboard"
 msgstr "Analysoidaan kuvaa leikepöydältä"
 
-#: addon\globalPlugins\CloudVision\__init__.py:175
+#: addon\globalPlugins\CloudVision\__init__.py:159
+msgid "Analyzing the active window"
+msgstr "Analysoidaan aktiivista ikkunaa"
+
+#: addon\globalPlugins\CloudVision\__init__.py:179
 msgid "CloudVision Settings"
 msgstr "Pilvinäön asetukset"
 
-#: addon\globalPlugins\CloudVision\__init__.py:185
+#: addon\globalPlugins\CloudVision\__init__.py:189
 msgid "Pre&fer a navigator object instead of a file"
 msgstr "Aseta &navigointiobjekti etusijalle"
 
-#: addon\globalPlugins\CloudVision\__init__.py:190
+#: addon\globalPlugins\CloudVision\__init__.py:194
 msgid "&Play sound during recognition"
 msgstr "Toi&sta ääni tunnistuksen aikana"
 
-#: addon\globalPlugins\CloudVision\__init__.py:194
+#: addon\globalPlugins\CloudVision\__init__.py:198
 msgid "Recognize &text"
 msgstr "Tunnista t&eksti"
 
-#: addon\globalPlugins\CloudVision\__init__.py:198
+#: addon\globalPlugins\CloudVision\__init__.py:202
 msgid "Recognize &images"
 msgstr "Tunnista &kuvat"
 
-#: addon\globalPlugins\CloudVision\__init__.py:212
+#: addon\globalPlugins\CloudVision\__init__.py:216
 msgid "What descriptions will be requested?"
 msgstr "Millainen kuvaus pyydetään?"
 
-#: addon\globalPlugins\CloudVision\__init__.py:230
+#: addon\globalPlugins\CloudVision\__init__.py:234
 msgid "Manage Be My Eyes account"
 msgstr "Be My E&yes -tilin hallinta"
 
-#: addon\globalPlugins\CloudVision\__init__.py:235
+#: addon\globalPlugins\CloudVision\__init__.py:239
 msgid "Read &QR / bar code"
 msgstr "Lue &QR- tai viivakoodi"
 
-#: addon\globalPlugins\CloudVision\__init__.py:241
+#: addon\globalPlugins\CloudVision\__init__.py:245
 msgid "Translate text"
 msgstr "Käännä teksti"
 
-#: addon\globalPlugins\CloudVision\__init__.py:245
+#: addon\globalPlugins\CloudVision\__init__.py:250
 msgid "Use &Mathpix for math formulas recognition"
 msgstr "Käytä &Mathpixiä matemaattisten kaavojen tunnistamiseen"
 
-#: addon\globalPlugins\CloudVision\__init__.py:250
+#: addon\globalPlugins\CloudVision\__init__.py:256
 msgid "Mathpix API &Key:"
 msgstr "Mat&hpixin API-avain:"
 
-#: addon\globalPlugins\CloudVision\__init__.py:268
+#: addon\globalPlugins\CloudVision\__init__.py:274
 msgid ""
 "Select image description language, other languages than english are more "
 "prone to translation errors"
@@ -191,63 +195,68 @@ msgstr ""
 "Valitse kuvien kuvauksen kieli (muut kuin englanti ovat alttiimpia "
 "käännösvirheille)"
 
-#: addon\globalPlugins\CloudVision\__init__.py:276
+#: addon\globalPlugins\CloudVision\__init__.py:282
 msgid "Open site"
 msgstr "Avaa siv&u"
 
-#: addon\globalPlugins\CloudVision\__init__.py:282
+#: addon\globalPlugins\CloudVision\__init__.py:288
 msgid "&Use proxy server"
 msgstr "Käytä v&älityspalvelinta"
 
-#: addon\globalPlugins\CloudVision\__init__.py:288
+#: addon\globalPlugins\CloudVision\__init__.py:294
 msgid "Proxy &protocol:"
 msgstr "Välityspalvelimen &protokolla:"
 
-#: addon\globalPlugins\CloudVision\__init__.py:294
+#: addon\globalPlugins\CloudVision\__init__.py:300
 msgid "Proxy &host:"
 msgstr "Välityspalvelimen oso&ite:"
 
-#: addon\globalPlugins\CloudVision\__init__.py:297
+#: addon\globalPlugins\CloudVision\__init__.py:303
 msgid "Proxy p&ort:"
 msgstr "Välityspalvelimen p&ortti:"
 
-#: addon\globalPlugins\CloudVision\__init__.py:301
+#: addon\globalPlugins\CloudVision\__init__.py:307
 msgid "Proxy &login:"
 msgstr "Välityspalvelimen &käyttäjätunnus:"
 
-#: addon\globalPlugins\CloudVision\__init__.py:304
+#: addon\globalPlugins\CloudVision\__init__.py:310
 msgid "Proxy p&assword:"
 msgstr "Välityspalvelimen s&alasana:"
 
-#: addon\globalPlugins\CloudVision\__init__.py:371
+#: addon\globalPlugins\CloudVision\__init__.py:377
 msgid "Please wait..."
 msgstr "Odota..."
 
-#: addon\globalPlugins\CloudVision\__init__.py:423
+#: addon\globalPlugins\CloudVision\__init__.py:389
+#: addon\globalPlugins\CloudVision\__init__.py:703
+msgid "Error"
+msgstr "Virhe"
+
+#: addon\globalPlugins\CloudVision\__init__.py:437
 msgid "Error saving settings"
 msgstr "Virhe tallennettaessa asetuksia"
 
-#: addon\globalPlugins\CloudVision\__init__.py:441
+#: addon\globalPlugins\CloudVision\__init__.py:457
 msgid "Mathpix API key is not set in settings"
 msgstr "Mathpixin API-avainta ei ole määritetty asetuksissa"
 
-#: addon\globalPlugins\CloudVision\__init__.py:457
+#: addon\globalPlugins\CloudVision\__init__.py:473
 msgid "You need to log in to your account"
 msgstr "Sinun on kirjauduttava tilillesi"
 
-#: addon\globalPlugins\CloudVision\__init__.py:490
+#: addon\globalPlugins\CloudVision\__init__.py:507
 msgid "Math formulas (Mathpix):"
 msgstr "Matemaattiset kaavat (Mathpix):"
 
-#: addon\globalPlugins\CloudVision\__init__.py:501
+#: addon\globalPlugins\CloudVision\__init__.py:519
 msgid "Cloud Vision settings..."
-msgstr "Pilvinäkö..."
+msgstr "Pilvinäön asetukset..."
 
-#: addon\globalPlugins\CloudVision\__init__.py:533
+#: addon\globalPlugins\CloudVision\__init__.py:551
 msgid "There have been no recognitions yet"
 msgstr "Tunnistuksia ei ole vielä suoritettu"
 
-#: addon\globalPlugins\CloudVision\__init__.py:560
+#: addon\globalPlugins\CloudVision\__init__.py:578
 msgid ""
 "To recognize files under the cursor without opening Update NVDA version to "
 "2021.1 or higher"
@@ -255,39 +264,35 @@ msgstr ""
 "Tunnista kohdistimen kohdalla oleva tiedosto avaamatta sitä päivittämällä "
 "NVDA versioksi 2021.1 tai uudemmaksi"
 
-#: addon\globalPlugins\CloudVision\__init__.py:623
+#: addon\globalPlugins\CloudVision\__init__.py:641
 msgid "File not supported"
 msgstr "Tiedostoa ei tueta"
 
-#: addon\globalPlugins\CloudVision\__init__.py:657
+#: addon\globalPlugins\CloudVision\__init__.py:662
 msgid "No mathematical formulas found"
 msgstr "Matemaattisia kaavoja ei löydy"
 
-#: addon\globalPlugins\CloudVision\__init__.py:675
+#: addon\globalPlugins\CloudVision\__init__.py:680
 msgid "CloudVision result"
 msgstr "Pilvinäön tulos"
 
-#: addon\globalPlugins\CloudVision\__init__.py:675
+#: addon\globalPlugins\CloudVision\__init__.py:682
 msgid "Mathpix result"
 msgstr "Mathpixin tulos"
 
-#: addon\globalPlugins\CloudVision\__init__.py:682
+#: addon\globalPlugins\CloudVision\__init__.py:689
 msgid "Analysis completed: "
 msgstr "Analyysi suoritettu: "
 
-#: addon\globalPlugins\CloudVision\__init__.py:708
-msgid "Error"
-msgstr "Virhe"
-
-#: addon\globalPlugins\CloudVision\__init__.py:805
+#: addon\globalPlugins\CloudVision\__init__.py:834
 msgid "This navigator object is not analyzable"
 msgstr "Tätä navigointiobjektia ei voi analysoida"
 
-#: addon\globalPlugins\CloudVision\__init__.py:829
+#: addon\globalPlugins\CloudVision\__init__.py:858
 msgid "This navigator object is too small"
 msgstr "Tämä navigointiobjekti on liian pieni"
 
-#: addon\globalPlugins\CloudVision\__init__.py:907
+#: addon\globalPlugins\CloudVision\__init__.py:938
 msgid ""
 "Gives a description on how current navigator object or selected file in "
 "Explorer looks like visually,\n"
@@ -297,59 +302,66 @@ msgid ""
 msgstr ""
 "Antaa kuvauksen siitä, miltä nykyinen navigointiobjekti tai "
 "Resurssienhallinnassa valittuna oleva tiedosto näyttää visuaalisesti.\n"
-"Kahdesti painettaessa kuvaus avataan erilliseen ikkunaan.\n"
+"Kahdesti painettaessa kuvaus avataan virtuaaliseen ikkunaan.\n"
 "Myös matemaattiset kaavat tunnistetaan, jos Mathpix on otettu käyttöön "
 "asetuksissa."
 
-#: addon\globalPlugins\CloudVision\__init__.py:911
-#: addon\globalPlugins\CloudVision\__init__.py:916
-#: addon\globalPlugins\CloudVision\__init__.py:943
-#: addon\globalPlugins\CloudVision\__init__.py:987
-#: addon\globalPlugins\CloudVision\__init__.py:1009
-#: addon\globalPlugins\CloudVision\__init__.py:1020
-#: addon\globalPlugins\CloudVision\__init__.py:1052
+#: addon\globalPlugins\CloudVision\__init__.py:942
+#: addon\globalPlugins\CloudVision\__init__.py:947
+#: addon\globalPlugins\CloudVision\__init__.py:974
+#: addon\globalPlugins\CloudVision\__init__.py:1000
+#: addon\globalPlugins\CloudVision\__init__.py:1044
+#: addon\globalPlugins\CloudVision\__init__.py:1066
+#: addon\globalPlugins\CloudVision\__init__.py:1077
+#: addon\globalPlugins\CloudVision\__init__.py:1111
 msgid "Cloud Vision"
 msgstr "Pilvinäkö"
 
-#: addon\globalPlugins\CloudVision\__init__.py:917
+#: addon\globalPlugins\CloudVision\__init__.py:948
 msgid "Switching between prompts"
 msgstr "Vaihtaa kehotetta"
 
-#: addon\globalPlugins\CloudVision\__init__.py:941
+#: addon\globalPlugins\CloudVision\__init__.py:972
 msgid "Analyze the full screen. Pressing twice will open the virtual viewer."
 msgstr ""
-"Analysoi koko ruudun. Kahdesti painettaessa tulokset avataan erillisessä "
+"Analysoi koko ruudun. Kahdesti painettaessa tulokset avataan virtuaalisessa "
 "ikkunassa."
 
-#: addon\globalPlugins\CloudVision\__init__.py:962
+#: addon\globalPlugins\CloudVision\__init__.py:998
+msgid "Analyze the active window. Pressing twice will open the virtual viewer."
+msgstr ""
+"Analysoi aktiivisen ikkunan. Kahdesti painettaessa tulokset avataan "
+"virtuaalisessa ikkunassa."
+
+#: addon\globalPlugins\CloudVision\__init__.py:1019
 msgid "Couldn't save image from clipboard"
 msgstr "Kuvaa ei voitu tallentaa leikepöydältä"
 
-#: addon\globalPlugins\CloudVision\__init__.py:985
+#: addon\globalPlugins\CloudVision\__init__.py:1042
 msgid ""
 "Analyzing an image from the clipboard. Pressing twice will open the virtual "
 "viewer."
 msgstr ""
 "Analysoi leikepöydällä olevan kuvan. Kahdesti painettaessa tulokset avataan "
-"erillisessä ikkunassa."
+"virtuaalisessa ikkunassa."
 
-#: addon\globalPlugins\CloudVision\__init__.py:992
+#: addon\globalPlugins\CloudVision\__init__.py:1049
 msgid "Text Not Found."
 msgstr "Tekstiä ei löydy."
 
-#: addon\globalPlugins\CloudVision\__init__.py:1003
+#: addon\globalPlugins\CloudVision\__init__.py:1060
 msgid "Result copyed in clipboard.\n"
 msgstr "Tulos kopioitu leikepöydälle.\n"
 
-#: addon\globalPlugins\CloudVision\__init__.py:1008
+#: addon\globalPlugins\CloudVision\__init__.py:1065
 msgid "Copy last result in clipboard."
 msgstr "Kopioi viimeisin tulos leikepöydälle."
 
-#: addon\globalPlugins\CloudVision\__init__.py:1019
+#: addon\globalPlugins\CloudVision\__init__.py:1076
 msgid "Ask the bot a question."
 msgstr "Esitä botille kysymys."
 
-#: addon\globalPlugins\CloudVision\__init__.py:1051
+#: addon\globalPlugins\CloudVision\__init__.py:1109
 msgid ""
 "Recognize mathematical formulas using Mathpix service. Opens virtual viewer "
 "automatically."

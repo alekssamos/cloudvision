@@ -1,17 +1,18 @@
 ### Pilvinäkö
 
-Tämä lisäosa mahdollistaa kuvan kuvailun tekoälyn avulla.
+Tämän lisäosan avulla on mahdollista saada kuvan kuvaus tekoälyä käyttäen.
 
 Se hyödyntää Google Chromen tekstintunnistusta, PiccyBotia ja Mathpix-palvelua matemaattisten kaavojen ja yhtälöiden tunnistamiseen.
 
 Aiemmin käytössä olivat myös Microsoft ja Be My Eyes, mutta Microsoft esti pääsyn palveluunsa ja Be My Eyes alkoi suojautua epäviralliselta rajapinnan käytöltä.
 
-Lisäosan asetukset löytyvät kohdasta NVDA-valikko > Mukautukset > Pilvinäkö.
+Lisäosan asetukset löytyvät kohdasta NVDA-valikko > Mukautukset > Pilvinäön asetukset.
 
 Pikanäppäimet:
 
-* NVDA+Ctrl+I: Kuvaile navigointiobjekti tai valittuna oleva JPG/PNG-kuva Resurssienhallinnassa. Kahdesti painettaessa tulos avautuu virtuaali-ikkunaan, jossa voit lukea sitä nuolilla, valita, kopioida jne.
+* NVDA+Ctrl+I: Kuvaile navigointiobjekti tai valittuna oleva JPG/PNG-kuva Resurssienhallinnassa. Kahdesti painettaessa tulos avautuu virtuaaliseen ikkunaan, jossa voit lukea sitä nuolilla, valita, kopioida jne.
 * NVDA+Alt+F: Tunnista koko ruutu.
+* NVDA+Alt+W: Tunnista aktiivinen ikkuna.
 * NVDA+Alt+C: Tunnista leikepöydällä oleva kuva.
 * NVDA+Alt+A: Esitä botille kysymys viimeksi tunnistetusta kuvasta.
 * Analysoi objekti Mathpixillä (matemaattisia kaavoja varten): Näppäinkomentoa ei ole määritetty. Voit määrittää sen Näppäinkomennot-valintaikkunassa.
