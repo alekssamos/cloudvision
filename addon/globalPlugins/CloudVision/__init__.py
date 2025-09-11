@@ -90,6 +90,7 @@ suppFiles = ["png", "jpg", "gif", "tiff", "tif", "jpeg", "webp"]
 prompt_choices = (_("Brief"), _("Detailed"), _("Your prompt"))
 
 
+FILE_NOT_SUPPORTED = _("File not supported")
 def _prompt_switcher():
     x = getConfig()["briefOrDetailed"]
     x += 1
@@ -103,6 +104,10 @@ def _prompt_switcher():
     queueHandler.queueFunction(queueHandler.eventQueue, ui.message, message)
 
 NO_IMAGE_IN_THE_CLIPBOARD = _("There is no image in the clipboard")
+
+def get_text_from_clipboard():
+    try: return api.getClipData()
+    except OSError: return ""
 
 def get_filenames_from_clipboard():
     # a variable for file names
@@ -658,7 +663,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
             return True  # Is a supported file format, so we can make OCR
         else:
             queueHandler.queueFunction(
-                queueHandler.eventQueue, ui.message, _("File not supported")
+                queueHandler.eventQueue, ui.message, FILE_NOT_SUPPORTED
             )
             return False  # It is a file format not supported so end the process.
 
@@ -1028,9 +1033,9 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
         tpng = ""
         try:
             files_from_clipboard = get_filenames_from_clipboard()
-            if api.getClipData().startswith("http"):
+            if get_text_from_clipboard().startswith("http"):
                 filePath = ur.urlretrieve(
-                    api.getClipData(),
+                    get_text_from_clipboard(),
                     os.path.join(globalVars.appArgs.configPath, "tempclip.png")
                 )[0]
             elif not files_from_clipboard:
@@ -1053,12 +1058,17 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
                 fileExtension = filePath.split(".")[-1]
                 tpng = ""
             fileName = os.path.basename(filePath)
+            if fileExtension not in suppFiles:
+                fileName = ""
+                filePath=""
+                queueHandler.queueFunction(
+                    queueHandler.eventQueue, ui.message, FILE_NOT_SUPPORTED
+                )
+                return False  # It is a file format not supported so end the process.
             self._script_analyzeObject(gesture, fullscreen=False, from_clipboard=True)
         except:
             log.exception("script error")
         finally:
-            if os.path.isfile(tpng):
-                os.remove(tpng)
             filePath = ""
             fileExtension = ""
             fileName = ""
