@@ -723,7 +723,11 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
                 queueHandler.eventQueue, ui.message, str(sys.exc_info()[1])
             )
             log.exception("error during recognition")
-        self.isWorking = False
+            return False
+        finally:
+            self.isWorking = False
+            if s:
+                beep_stop()
         if not resp.strip():
             resp = _("Error")
         self.last_resp = resp
@@ -737,9 +741,6 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
             _t = _t + " & Chrome OCR"
         if "description" in resx:
             globalVars.cvaskargs = (_t, self.last_resp, False)
-        if s:
-            beep_stop()
-            self.isWorking = False
 
     def _script_analyzeObject(
         self,
