@@ -286,6 +286,9 @@ class AskPanel(wx.Panel):
         ):
             s.Bind(wx.EVT_KEY_DOWN, self.on_key_down)
 
+    @property
+    def soundx(self):
+        return getConfig()["soundx"]
     def format_text(self, text):
         sentences = []
         current_sentence = ""
@@ -321,7 +324,6 @@ class AskPanel(wx.Panel):
             _("Wait for the Bot to type the message"),
         )
         self.ask_tmr.start()
-        if getConfig()["sound"]: beep_start()
 
     def on_key_down(self, event):
         key = event.GetKeyCode()
@@ -353,6 +355,7 @@ class AskPanel(wx.Panel):
     def _on_send(self, event):
         message = self.question_input.GetValue()
         f = self.FindWindowByName("askframe1")
+        beep_start(self.soundx)
         try:
             self.question_input.SetValue("")
             self.add_message(_("You"), message)
@@ -366,7 +369,7 @@ class AskPanel(wx.Panel):
             return False
         finally:
             self.send_button.Enable()
-            if getConfig()["sound"]: beep_stop()
+            beep_stop()
         self.add_message(
             "Be My Eyes" if getConfig()["gptAPI"] == 1 else "PiccyBot", res
         )
@@ -473,7 +476,6 @@ class AskFrame(wx.Frame):
         cvaskargs = getattr(globalVars, "cvaskargs", None)
         if cvaskargs:
             self.ask_panel.add_message(*cvaskargs)
-            globalVars.cvaskargs = None
 
     def on_close(self, event):
         self.Hide()

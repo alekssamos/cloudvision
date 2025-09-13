@@ -6,35 +6,45 @@ sys.path.insert(0, os.path.dirname(__file__))
 import urllib3
 import urllib.request
 from urllib.parse import urlencode
-from threading import Timer
+from tones import beep
+from threading import Timer, Lock
 import os.path
 import winsound
-from cvconf import getConfig
 from advanced_http_pool import AdvancedHttpPool
+from cvconf import getConfig
 del sys.path[0]
 
+_lock = Lock()
 BME_WAV = os.path.join(
     os.path.dirname(__file__),
     "bmai.wav"
 )
 
 _beep_thr = None
-def beep_start(fthr=False):
+
+def beep_start(st, fthr=False):
+    if st == 0: return
     global _beep_thr
-    if _beep_thr is None and fthr: return
-    winsound.PlaySound(BME_WAV, True)
-    _beep_thr= Timer(11, beep_start, (True,))
-    _beep_thr.start()
+    with _lock:
+        if _beep_thr is None and fthr: return
+    if st == 1:
+        beep(500, 100)
+        with _lock: _beep_thr= Timer(1, beep_start, (st,True,))
+    if st == 2:
+        winsound.PlaySound(BME_WAV, True)
+        with _lock: _beep_thr= Timer(11, beep_start, (st,True,))
+    with _lock: _beep_thr.start()
     return True
 
 def beep_stop():
     global _beep_thr
-    winsound.PlaySound(None, True)
-    try:
-        if _beep_thr: _beep_thr.cancel()
-    except RuntimeError as e:
-        log.exception("cancel beep")
-    _beep_thr=None
+    with _lock: 
+        winsound.PlaySound(None, True)
+        try:
+            if _beep_thr: _beep_thr.cancel()
+        except RuntimeError as e:
+            log.exception("cancel beep")
+        _beep_thr=None
     return True
 
 

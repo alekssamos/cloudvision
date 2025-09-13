@@ -103,7 +103,7 @@ _config = None
 configspec = StringIO(
     """
 prefer_navigator=boolean(default=False)
-sound=boolean(default=False)
+soundx=integer(default=0)
 textonly=boolean(default=True)
 imageonly=boolean(default=True)
 gptAPI=integer(default=0)

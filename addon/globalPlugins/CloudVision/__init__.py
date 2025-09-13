@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # CloudVision
 # Author: alekssamos
 # Copyright 2020, released under GPL.
@@ -216,9 +217,13 @@ class SettingsDialog(gui.SettingsDialog):
         self.prefer_navigator.SetValue(getConfig()["prefer_navigator"])
         settingsSizerHelper.addItem(self.prefer_navigator)
 
-        self.sound = wx.CheckBox(self, label=_("&Play sound during recognition"))
-        self.sound.SetValue(getConfig()["sound"])
-        settingsSizerHelper.addItem(self.sound)
+        # Translators: choosing which sound to play
+        self.sound = settingsSizerHelper.addLabeledControl(
+            _("&Play sound during recognition"),
+            wx.Choice,
+            choices=(_("off"), _("tones"), _("melody")),
+        )
+        self.sound.SetSelection(getConfig()["soundx"])
 
         self.textonly = wx.CheckBox(self, label=_("Recognize &text"))
         self.textonly.SetValue(getConfig()["textonly"])
@@ -439,7 +444,7 @@ class SettingsDialog(gui.SettingsDialog):
             self.textonly.SetValue(True)
             self.imageonly.SetValue(True)
         getConfig()["prefer_navigator"] = self.prefer_navigator.IsChecked()
-        getConfig()["sound"] = self.sound.IsChecked()
+        getConfig()["soundx"] = self.sound.GetSelection()
         getConfig()["textonly"] = self.textonly.IsChecked()
         getConfig()["imageonly"] = self.imageonly.IsChecked()
         promptInputValue = quote(self.promptInput.GetValue() or "").strip()[0:512]
@@ -540,6 +545,11 @@ def cloudvision_request(
 class GlobalPlugin(globalPluginHandler.GlobalPlugin):
     def __init__(self):
         super(globalPluginHandler.GlobalPlugin, self).__init__()
+        _sound = getConfig().get("sound", False)
+        if _sound == True or _sound == "True":
+            getConfig()["soundx"]=2
+            del getConfig()["sound"]
+            getConfig().write()
         self.CloudVisionSettingsItem = gui.mainFrame.sysTrayIcon.preferencesMenu.Append(
             wx.ID_ANY, _("Cloud Vision settings...")
         )
@@ -553,6 +563,9 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
             self.CloudVisionSettingsItem,
         )
 
+    @property
+    def soundx(self):
+        return getConfig()["soundx"]
     def terminate(self):
         globalVars.cvask = None
         globalVars.cvaskargs = None
@@ -668,14 +681,13 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
             return False  # It is a file format not supported so end the process.
 
     def thr_analyzeObject(
-        self, gesture, img_str, lang, s=0, target="all", t=0, q=0, mathpix_only=False
+        self, gesture, img_str, lang, target="all", t=0, q=0, mathpix_only=False
     ):
-        if s:
-            beep_start()
-            self.isWorking = True
-
         resp = ""
         try:
+            self.isWorking = True
+            globalVars.cvaskargs = None
+            beep_start(self.soundx)
             resx = cloudvision_request(img_str, lang, target, bm, q, t, mathpix_only)
             if resx is None:
                 return
@@ -726,8 +738,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
             return False
         finally:
             self.isWorking = False
-            if s:
-                beep_stop()
+            beep_stop()
         if not resp.strip():
             resp = _("Error")
         self.last_resp = resp
@@ -851,6 +862,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
             log.exception("get nav object")
             self.isWorking = False
             self.isVirtual = False
+            beep_stop()
             return False
 
         if not nav.location and p == False and is_url == False:
@@ -862,6 +874,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
             )
             self.isWorking = False
             self.isVirtual = False
+            beep_stop()
             return
         if p == False and is_url == False:
             left, top, width, height = nav.location
@@ -886,6 +899,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
             )
             self.isWorking = False
             self.isVirtual = False
+            beep_stop()
             return False
         if p == False and is_url == False:
             bmp = wx.Bitmap(width, height)
@@ -910,10 +924,6 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
         if is_url == True:
             img_str = body
 
-        sound = getConfig()["sound"]
-        s = 0
-        if sound:
-            s = 1
         textonly = getConfig()["textonly"]
         imageonly = getConfig()["imageonly"]
         target = "all"
@@ -936,7 +946,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
         self.tmr = Timer(
             0.1,
             self.thr_analyzeObject,
-            [gesture, img_str, lang, s, target, t, q, mathpix_only],
+            [gesture, img_str, lang, target, t, q, mathpix_only],
         )
         self.tmr.start()
 
@@ -958,6 +968,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
                     return
                 self.isWorking = False
                 self.isVirtual = False
+                beep_stop()
 
             Timer(3, restorework, []).start()
 
@@ -992,6 +1003,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
                     return
                 self.isWorking = False
                 self.isVirtual = False
+                beep_stop()
 
             Timer(3, restorework, []).start()
 
@@ -1018,6 +1030,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
                     return
                 self.isWorking = False
                 self.isVirtual = False
+                beep_stop()
 
             Timer(3, restorework, []).start()
 
@@ -1080,6 +1093,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
                     return
                 self.isWorking = False
                 self.isVirtual = False
+                beep_stop()
 
             Timer(3, restorework, []).start()
 
@@ -1147,6 +1161,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
                     return
                 self.isWorking = False
                 self.isVirtual = False
+                beep_stop()
 
             Timer(3, restorework, []).start()
 
