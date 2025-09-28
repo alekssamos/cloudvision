@@ -92,8 +92,7 @@ prompt_choices = (_("Brief"), _("Detailed"), _("Your prompt"))
 
 
 FILE_NOT_SUPPORTED = _("File not supported")
-def _prompt_switcher():
-    x = getConfig()["briefOrDetailed"]
+def _prompt_switcher(x):
     x += 1
     if x > 2:
         x = 0
@@ -493,7 +492,7 @@ def cloudvision_request(
 
     if target in ["all", "image"]:
         if getConfig()["gptAPI"] == 0:
-            result["description"] = piccyBot(img_str, lang, get_prompt())
+            result["description"] = piccyBot(img_str, lang, get_prompt(getConfig()["briefOrDetailed"]))
         elif getConfig()["gptAPI"] == 1:
             bm = BeMyAI()
             if not bm.authorized:
