@@ -48,11 +48,7 @@ def beep_stop():
     return True
 
 
-def get_prompt():
-    briefOrDetailed, promptInput = (
-        getConfig()["briefOrDetailed"],
-        getConfig()["promptInput"],
-    )
+def get_prompt(briefOrDetailed, promptInput):
     prompts = [
         "Briefly describe what's in this image?",
         "Describe it in as much detail as possible what's in this image?",

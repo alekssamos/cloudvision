@@ -492,7 +492,10 @@ def cloudvision_request(
 
     if target in ["all", "image"]:
         if getConfig()["gptAPI"] == 0:
-            result["description"] = piccyBot(img_str, lang, get_prompt(getConfig()["briefOrDetailed"]))
+            promptInputValue = unquote(getConfig()["promptInput"] or "")
+            result["description"] = piccyBot(img_str, lang, get_prompt(
+                getConfig()["briefOrDetailed"], promptInputValue)
+            )
         elif getConfig()["gptAPI"] == 1:
             bm = BeMyAI()
             if not bm.authorized:
