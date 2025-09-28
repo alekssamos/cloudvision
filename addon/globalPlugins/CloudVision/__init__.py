@@ -982,7 +982,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
     script_analyzeObject.category = _("Cloud Vision")
 
     def script_switch_prompt(self, gesture):
-        _prompt_switcher()
+        _prompt_switcher(getConfig()["briefOrDetailed"])
 
     script_switch_prompt.category = _("Cloud Vision")
     script_switch_prompt.__doc__ = _("Switching between prompts")
