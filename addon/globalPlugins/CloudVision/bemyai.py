@@ -120,7 +120,7 @@ class BeMyAI:
         if not os.path.isdir(dl_folder):
             os.mkdir(dl_folder)
             log.info("created dl folder")
-        self.response_language = getConfig()["language"]
+        self.response_language = getConfig()["language"].replace("_", "-")
         self.bemyeyes_app_secret = (
             "55519e815ff7b09ab971de5564baa282eca53af1eb528385fb98a34f2010e8c7"
         )
