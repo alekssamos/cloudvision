@@ -51,9 +51,9 @@ import api
 from logHandler import log
 import languageHandler
 import addonHandler
-import versionInfo
+import buildVersion
 
-is_new_nvda = versionInfo.version_year >= 2021 and versionInfo.version_major >= 1
+is_new_nvda = buildVersion.version_year >= 2021 and buildVersion.version_major >= 1
 if is_new_nvda:
     from comtypes.client import CreateObject as COMCreate
     from .MyOCREnhance import totalCommanderHelper
