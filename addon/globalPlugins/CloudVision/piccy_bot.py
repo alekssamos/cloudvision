@@ -32,7 +32,7 @@ def piccyBot(
     url = "https://sparklingapps.com/piccybotapi/index.php/chat"
 
     chat_data = {
-        "model": "openai41",
+        "model": "piccybotmodel",
         "user_message": [
             {
                 "role": "user",
@@ -51,7 +51,7 @@ def piccyBot(
                 ],
             }
         ],
-        "sub": False,
+        "sub": True,
         "token": 40,
         "exp": True,
     }
@@ -59,7 +59,7 @@ def piccyBot(
     http = AdvancedHttpPool().Pool
     http.headers = {
         "Content-Type": "application/json",
-        "User-Agent": "PiccyBot/2.17.6 CFNetwork/1498.700.2 Darwin/23.6.0",
+        "User-Agent": "PiccyBot/2.42.12 CFNetwork/1498.700.2 Darwin/23.6.0",
     }
     response = http.request("POST", url, json=chat_data)
     data = response.json()
