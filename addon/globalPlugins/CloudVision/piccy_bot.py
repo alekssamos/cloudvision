@@ -32,7 +32,7 @@ def piccyBot(
     url = "https://sparklingapps.com/piccybotapi/index.php/chat"
 
     chat_data = {
-        "model": "piccybotmodel",
+        "model": "openai5chat",
         "user_message": [
             {
                 "role": "user",
