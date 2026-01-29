@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # CloudVision
 # Author: alekssamos
-# Copyright 2020, released under GPL.
+# Copyright 2026, released under GPL.
 # Add-on that gets description of current navigator object based on visual features,
 # the computer vision heavy computations are made in the cloud.
 # VISIONBOT.RU
@@ -25,6 +25,7 @@ from cvhelpers import beep_start, beep_stop
 del sys.path[0]
 from ctypes import windll
 from .bm import account_gui as bmgui
+from .piccy_bot import get_model, get_models
 from glob import glob
 from xml.parsers import expat
 from collections import namedtuple
@@ -241,6 +242,13 @@ class SettingsDialog(gui.SettingsDialog):
         self.gptAPI.Bind(wx.EVT_CHOICE, self.onGptAPI)
         # self.gptAPI.Disable()
 
+        self.pbMODEL = settingsSizerHelper.addLabeledControl(
+            "Model:",
+            wx.Choice,
+            choices=piccy_bot.models_keys(),
+        )
+        self.pbMODEL.SetSelection( get_model(getConfig()["pbMODEL"])[2] )
+        
         self.briefOrDetailed = settingsSizerHelper.addLabeledControl(
             _("What descriptions will be requested?"),
             wx.Choice,
@@ -353,9 +361,11 @@ class SettingsDialog(gui.SettingsDialog):
         if selection == 0:
             self.manage_account_button.Disable()
             self.briefOrDetailed.Enable()
+            self.pbMODEL.Enable()
         elif selection == 1:
             self.manage_account_button.Enable()
             self.briefOrDetailed.Disable()
+            self.pbMODEL.Disable()
 
     def onBriefOrDetailed(self, event):
         if event:
@@ -428,6 +438,9 @@ class SettingsDialog(gui.SettingsDialog):
     def onOk(self, event):
         event.Skip()
         getConfig()["gptAPI"] = self.gptAPI.GetCurrentSelection()
+        modelSelection = self.pbMODEL.GetCurrentSelection()
+        model = get_models()[modelSelection]["value"]
+        getConfig()["pbMODEL"] = model
         self.ahp.proxyEnabled = self.useProxy.IsChecked()
         self.ahp.proxyAuth = (
             self.proxy_username.GetValue().strip() != ""
@@ -493,8 +506,14 @@ def cloudvision_request(
     if target in ["all", "image"]:
         if getConfig()["gptAPI"] == 0:
             promptInputValue = unquote(getConfig()["promptInput"] or "")
-            result["description"] = piccyBot(img_str, lang, get_prompt(
-                getConfig()["briefOrDetailed"], promptInputValue)
+            result["description"] = piccyBot(
+                img_str,
+                lang,
+                get_prompt(
+                    getConfig()["briefOrDetailed"],
+                    promptInputValue
+                ),
+                getConfig()["pbMODEL"]
             )
         elif getConfig()["gptAPI"] == 1:
             bm = BeMyAI()
